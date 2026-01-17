@@ -1,0 +1,172 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Student;
+use App\Models\Batch;
+use App\Models\Role;
+use App\Models\Attendance;
+use App\Models\ExamResult;
+use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+
+class StudentManagementSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $studentRole = Role::where('slug', 'student')->first();
+
+        // Ensure we seed at least one student for EVERY class (1-12)
+        foreach (range(1, 12) as $class) {
+            // Find a course for this class
+            $course = \App\Models\Course::where('class', (string)$class)->first();
+
+            if (!$course) {
+                // Should not happen if CourseSeeder runs first, but safety check
+                continue;
+            }
+
+            // Find valid batches for this course
+            $batches = \App\Models\Batch::where('course_id', $course->id)->get();
+            
+            if ($batches->isEmpty()) {
+                continue; 
+            }
+
+            // Unsplash Image List for Students
+            $studentImages = [
+                'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600', // Girl
+                'https://images.unsplash.com/photo-1491013516836-7dbc888c3867?w=600', // Girl 2
+                'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600', // Boy
+                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600', // Boy 2
+                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600', // Girl 3
+                'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600', // Boy 3
+                'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=600', // Girl 4
+                'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600', // Boy 4
+                'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600', // Man
+                'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600', // Girl 5
+            ];
+
+            // Create 1-3 students for this class
+            $studentCount = rand(1, 3);
+            
+            for ($i = 0; $i < $studentCount; $i++) {
+                $batch = $batches->random();
+                
+                // Create unique user
+                $email = "student_class{$class}_{$i}@example.com";
+                $name = "Student Class $class - " . ($i + 1);
+                
+                $user = User::firstOrCreate(
+                    ['email' => $email],
+                    [
+                        'name' => $name,
+                        'password' => Hash::make('password'),
+                    ]
+                );
+
+                if ($studentRole && !$user->hasRole('student')) {
+                    $user->roles()->attach($studentRole->id);
+                }
+
+                // Create Student Profile
+                $student = Student::updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'batch_id' => $batch->id,
+                        'class' => (string)$class,
+                        'course_name' => $course->name, // Legacy field
+                        'phone' => '017' . str_pad((string)$class, 2, '0', STR_PAD_LEFT) . rand(100000, 999999),
+                        'profile_image' => collect($studentImages)->random(),
+                        'featured' => rand(1, 10) === 1, // Randomly mark ~10% as featured
+                    ]
+                );
+
+                     // Seed Attendance (Last 10 days)
+                for ($j = 0; $j < 5; $j++) {
+                    Attendance::updateOrCreate(
+                        [
+                            'student_id' => $student->id,
+                            'date' => Carbon::now()->subDays($j)->toDateString(),
+                        ],
+                        [
+                            'batch_id' => $student->batch_id,
+                            'status' => collect(['present', 'present', 'present', 'absent'])->random(),
+                        ]
+                    );
+                }
+
+                // Seed Exam Results
+                $subjects = ['Mathematics', 'English', 'Science'];
+                foreach ($subjects as $subject) {
+                    $marks = rand(40, 99);
+                    $grade = $marks >= 80 ? 'A+' : ($marks >= 70 ? 'A' : ($marks >= 60 ? 'A-' : 'B'));
+
+                    ExamResult::updateOrCreate(
+                        [
+                            'student_id' => $student->id,
+                            'subject_name' => $subject,
+                        ],
+                        [
+                            'marks' => $marks,
+                            'grade' => $grade,
+                        ]
+                    );
+                }
+            }
+        }
+        
+        // Add a few random "cool" students with images/real names just for demo if they don't exist
+        $demoStudents = [
+            [
+                'name' => 'Rahim Ahmed',
+                'email' => 'rahim@example.com',
+                'class' => '10',
+                'image' => 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            ],
+            [
+                'name' => 'Fatima Begum',
+                'email' => 'fatima@example.com',
+                'class' => '11',
+                'image' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            ]
+        ];
+
+        foreach($demoStudents as $data) {
+             // Find course/batch for this class
+             $course = \App\Models\Course::where('class', $data['class'])->first();
+             if(!$course) continue;
+             $batch = \App\Models\Batch::where('course_id', $course->id)->inRandomOrder()->first();
+             if(!$batch) continue;
+
+             $user = User::firstOrCreate(
+                ['email' => $data['email']],
+                [
+                    'name' => $data['name'],
+                    'password' => Hash::make('password'),
+                ]
+            );
+
+            if ($studentRole && !$user->hasRole('student')) {
+                $user->roles()->attach($studentRole->id);
+            }
+
+            Student::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'batch_id' => $batch->id,
+                    'class' => $data['class'],
+                    'course_name' => $course->name,
+                    'phone' => '01700000000',
+                    'profile_image' => $data['image'],
+                    'featured' => true, // Mark demo students as featured
+                ]
+            );
+        }
+    }
+}

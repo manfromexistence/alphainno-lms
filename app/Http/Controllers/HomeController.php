@@ -1,0 +1,170 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Page;
+use App\Models\Student;
+use App\Models\Teacher;
+use Illuminate\Http\Request;
+
+class HomeController extends Controller
+{
+    public function index()
+    {
+        $featuredStudents = Student::with(['user', 'batch.course'])
+            ->featured()
+            ->take(8)
+            ->get();
+
+        $randomStudents = Student::with(['user', 'batch.course'])
+            ->inRandomOrder()
+            ->take(12)
+            ->get();
+
+        $popularCourses = \App\Models\Course::active()
+            ->with(['batches.students', 'videos'])
+            ->withCount('videos')
+            ->take(8)
+            ->get();
+
+        $page = Page::findBySlug('home');
+
+        return view('welcome', compact('featuredStudents', 'randomStudents', 'popularCourses', 'page'));
+    }
+
+    public function about()
+    {
+        $page = Page::findBySlug('about');
+        return view('about', compact('page'));
+    }
+
+    public function contact()
+    {
+        $page = Page::findBySlug('contact');
+        return view('contact', compact('page'));
+    }
+
+    public function courses()
+    {
+        $page = Page::findBySlug('courses');
+        
+        $query = \App\Models\Course::active()
+            ->with(['batches.students', 'videos'])
+            ->withCount('videos');
+        
+        // Apply search filter
+        if (request()->filled('search')) {
+            $search = request('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%");
+            });
+        }
+        
+        // Apply category filter
+        if (request()->filled('category')) {
+            $query->where('category', request('category'));
+        }
+        
+        $courses = $query->paginate(12)->withQueryString();
+        
+        // Get unique categories for filter
+        $categories = \App\Models\Course::active()
+            ->whereNotNull('category')
+            ->distinct()
+            ->pluck('category')
+            ->filter()
+            ->sort()
+            ->values();
+        
+        return view('courses', compact('page', 'courses', 'categories'));
+    }
+
+    public function teachers()
+    {
+        $page = Page::findBySlug('teachers');
+        $teachers = Teacher::with('user')->get();
+        return view('teachers', compact('page', 'teachers'));
+    }
+
+    public function students()
+    {
+        $page = Page::findBySlug('students');
+        
+        // Get statistics
+        $totalStudents = Student::count();
+        $maleStudents = Student::where('gender', 'Male')->count();
+        $femaleStudents = Student::where('gender', 'Female')->count();
+        
+        // Calculate attendance rate
+        $attendanceRate = 0;
+        $studentsWithAttendance = Student::has('attendances')->get();
+        if ($studentsWithAttendance->count() > 0) {
+            $attendanceRate = round($studentsWithAttendance->avg(function($student) {
+                return $student->attendance_percentage;
+            }), 0);
+        }
+        
+        // Get class-wise distribution
+        $classDistribution = Student::selectRaw('class, COUNT(*) as count')
+            ->whereNotNull('class')
+            ->groupBy('class')
+            ->orderBy('class')
+            ->get();
+        
+        return view('students', compact('page', 'totalStudents', 'maleStudents', 'femaleStudents', 'attendanceRate', 'classDistribution'));
+    }
+
+    public function results(Request $request)
+    {
+        $page = Page::findBySlug('results');
+        
+        // Get all exams with results for the dropdown
+        $exams = \App\Models\Exam::with(['batch', 'course'])
+            ->has('results')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        // Get recent exam statistics
+        $recentExams = \App\Models\Exam::with(['results', 'batch', 'course'])
+            ->has('results')
+            ->orderBy('created_at', 'desc')
+            ->take(6)
+            ->get()
+            ->map(function($exam) {
+                $results = $exam->results;
+                $totalStudents = $results->count();
+                $passedStudents = $results->filter(fn($r) => $r->hasPassed())->count();
+                $passRate = $totalStudents > 0 ? round(($passedStudents / $totalStudents) * 100, 1) : 0;
+                
+                $gpa5Count = $results->filter(fn($r) => $r->percentage >= 90)->count();
+                $gpa4Count = $results->filter(fn($r) => $r->percentage >= 80)->count();
+                
+                return [
+                    'id' => $exam->id,
+                    'title' => $exam->title,
+                    'type' => $exam->type,
+                    'pass_rate' => $passRate,
+                    'gpa5_count' => $gpa5Count,
+                    'gpa4_count' => $gpa4Count,
+                    'total_students' => $totalStudents,
+                ];
+            });
+        
+        // Handle search
+        $searchResult = null;
+        if ($request->filled('exam_id') && $request->filled('registration_no')) {
+            $student = \App\Models\Student::where('registration_no', $request->registration_no)->first();
+            
+            if ($student) {
+                $searchResult = \App\Models\ExamResult::with(['exam', 'student'])
+                    ->where('exam_id', $request->exam_id)
+                    ->where('student_id', $student->id)
+                    ->first();
+            }
+        }
+        
+        return view('results', compact('page', 'exams', 'recentExams', 'searchResult'));
+    }
+}
