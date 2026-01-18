@@ -65,20 +65,33 @@ class ExamTakingService
 
     /**
      * Submit an exam attempt.
+     * 
+     * Requirements: 2.2
+     * 
+     * Task details:
+     * - Validate exam attempt ownership (handled by controller)
+     * - Save all answers to exam_attempts table (already saved via auto-save)
+     * - Create ExamResult record with score calculation
+     * - Mark attempt as submitted
+     * - Redirect to results page (handled by controller)
      */
     public function submitExam(ExamAttempt $attempt): ExamResult
     {
         return DB::transaction(function () use ($attempt) {
+            // Calculate score from answers
             $score = $this->calculateMcqScore($attempt);
             
+            // Mark attempt as submitted
             $attempt->update([
                 'status' => 'submitted',
                 'submitted_at' => Carbon::now(),
             ]);
 
+            // Get exam details
             $exam = $attempt->exam;
             $percentage = $exam->total_marks > 0 ? ($score / $exam->total_marks) * 100 : 0;
 
+            // Create ExamResult record with score calculation
             return ExamResult::updateOrCreate(
                 [
                     'student_id' => $attempt->student_id,
@@ -86,10 +99,10 @@ class ExamTakingService
                 ],
                 [
                     'marks' => $score,
+                    'obtained_marks' => $score,
                     'total_marks' => $exam->total_marks,
-                    'percentage' => round($percentage, 2),
                     'grade' => $this->calculateGrade($percentage),
-                    'remarks' => $this->getRemarks($percentage),
+                    'feedback' => $this->getRemarks($percentage),
                 ]
             );
         });

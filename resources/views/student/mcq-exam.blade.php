@@ -223,9 +223,12 @@
     const totalQuestions = {{ $questions->count() }};
     const attemptId = {{ $attempt->id }};
     const saveAnswerUrl = '{{ route("student.exams.save-answer", $attempt) }}';
+    const recordTabSwitchUrl = '{{ route("student.exams.record-tab-switch", $attempt) }}';
     const csrfToken = '{{ csrf_token() }}';
     let answeredCount = {{ count($savedAnswers) }};
     let autoSaveTimeout = null;
+    let tabSwitchCount = 0;
+    let fullscreenExitCount = 0;
 
     // Timer Management
     function updateTimer() {
@@ -383,9 +386,99 @@
         window.onbeforeunload = null;
     };
 
+    // Anti-Cheating: Fullscreen Detection
+    function requestFullscreen() {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(err => {
+                console.log('Fullscreen request failed:', err);
+            });
+        } else if (elem.webkitRequestFullscreen) { // Safari
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { // IE11
+            elem.msRequestFullscreen();
+        }
+    }
+
+    function detectFullscreenExit() {
+        if (!document.fullscreenElement && 
+            !document.webkitFullscreenElement && 
+            !document.msFullscreenElement) {
+            
+            fullscreenExitCount++;
+            const timestamp = new Date().toISOString();
+            
+            // Log event to server
+            logCheatingEvent('fullscreen_exit', timestamp);
+            
+            // Show warning to user
+            if (fullscreenExitCount === 1) {
+                alert('Warning: You have exited fullscreen mode. This has been recorded. Please return to fullscreen.');
+                requestFullscreen();
+            } else if (fullscreenExitCount <= 3) {
+                alert(`Warning ${fullscreenExitCount}: Fullscreen exit detected and recorded. Please stay in fullscreen mode.`);
+                requestFullscreen();
+            }
+        }
+    }
+
+    // Anti-Cheating: Tab Switch Detection
+    function detectTabSwitch() {
+        if (document.hidden) {
+            tabSwitchCount++;
+            const timestamp = new Date().toISOString();
+            
+            // Log event to server
+            logCheatingEvent('tab_switch', timestamp);
+            
+            // Show warning when user returns
+            setTimeout(() => {
+                if (!document.hidden) {
+                    if (tabSwitchCount === 1) {
+                        alert('Warning: Tab switch detected and recorded. Please stay on this exam tab.');
+                    } else if (tabSwitchCount <= 3) {
+                        alert(`Warning ${tabSwitchCount}: Multiple tab switches detected. This behavior is being monitored.`);
+                    }
+                }
+            }, 500);
+        }
+    }
+
+    // Log Cheating Event to Server
+    function logCheatingEvent(eventType, timestamp) {
+        fetch(recordTabSwitchUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                event_type: eventType,
+                timestamp: timestamp
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(`${eventType} logged:`, data);
+        })
+        .catch(err => console.error('Failed to log cheating event:', err));
+    }
+
+    // Event Listeners for Anti-Cheating
+    document.addEventListener('fullscreenchange', detectFullscreenExit);
+    document.addEventListener('webkitfullscreenchange', detectFullscreenExit); // Safari
+    document.addEventListener('msfullscreenchange', detectFullscreenExit); // IE11
+    document.addEventListener('visibilitychange', detectTabSwitch);
+
     // Initialize
     updateProgress();
     goToQuestion(0);
+    
+    // Request fullscreen on page load
+    setTimeout(() => {
+        requestFullscreen();
+    }, 1000);
 </script>
 
 <style>

@@ -47,7 +47,7 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - Add submit button
     - _Requirements: 2.1, 2.3, 2.5_
   
-  - [-] 3.4 Implement JavaScript for MCQ exam functionality
+  - [x] 3.4 Implement JavaScript for MCQ exam functionality
     - Create timer countdown with auto-submit at zero
     - Implement AJAX auto-save for answer selections
     - Add question navigation handlers
@@ -57,7 +57,7 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - Send cheating events to server via AJAX
     - _Requirements: 2.2, 2.4, 6.1, 6.2, 6.3_
   
-  - [~] 3.5 Create ExamController::submitExam() method
+  - [x] 3.5 Create ExamController::submitExam() method
     - Validate exam attempt ownership
     - Save all answers to exam_attempts table
     - Create ExamResult record with score calculation
@@ -65,14 +65,14 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - Redirect to results page
     - _Requirements: 2.2_
   
-  - [~] 3.6 Create ExamController::logCheatingEvent() method
+  - [x] 3.6 Create ExamController::logCheatingEvent() method
     - Validate exam attempt ownership
     - Append event to cheating_events JSON column
     - Return success response
     - _Requirements: 6.2, 6.3, 6.4_
 
 - [ ] 4. Build CQ exam interface
-  - [~] 4.1 Create ExamController::takeCQ() method
+  - [-] 4.1 Create ExamController::takeCQ() method
     - Validate exam time window
     - Create or retrieve ExamAttempt
     - Load CQ questions

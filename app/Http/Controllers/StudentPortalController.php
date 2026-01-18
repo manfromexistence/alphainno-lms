@@ -346,7 +346,55 @@ class StudentPortalController extends Controller
     }
 
     /**
+     * Record tab switch event (anti-cheating).
+     * 
+     * Requirements: 6.3, 6.4
+     */
+    public function recordTabSwitch(Request $request, ExamAttempt $attempt)
+    {
+        $student = $this->getStudent();
+        
+        if (!$student || $attempt->student_id !== $student->id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'event_type' => 'required|string|in:tab_switch,fullscreen_exit',
+            'timestamp' => 'required|string',
+        ]);
+
+        // Get existing cheating events or initialize empty array
+        $cheatingEvents = $attempt->cheating_events ?? [];
+        
+        // Add new event
+        $cheatingEvents[] = [
+            'type' => $request->event_type,
+            'timestamp' => $request->timestamp,
+            'recorded_at' => now()->toISOString(),
+        ];
+
+        // Update attempt with new events
+        $attempt->update([
+            'cheating_events' => $cheatingEvents,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'event_count' => count($cheatingEvents),
+        ]);
+    }
+
+    /**
      * Submit an exam.
+     * 
+     * Requirements: 2.2
+     * 
+     * Task details:
+     * - Validate exam attempt ownership
+     * - Save all answers to exam_attempts table (already saved via auto-save)
+     * - Create ExamResult record with score calculation
+     * - Mark attempt as submitted
+     * - Redirect to results page
      */
     public function submitExam(Request $request, Exam $exam)
     {
@@ -356,16 +404,20 @@ class StudentPortalController extends Controller
             return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
         }
 
+        // Validate exam attempt ownership
         $attempt = ExamAttempt::where('student_id', $student->id)
             ->where('exam_id', $exam->id)
+            ->where('status', 'in_progress')
             ->first();
 
         if (!$attempt) {
-            return redirect()->route('student.exams')->with('error', 'No attempt found for this exam.');
+            return redirect()->route('student.exams')->with('error', 'No active attempt found for this exam.');
         }
 
+        // Submit exam (saves answers, creates result, marks as submitted)
         $result = $this->examService->submitExam($attempt);
 
+        // Redirect to results page
         return redirect()->route('student.exam-result', $result->id)
             ->with('success', 'Exam submitted successfully!');
     }
