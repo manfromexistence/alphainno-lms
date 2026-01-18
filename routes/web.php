@@ -31,6 +31,7 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout.get');
 
 // Unauthorized Access Route
 Route::get('/unauthorized', function () {
