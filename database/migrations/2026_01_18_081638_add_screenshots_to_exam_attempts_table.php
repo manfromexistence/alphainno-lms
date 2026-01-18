@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('exam_attempts', function (Blueprint $table) {
             // Add screenshots JSON column to store CQ exam screenshot paths
-            $table->json('screenshots')->nullable()->after('answers');
+            $table->json('screenshots')->nullable();
         });
     }
 

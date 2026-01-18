@@ -21,10 +21,10 @@ return new class extends Migration {
             ]);
 
             // Add Payment Fields
-            $table->decimal('total_amount', 10, 2)->default(0)->after('status')->nullable();
-            $table->decimal('paid_amount', 10, 2)->default(0)->after('total_amount')->nullable();
-            $table->decimal('due_amount', 10, 2)->default(0)->after('paid_amount')->nullable();
-            $table->string('payment_method')->nullable()->after('due_amount');
+            $table->decimal('total_amount', 10, 2)->default(0)->nullable();
+            $table->decimal('paid_amount', 10, 2)->default(0)->nullable();
+            $table->decimal('due_amount', 10, 2)->default(0)->nullable();
+            $table->string('payment_method')->nullable();
 
             // Ensure proper indexing if needed
             if (!Schema::hasColumn('students', 'registration_no')) {

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('exam_attempts', function (Blueprint $table) {
             // Add cheating_events JSON column to store anti-cheating detection events
-            $table->json('cheating_events')->nullable()->after('cheating_notes');
+            $table->json('cheating_events')->nullable();
         });
     }
 
