@@ -714,12 +714,7 @@ class SidebarService
             ],
 
             // Parent Dashboard Items (read-only access to children's data)
-            [
-                'title' => 'Children Overview',
-                'icon' => 'users',
-                'route' => 'dashboard.children',
-                'roles' => [self::ROLE_PARENT],
-            ],
+            // Note: Children Overview is the parent dashboard, so it's accessed via the main Dashboard menu item
             [
                 'title' => 'Academic Progress',
                 'icon' => 'trending-up',

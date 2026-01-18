@@ -22,7 +22,28 @@
         }
     }
     
-    $isActive = isset($item['route']) && $item['route'] && Route::currentRouteName() === $item['route'];
+    // Check if current route matches the item's route or any of its active routes
+    $currentRoute = Route::currentRouteName();
+    $isActive = false;
+    
+    // Strip whitespace from route name for comparison
+    $itemRoute = isset($item['route']) && $item['route'] ? preg_replace('/\s+/u', '', $item['route']) : null;
+    
+    // Check main route
+    if ($itemRoute && $currentRoute === $itemRoute) {
+        $isActive = true;
+    }
+    
+    // Check activeRoutes array
+    if (!$isActive && isset($item['activeRoutes']) && is_array($item['activeRoutes'])) {
+        foreach ($item['activeRoutes'] as $activeRoute) {
+            $cleanRoute = preg_replace('/\s+/u', '', $activeRoute);
+            if ($currentRoute === $cleanRoute) {
+                $isActive = true;
+                break;
+            }
+        }
+    }
     
     // Check if any child is active
     $hasActiveChild = false;

@@ -25,8 +25,9 @@ class DashboardController extends Controller
             return redirect()->route('teacher.dashboard');
         }
         
+        // Show parent dashboard directly (no redirect)
         if ($role === 'parent' || $user->hasRole('parent')) {
-            return redirect()->route('dashboard.children');
+            return app(\App\Http\Controllers\ParentPortalController::class)->index();
         }
         
         // Admin and Super Admin see the main dashboard
