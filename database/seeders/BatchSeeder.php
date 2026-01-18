@@ -34,7 +34,7 @@ class BatchSeeder extends Seeder
 
             for ($i = 1; $i <= $batchCount; $i++) {
                 $startDate = now()->addDays(rand(7, 60));
-                $endDate = $startDate->copy()->addMonths($course->duration);
+                $endDate = $startDate->copy()->addMonths((int) $course->duration);
 
                 Batch::updateOrCreate(
                     ['code' => $course->code . '-B' . $i],
