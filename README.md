@@ -16,3 +16,5 @@ php artisan key:generate && php artisan migrate:fresh --seed && rm -rf public/st
 
 Student
 SMS
+
+I am logged in as a parent - now the parent, current the children overview is the parent dashboad so please remove that item from sidebar and when parent goes to that page please hightlight dashboard item

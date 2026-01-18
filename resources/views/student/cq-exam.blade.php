@@ -3,9 +3,6 @@
 @section('title', 'Take Exam - ' . $exam->title)
 
 @section('content')
-<!-- TinyMCE CDN -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
 <div class="min-h-screen bg-background py-6" id="exam-app">
     <div class="max-w-6xl mx-auto px-4">
         <!-- Header with Timer and Exam Info -->
@@ -117,13 +114,56 @@
                         </svg>
                         Your Answer:
                     </label>
-                    <textarea 
-                        name="answers[{{ $question->id }}][text]" 
-                        id="editor-{{ $index }}"
-                        class="tinymce-editor w-full bg-card text-foreground rounded-lg p-4 min-h-[200px] border border-input focus:border-primary focus:ring-2 focus:ring-ring"
-                        data-question-id="{{ $question->id }}"
-                        data-question-index="{{ $index }}"
-                        placeholder="Type your answer here..."></textarea>
+                    
+                    <!-- Custom Rich Text Editor -->
+                    <div class="border border-input rounded-lg overflow-hidden bg-card">
+                        <!-- Toolbar -->
+                        <div class="bg-secondary border-b border-border p-2 flex flex-wrap gap-1">
+                            <button type="button" onclick="formatText('bold', {{ $index }})" class="p-2 hover:bg-accent rounded" title="Bold">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6 4v12h4.5c1.76 0 3.5-1.24 3.5-3.25 0-1.1-.5-2.05-1.32-2.63C13.48 9.5 14 8.5 14 7.25 14 5.24 12.26 4 10.5 4H6zm2 2h2.5c.83 0 1.5.67 1.5 1.5S11.33 9 10.5 9H8V6zm0 5h2.5c1.1 0 2 .9 2 2s-.9 2-2 2H8v-4z"/></svg>
+                            </button>
+                            <button type="button" onclick="formatText('italic', {{ $index }})" class="p-2 hover:bg-accent rounded" title="Italic">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 4v2h1.5l-3 8H7v2h6v-2h-1.5l3-8H16V4h-6z"/></svg>
+                            </button>
+                            <button type="button" onclick="formatText('underline', {{ $index }})" class="p-2 hover:bg-accent rounded" title="Underline">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6 3v7c0 2.21 1.79 4 4 4s4-1.79 4-4V3h-2v7c0 1.1-.9 2-2 2s-2-.9-2-2V3H6zm-2 14h12v2H4v-2z"/></svg>
+                            </button>
+                            <div class="w-px bg-border mx-1"></div>
+                            <button type="button" onclick="formatText('insertUnorderedList', {{ $index }})" class="p-2 hover:bg-accent rounded" title="Bullet List">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4h2v2H4V4zm4 0h8v2H8V4zM4 8h2v2H4V8zm4 0h8v2H8V8zm-4 4h2v2H4v-2zm4 0h8v2H8v-2z"/></svg>
+                            </button>
+                            <button type="button" onclick="formatText('insertOrderedList', {{ $index }})" class="p-2 hover:bg-accent rounded" title="Numbered List">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4h10v2H5V4zm0 4h10v2H5V8zm0 4h10v2H5v-2zM2 4h2v2H2V4zm0 4h2v2H2V8zm0 4h2v2H2v-2z"/></svg>
+                            </button>
+                            <div class="w-px bg-border mx-1"></div>
+                            <button type="button" onclick="formatText('justifyLeft', {{ $index }})" class="p-2 hover:bg-accent rounded" title="Align Left">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4h14v2H3V4zm0 4h10v2H3V8zm0 4h14v2H3v-2zm0 4h10v2H3v-2z"/></svg>
+                            </button>
+                            <button type="button" onclick="formatText('justifyCenter', {{ $index }})" class="p-2 hover:bg-accent rounded" title="Align Center">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4h14v2H3V4zm2 4h10v2H5V8zm-2 4h14v2H3v-2zm2 4h10v2H5v-2z"/></svg>
+                            </button>
+                            <button type="button" onclick="formatText('justifyRight', {{ $index }})" class="p-2 hover:bg-accent rounded" title="Align Right">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4h14v2H3V4zm4 4h10v2H7V8zm-4 4h14v2H3v-2zm4 4h10v2H7v-2z"/></svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Editor Content -->
+                        <div 
+                            id="editor-{{ $index }}"
+                            class="editor-content p-4 min-h-[200px] max-h-[400px] overflow-y-auto focus:outline-none"
+                            contenteditable="true"
+                            data-question-id="{{ $question->id }}"
+                            data-question-index="{{ $index }}"
+                            oninput="handleEditorInput({{ $index }})"
+                            placeholder="Type your answer here...">
+                        </div>
+                        
+                        <!-- Hidden textarea to store the content for form submission -->
+                        <textarea 
+                            name="answers[{{ $question->id }}][text]" 
+                            id="hidden-textarea-{{ $index }}"
+                            class="hidden"></textarea>
+                    </div>
                 </div>
                 
                 <!-- Screenshot Upload -->
@@ -248,29 +288,56 @@
     let answeredCount = 0;
     let editorInstances = {};
 
-    // Initialize TinyMCE
+    // Custom Rich Text Editor Functions
+    function formatText(command, index) {
+        const editor = document.getElementById(`editor-${index}`);
+        editor.focus();
+        document.execCommand(command, false, null);
+        handleEditorInput(index);
+    }
+
+    function handleEditorInput(index) {
+        const editor = document.getElementById(`editor-${index}`);
+        const hiddenTextarea = document.getElementById(`hidden-textarea-${index}`);
+        
+        // Save content to hidden textarea
+        hiddenTextarea.value = editor.innerHTML;
+        
+        // Store in editorInstances for compatibility
+        editorInstances[index] = {
+            getContent: () => editor.innerHTML,
+            setContent: (content) => { editor.innerHTML = content; }
+        };
+        
+        checkQuestionAnswered(index);
+    }
+
+    // Initialize editors on page load
     document.addEventListener('DOMContentLoaded', function() {
-        tinymce.init({
-            selector: '.tinymce-editor',
-            height: 300,
-            menubar: false,
-            plugins: [
-                'advlist', 'autolink', 'lists', 'link', 'charmap',
-                'searchreplace', 'visualblocks', 'code',
-                'insertdatetime', 'table', 'help', 'wordcount'
-            ],
-            toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | removeformat',
-            setup: function(editor) {
-                editor.on('init', function() {
-                    const index = editor.targetElm.dataset.questionIndex;
-                    editorInstances[index] = editor;
+        // Initialize all editors
+        for (let i = 0; i < totalQuestions; i++) {
+            const editor = document.getElementById(`editor-${i}`);
+            if (editor) {
+                // Set placeholder behavior
+                editor.addEventListener('focus', function() {
+                    if (this.innerHTML === '') {
+                        this.classList.remove('empty');
+                    }
                 });
-                editor.on('change keyup', function() {
-                    const index = editor.targetElm.dataset.questionIndex;
-                    checkQuestionAnswered(index);
+                
+                editor.addEventListener('blur', function() {
+                    if (this.innerHTML === '') {
+                        this.classList.add('empty');
+                    }
                 });
+                
+                // Initialize editor instance
+                editorInstances[i] = {
+                    getContent: () => editor.innerHTML,
+                    setContent: (content) => { editor.innerHTML = content; }
+                };
             }
-        });
+        }
     });
 
     // Timer
@@ -438,16 +505,26 @@
     }
 
     function submitExam() {
-        for (let index in editorInstances) {
-            editorInstances[index].save();
+        // Sync all editors before submit
+        for (let i = 0; i < totalQuestions; i++) {
+            const editor = document.getElementById(`editor-${i}`);
+            const hiddenTextarea = document.getElementById(`hidden-textarea-${i}`);
+            if (editor && hiddenTextarea) {
+                hiddenTextarea.value = editor.innerHTML;
+            }
         }
         window.onbeforeunload = null;
         document.getElementById('exam-form').submit();
     }
 
     function autoSubmitExam() {
-        for (let index in editorInstances) {
-            editorInstances[index].save();
+        // Sync all editors before submit
+        for (let i = 0; i < totalQuestions; i++) {
+            const editor = document.getElementById(`editor-${i}`);
+            const hiddenTextarea = document.getElementById(`hidden-textarea-${i}`);
+            if (editor && hiddenTextarea) {
+                hiddenTextarea.value = editor.innerHTML;
+            }
         }
         window.onbeforeunload = null;
         alert('Time is up! Submitting exam...');
@@ -470,6 +547,46 @@
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Custom Rich Text Editor Styles */
+    .editor-content {
+        outline: none;
+    }
+    
+    .editor-content:empty:before {
+        content: attr(placeholder);
+        color: #9ca3af;
+        pointer-events: none;
+    }
+    
+    .editor-content:focus {
+        outline: none;
+    }
+    
+    .editor-content p {
+        margin-bottom: 0.5rem;
+    }
+    
+    .editor-content ul, .editor-content ol {
+        margin-left: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .editor-content li {
+        margin-bottom: 0.25rem;
+    }
+    
+    .editor-content strong {
+        font-weight: bold;
+    }
+    
+    .editor-content em {
+        font-style: italic;
+    }
+    
+    .editor-content u {
+        text-decoration: underline;
     }
 </style>
 @endsection
