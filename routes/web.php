@@ -27,6 +27,8 @@ Route::get('/results', [HomeController::class, 'results'])->name('results');
 
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
+Route::get('/announcements/{announcement}', [HomeController::class, 'showAnnouncement'])->name('announcement.show');
+
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -325,6 +327,7 @@ Route::middleware('auth')->group(function () {
         
         // Course Enrollment Payment Routes (Task 15)
         Route::get('/courses', [\App\Http\Controllers\StudentPortalController::class, 'courses'])->name('courses');
+        Route::get('/courses/{course}/enroll', [\App\Http\Controllers\StudentPortalController::class, 'enroll'])->name('course.enroll');
         Route::get('/payment/form/{course}', [\App\Http\Controllers\PaymentController::class, 'showForm'])->name('payment.form');
         Route::post('/payment/submit', [\App\Http\Controllers\PaymentController::class, 'submit'])->name('payment.submit');
         Route::get('/payment/dashboard', [\App\Http\Controllers\PaymentController::class, 'dashboard'])->name('payment.dashboard');

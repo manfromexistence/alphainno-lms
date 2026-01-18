@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Page;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\Announcement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -27,9 +29,30 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
+        $announcements = Announcement::where('status', 'published')
+            ->orderBy('published_at', 'desc')
+            ->take(5)
+            ->get();
+
         $page = Page::findBySlug('home');
 
-        return view('welcome', compact('featuredStudents', 'randomStudents', 'popularCourses', 'page'));
+        return view('welcome', compact('featuredStudents', 'randomStudents', 'popularCourses', 'announcements', 'page'));
+    }
+
+    public function showAnnouncement(Announcement $announcement)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        // According to requirements:
+        // - Authenticated: Redirect to announcement details
+        // - Bought course: Redirect to announcement details
+        // - Not bought: Redirect to announcement details
+        // - Bought + Batch: Redirect to announcement details
+        
+        // Basically, if logged in, show it.
+        return view('announcement-details', compact('announcement'));
     }
 
     public function about()

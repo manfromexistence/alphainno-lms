@@ -17,7 +17,7 @@
                 @endif
             </div>
         </div>
-        <div class="flex-shrink-0 flex items-center gap-4">
+        <div class="shrink-0 flex items-center gap-4">
             <span>EIIN No: <strong>123354</strong></span>
             <span>School code: <strong>123456</strong></span>
             <span>Reg. No: <strong>12334455617</strong></span>

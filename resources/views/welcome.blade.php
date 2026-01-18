@@ -94,7 +94,7 @@
                     <div class="relative">
                         <img src="{{ $page ? $page->getContent('banner_image', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800') : 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800' }}" alt="Learning Banner"
                             class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent to-white/30"></div>
+                        <div class="absolute inset-0 bg-linear-to-r from-transparent to-white/30"></div>
                     </div>
 
                     <!-- Right Side - Content -->
@@ -153,7 +153,7 @@
                         @endphp
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/3 select-none">
                             <div onclick="openCourseModal(this)" data-course='@json($course)' class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
-                                <div class="relative h-48 bg-gradient-to-br {{ $gradient }}">
+                                <div class="relative h-48 bg-linear-to-br {{ $gradient }}">
                                     @if($course->image)
                                         @if(str_starts_with($course->image, 'http'))
                                             <img src="{{ $course->image }}" alt="{{ $course->name }}" class="w-full h-full object-cover pointer-events-none">
@@ -243,8 +243,19 @@
                 <x-ui.carousel class="w-full">
                     @foreach($featuredStudents as $student)
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/4 select-none">
-                            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
-                                <div class="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500">
+                            <div onclick="openStudentModal(this)" 
+                                 data-student='@json([
+                                     "name" => $student->user->name ?? "Student",
+                                     "image" => $student->profile_image,
+                                     "class" => $student->class,
+                                     "batch" => $student->batch->name ?? null,
+                                     "roll" => $student->roll_no,
+                                     "section" => $student->section,
+                                     "shift" => $student->shift,
+                                     "group" => $student->group
+                                 ])'
+                                 class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
+                                <div class="relative h-48 bg-linear-to-br from-blue-400 to-purple-500">
                                     @if($student->profile_image)
                                         @if(str_starts_with($student->profile_image, 'http'))
                                             <img src="{{ $student->profile_image }}" alt="{{ $student->user->name ?? 'Student' }}" class="w-full h-full object-cover pointer-events-none">
@@ -341,8 +352,19 @@
                             $studentGradient = $studentGradients[$index % count($studentGradients)];
                         @endphp
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/4 select-none">
-                            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
-                                <div class="relative h-48 bg-gradient-to-br {{ $studentGradient }}">
+                            <div onclick="openStudentModal(this)"
+                                 data-student='@json([
+                                     "name" => $student->user->name ?? "Student",
+                                     "image" => $student->profile_image,
+                                     "class" => $student->class,
+                                     "batch" => $student->batch->name ?? null,
+                                     "roll" => $student->roll_no,
+                                     "section" => $student->section,
+                                     "shift" => $student->shift,
+                                     "group" => $student->group
+                                 ])'
+                                 class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
+                                <div class="relative h-48 bg-linear-to-br {{ $studentGradient }}">
                                     @if($student->profile_image)
                                         @if(str_starts_with($student->profile_image, 'http'))
                                             <img src="{{ $student->profile_image }}" alt="{{ $student->user->name ?? 'Student' }}" class="w-full h-full object-cover pointer-events-none">
@@ -443,15 +465,24 @@
                         <h3 class="text-xl font-bold text-gray-800">{{ $page ? $page->getContent('notice_title', 'নোটিশ বোর্ড') : 'নোটিশ বোর্ড' }}</h3>
                     </div>
                     <div class="space-y-4 flex-1">
-                        <a href="#"
+                        @forelse($announcements as $index => $announcement)
+                        <a href="{{ route('announcement.show', $announcement->id) }}"
                             class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition group">
                             <div
-                                class="flex-shrink-0 w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold">
-                                1</div>
+                                class="shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold
+                                {{ $index % 3 === 0 ? 'bg-red-100 text-red-600' : ($index % 3 === 1 ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600') }}">
+                                {{ $index + 1 }}
+                            </div>
                             <div class="flex-1">
-                                <p class="text-sm text-gray-700 group-hover:text-primary">{{ $page ? $page->getContent('notice_1', 'নতুন শিক্ষাবর্ষের ভর্তি কার্যক্রম শুরু...') : 'নতুন শিক্ষাবর্ষের ভর্তি কার্যক্রম শুরু...' }}</p>
+                                <p class="text-sm text-gray-700 group-hover:text-primary font-medium line-clamp-2">{{ $announcement->title }}</p>
+                                <span class="text-xs text-gray-500">{{ $announcement->published_at ? $announcement->published_at->format('d M, Y') : $announcement->created_at->format('d M, Y') }}</span>
                             </div>
                         </a>
+                        @empty
+                        <div class="text-center text-gray-500 py-4">
+                            কোন নোটিশ পাওয়া যায়নি।
+                        </div>
+                        @endforelse
                     </div>
                     <div class="mt-4 text-center">
                         <a href="#"
@@ -500,10 +531,67 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary/90 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm" onclick="closeCourseModal()">
-                        Close
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
+                    <a id="modal-buy-btn" href="#" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary/90 focus:outline-none sm:w-auto sm:text-sm">
+                        কোর্সটি কিনুন
+                    </a>
+                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeCourseModal()">
+                        বন্ধ করুন
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Modal -->
+    <div id="studentModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeStudentModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md w-full">
+                <div class="relative bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="absolute top-0 right-0 pt-4 pr-4">
+                        <button type="button" class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none" onclick="closeStudentModal()">
+                            <span class="sr-only">Close</span>
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="sm:flex sm:items-start">
+                         <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                            <div class="flex flex-col items-center">
+                                <img id="student-modal-image" src="" alt="Student Image" class="w-32 h-32 rounded-full object-cover border-4 border-primary/20 mb-4 shadow-sm">
+                                <h3 class="text-2xl leading-6 font-bold text-gray-900 mb-2" id="student-modal-name">Student Name</h3>
+                                <div class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium mb-6">
+                                    <span id="student-modal-class"></span>
+                                </div>
+                                
+                                <div class="w-full grid grid-cols-2 gap-4 text-left bg-gray-50 p-4 rounded-lg">
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Batch</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-batch">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Roll</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-roll">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Section</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-section">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Group</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-group">-</p>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Shift</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-shift">-</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -627,12 +715,46 @@
                 document.getElementById('modal-category').style.display = 'none';
             }
 
+            // Set Buy Link
+            const buyBtn = document.getElementById('modal-buy-btn');
+            if (buyBtn) {
+                buyBtn.href = `/student/courses/${course.id}/enroll`;
+            }
+
             document.getElementById('courseModal').classList.remove('hidden');
             document.body.style.overflow = 'hidden'; // Prevent background scrolling
         }
 
         function closeCourseModal() {
             document.getElementById('courseModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openStudentModal(element) {
+            const student = JSON.parse(element.getAttribute('data-student'));
+            
+            document.getElementById('student-modal-name').innerText = student.name;
+            document.getElementById('student-modal-class').innerText = 'Class ' + (student.class || 'N/A');
+            document.getElementById('student-modal-batch').innerText = student.batch || '-';
+            document.getElementById('student-modal-roll').innerText = student.roll || '-';
+            document.getElementById('student-modal-section').innerText = student.section || '-';
+            document.getElementById('student-modal-group').innerText = student.group || '-';
+            document.getElementById('student-modal-shift').innerText = student.shift || '-';
+            
+            let imageUrl = '';
+            if (student.image) {
+                imageUrl = student.image.startsWith('http') ? student.image : `/storage/${student.image}`;
+            } else {
+                imageUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=random`;
+            }
+            document.getElementById('student-modal-image').src = imageUrl;
+
+            document.getElementById('studentModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeStudentModal() {
+            document.getElementById('studentModal').classList.add('hidden');
             document.body.style.overflow = 'auto';
         }
     </script>

@@ -9,6 +9,7 @@ use App\Models\ExamResult;
 use App\Models\CqSubmission;
 use App\Models\Payment;
 use App\Models\CourseMaterial;
+use App\Models\Course;
 use App\Services\StudentPortalService;
 use App\Services\ExamTakingService;
 use App\Services\MarkSheetService;
@@ -705,6 +706,49 @@ class StudentPortalController extends Controller
                 'error' => 'Failed to upload screenshot. Please try again.',
                 'message' => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    /**
+     * Handle course enrollment/purchase logic.
+     */
+    public function enroll(Course $course)
+    {
+        $student = $this->getStudent();
+
+        if (!$student) {
+            return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
+        }
+
+        // Check if course is purchased (approved payment)
+        $hasPurchased = Payment::where('student_id', $student->id)
+            ->where('course_id', $course->id)
+            ->where('status', Payment::STATUS_APPROVED)
+            ->exists();
+
+        if ($hasPurchased) {
+            // Check if added to batch
+            if ($student->batch_id) {
+                // Already in a batch - redirect to course content (using materials as simpler proxy for "course page")
+                return redirect()->route('student.materials')->with('success', 'You are already enrolled.');
+            } else {
+                // Purchased but no batch - redirect to batch selection (or dashboard with warning for now)
+                // Since batch selection page doesn't exist, we send to dashboard with instruction.
+                return redirect()->route('student.dashboard')->with('info', 'Payment approved! Please contact admin to be assigned to a batch.');
+            }
+        } else {
+            // Check if there is a pending payment
+            $isPending = Payment::where('student_id', $student->id)
+                ->where('course_id', $course->id)
+                ->where('status', Payment::STATUS_PENDING)
+                ->exists();
+
+            if ($isPending) {
+                 return redirect()->route('student.payment.dashboard')->with('info', 'You already have a pending payment for this course.');
+            }
+
+            // Not purchased, redirect to payment form
+            return redirect()->route('student.payment.form', $course->id);
         }
     }
 
