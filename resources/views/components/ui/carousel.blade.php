@@ -24,15 +24,15 @@
     <!-- Controls -->
     @if($isHorizontal)
         <button type="button" data-carousel-prev
-            class="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full border border-gray-200 bg-white shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-400 z-10 duration-200"
+            class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 h-10 w-10 md:h-8 md:w-8 rounded-full border border-gray-200 bg-white shadow-lg flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity disabled:opacity-30 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-400 z-10 duration-200"
             disabled>
-            <svg class="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+            <svg class="w-5 h-5 md:w-4 md:h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             <span class="sr-only">Previous slide</span>
         </button>
 
         <button type="button" data-carousel-next
-            class="absolute right-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full border border-gray-200 bg-white shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-400 z-10 duration-200">
-            <svg class="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 h-10 w-10 md:h-8 md:w-8 rounded-full border border-gray-200 bg-white shadow-lg flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity disabled:opacity-30 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-400 z-10 duration-200">
+            <svg class="w-5 h-5 md:w-4 md:h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             <span class="sr-only">Next slide</span>
         </button>
     @else
@@ -59,62 +59,70 @@
                 const isHorizontal = root.dataset.orientation === 'horizontal';
                 
                 // Get all carousel items
-                const items = container.querySelectorAll('[data-carousel-item]');
+                const items = Array.from(container.querySelectorAll('[data-carousel-item]'));
                 let currentIndex = 0;
+
+                // Calculate visible items count
+                const getVisibleItemsCount = () => {
+                    if (items.length === 0) return 1;
+                    const itemWidth = items[0].offsetWidth;
+                    const viewportWidth = viewport.clientWidth;
+                    return Math.max(1, Math.floor(viewportWidth / itemWidth));
+                };
 
                 // Scroll Logic - Snap to full items
                 const scrollNext = () => {
                     if (items.length === 0) return;
                     
-                    // Calculate how many items are visible
-                    const itemWidth = items[0].offsetWidth;
-                    const viewportWidth = viewport.clientWidth;
-                    const visibleItems = Math.floor(viewportWidth / itemWidth);
+                    const visibleItems = getVisibleItemsCount();
+                    const maxIndex = Math.max(0, items.length - visibleItems);
                     
-                    // Move to next set of items
-                    currentIndex = Math.min(currentIndex + visibleItems, items.length - visibleItems);
+                    // Move to next item
+                    currentIndex = Math.min(currentIndex + 1, maxIndex);
                     
                     // Scroll to the item
-                    const scrollPosition = items[currentIndex].offsetLeft - container.offsetLeft;
-                    viewport.scrollTo({
-                        left: scrollPosition,
-                        behavior: 'smooth'
-                    });
+                    const targetItem = items[currentIndex];
+                    if (targetItem) {
+                        const scrollPosition = targetItem.offsetLeft - parseInt(getComputedStyle(container).marginLeft || 0);
+                        viewport.scrollTo({
+                            left: scrollPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                    
+                    updateButtons();
                 };
 
                 const scrollPrev = () => {
                     if (items.length === 0) return;
                     
-                    // Calculate how many items are visible
-                    const itemWidth = items[0].offsetWidth;
-                    const viewportWidth = viewport.clientWidth;
-                    const visibleItems = Math.floor(viewportWidth / itemWidth);
-                    
-                    // Move to previous set of items
-                    currentIndex = Math.max(currentIndex - visibleItems, 0);
+                    // Move to previous item
+                    currentIndex = Math.max(currentIndex - 1, 0);
                     
                     // Scroll to the item
-                    const scrollPosition = items[currentIndex].offsetLeft - container.offsetLeft;
-                    viewport.scrollTo({
-                        left: scrollPosition,
-                        behavior: 'smooth'
-                    });
+                    const targetItem = items[currentIndex];
+                    if (targetItem) {
+                        const scrollPosition = targetItem.offsetLeft - parseInt(getComputedStyle(container).marginLeft || 0);
+                        viewport.scrollTo({
+                            left: scrollPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                    
+                    updateButtons();
                 };
 
                 const updateButtons = () => {
                     if (!prevBtn || !nextBtn || items.length === 0) return;
                     
-                    const itemWidth = items[0].offsetWidth;
-                    const viewportWidth = viewport.clientWidth;
-                    const visibleItems = Math.floor(viewportWidth / itemWidth);
+                    const visibleItems = getVisibleItemsCount();
+                    const maxIndex = Math.max(0, items.length - visibleItems);
                     
-                    // Disable prev if at start
+                    // Update button states
                     prevBtn.disabled = currentIndex <= 0;
+                    nextBtn.disabled = currentIndex >= maxIndex;
                     
-                    // Disable next if at end
-                    nextBtn.disabled = currentIndex >= items.length - visibleItems;
-                    
-                    // Hide buttons if all items fit in viewport
+                    // Show/hide buttons based on whether scrolling is needed
                     if (items.length <= visibleItems) {
                         prevBtn.style.display = 'none';
                         nextBtn.style.display = 'none';
@@ -124,36 +132,63 @@
                     }
                 };
 
+                // Update current index based on scroll position
+                const updateIndexFromScroll = () => {
+                    if (items.length === 0) return;
+                    
+                    const scrollLeft = viewport.scrollLeft;
+                    const itemWidth = items[0].offsetWidth;
+                    const newIndex = Math.round(scrollLeft / itemWidth);
+                    currentIndex = Math.max(0, Math.min(newIndex, items.length - 1));
+                    updateButtons();
+                };
+
                 // Snap to nearest item on scroll end
                 let scrollTimeout;
                 viewport.addEventListener('scroll', () => {
                     clearTimeout(scrollTimeout);
                     scrollTimeout = setTimeout(() => {
-                        if (items.length === 0) return;
+                        updateIndexFromScroll();
                         
-                        // Find the closest item to current scroll position
-                        const scrollLeft = viewport.scrollLeft;
-                        const itemWidth = items[0].offsetWidth;
-                        const nearestIndex = Math.round(scrollLeft / itemWidth);
-                        currentIndex = Math.max(0, Math.min(nearestIndex, items.length - 1));
-                        
-                        // Snap to it
-                        const scrollPosition = items[currentIndex].offsetLeft - container.offsetLeft;
-                        viewport.scrollTo({
-                            left: scrollPosition,
-                            behavior: 'smooth'
-                        });
+                        // Snap to current item
+                        const targetItem = items[currentIndex];
+                        if (targetItem) {
+                            const scrollPosition = targetItem.offsetLeft - parseInt(getComputedStyle(container).marginLeft || 0);
+                            if (Math.abs(viewport.scrollLeft - scrollPosition) > 5) {
+                                viewport.scrollTo({
+                                    left: scrollPosition,
+                                    behavior: 'smooth'
+                                });
+                            }
+                        }
                     }, 150);
                 });
 
-                if (prevBtn) prevBtn.addEventListener('click', scrollPrev);
-                if (nextBtn) nextBtn.addEventListener('click', scrollNext);
-                viewport.addEventListener('scroll', () => {
-                    updateButtons();
+                // Button click handlers
+                if (prevBtn) prevBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    scrollPrev();
+                });
+                
+                if (nextBtn) nextBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    scrollNext();
+                });
+
+                // Handle window resize
+                let resizeTimeout;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        updateButtons();
+                    }, 200);
                 });
 
                 // Init state
-                updateButtons();
+                setTimeout(() => {
+                    updateButtons();
+                }, 100);
+                
                 root.dataset.carouselInitialized = 'true';
             };
 
