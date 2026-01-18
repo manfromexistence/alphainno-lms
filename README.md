@@ -13,8 +13,3 @@ npm run build && "/c/Program Files/7-Zip/7z.exe" a -tzip ../lms-updated-again.zi
 ```bash
 php artisan key:generate && php artisan migrate:fresh --seed && rm -rf public/storage && php artisan storage:link
 ```
-
-Student
-SMS
-
-I am logged in as a parent - now the parent, current the children overview is the parent dashboad so please remove that item from sidebar and when parent goes to that page please hightlight dashboard item
