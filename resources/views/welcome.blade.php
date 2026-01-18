@@ -243,16 +243,7 @@
                     @foreach($featuredStudents as $student)
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/4 select-none">
                             <div onclick="openStudentModal(this)" 
-                                 data-student="@json([
-                                     'name' => $student->user->name ?? 'Student',
-                                     'image' => $student->profile_image,
-                                     'class' => $student->class,
-                                     'batch' => $student->batch->name ?? null,
-                                     'roll' => $student->roll_no,
-                                     'section' => $student->section,
-                                     'shift' => $student->shift,
-                                     'group' => $student->group
-                                 ])"
+
                                  class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-linear-to-br from-blue-400 to-purple-500">
                                     @if($student->profile_image)
@@ -352,16 +343,7 @@
                         @endphp
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/4 select-none">
                             <div onclick="openStudentModal(this)"
-                                 data-student="@json([
-                                     'name' => $student->user->name ?? 'Student',
-                                     'image' => $student->profile_image,
-                                     'class' => $student->class,
-                                     'batch' => $student->batch->name ?? null,
-                                     'roll' => $student->roll_no,
-                                     'section' => $student->section,
-                                     'shift' => $student->shift,
-                                     'group' => $student->group
-                                 ])"
+
                                  class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-linear-to-br {{ $studentGradient }}">
                                     @if($student->profile_image)
