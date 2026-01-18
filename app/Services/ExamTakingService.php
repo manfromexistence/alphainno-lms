@@ -78,8 +78,16 @@ class ExamTakingService
     public function submitExam(ExamAttempt $attempt): ExamResult
     {
         return DB::transaction(function () use ($attempt) {
-            // Calculate score from answers
-            $score = $this->calculateMcqScore($attempt);
+            // Get exam details
+            $exam = $attempt->exam;
+            
+            // Calculate score based on exam type
+            if ($exam->type === 'mcq') {
+                $score = $this->calculateMcqScore($attempt);
+            } else {
+                // CQ exams need manual grading, set score to 0 initially
+                $score = 0;
+            }
             
             // Mark attempt as submitted
             $attempt->update([
@@ -87,8 +95,6 @@ class ExamTakingService
                 'submitted_at' => Carbon::now(),
             ]);
 
-            // Get exam details
-            $exam = $attempt->exam;
             $percentage = $exam->total_marks > 0 ? ($score / $exam->total_marks) * 100 : 0;
 
             // Get subject name from exam title or course
@@ -108,8 +114,8 @@ class ExamTakingService
                     'marks' => $score,
                     'obtained_marks' => $score,
                     'total_marks' => $exam->total_marks,
-                    'grade' => $this->calculateGrade($percentage),
-                    'feedback' => $this->getRemarks($percentage),
+                    'grade' => $exam->type === 'cq' ? 'Pending' : $this->calculateGrade($percentage),
+                    'feedback' => $exam->type === 'cq' ? 'Awaiting manual grading' : $this->getRemarks($percentage),
                 ]
             );
         });

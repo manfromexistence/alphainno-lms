@@ -446,12 +446,31 @@ class StudentPortalController extends Controller
         }
 
         // Validate exam attempt ownership
+        // First try to find an in-progress attempt
         $attempt = ExamAttempt::where('student_id', $student->id)
             ->where('exam_id', $exam->id)
             ->where('status', 'in_progress')
             ->first();
 
+        // If no in-progress attempt, check if already submitted
         if (!$attempt) {
+            $submittedAttempt = ExamAttempt::where('student_id', $student->id)
+                ->where('exam_id', $exam->id)
+                ->where('status', 'submitted')
+                ->first();
+            
+            if ($submittedAttempt) {
+                // Already submitted, redirect to results
+                $result = ExamResult::where('student_id', $student->id)
+                    ->where('exam_id', $exam->id)
+                    ->first();
+                
+                if ($result) {
+                    return redirect()->route('student.exam-result', $result->id)
+                        ->with('info', 'This exam has already been submitted.');
+                }
+            }
+            
             return redirect()->route('student.exams')->with('error', 'No active attempt found for this exam.');
         }
 
