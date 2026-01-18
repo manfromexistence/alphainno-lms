@@ -123,20 +123,19 @@
 
         @keyframes scroll {
             0% { transform: translateX(0%); }
-            100% { transform: translateX(-100%); }
+            100% { transform: translateX(-50%); }
         }
 
         .ticker { 
             display: inline-block; 
             white-space: nowrap; 
-            animation: scroll 30s linear infinite; 
-            padding-right: 100%;
+            animation: scroll 15s linear infinite; 
         }
 
-        /* Slightly faster on mobile but still slow */
+        /* Slightly faster on mobile */
         @media (max-width: 768px) {
             .ticker {
-                animation: scroll 25s linear infinite;
+                animation: scroll 12s linear infinite;
             }
         }
 

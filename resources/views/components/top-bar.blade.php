@@ -15,6 +15,15 @@
                     <span>নতুন শিক্ষাবর্ষে ভর্তি চলছে।</span>
                     <span class="mx-4">★</span>
                 @endif
+                <!-- Duplicate content for seamless loop -->
+                <span>মাধ্যমিক শিক্ষা বোর্ড জামালপুরের অধীনস্থ প্রতিষ্ঠান এবং একটি বেসরকারি শিক্ষা প্রতিষ্ঠান।</span>
+                @if(Request::is('/'))
+                    <span class="mx-4">★</span>
+                    <span>২০২৬ সালের এসএসসি পরীক্ষার্থীদের জন্য বিশেষ নোটিশ।</span>
+                    <span class="mx-4">★</span>
+                    <span>নতুন শিক্ষাবর্ষে ভর্তি চলছে।</span>
+                    <span class="mx-4">★</span>
+                @endif
             </div>
         </div>
         <div class="shrink-0 flex flex-wrap items-center justify-center gap-2 md:gap-4 text-xs">
