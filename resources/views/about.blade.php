@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', $page ? $page->getContent('page_title', 'প্রতিষ্ঠান পরিচিতি') : 'প্রতিষ্ঠান পরিচিতি' . ' - XYZ School & College')
+@section('title', $page ? $page->getContent('page_title', 'প্রতিষ্ঠান পরিচিতি') : 'প্রতিষ্ঠান পরিচিতি' . ' - Alphainno Lms')
 
 @section('content')
     <!-- Page Header -->

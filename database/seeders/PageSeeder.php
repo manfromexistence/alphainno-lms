@@ -13,7 +13,7 @@ class PageSeeder extends Seeder
             [
                 'title' => 'Home Page',
                 'slug' => 'home',
-                'meta_title' => 'Welcome to XYZ School & College',
+                'meta_title' => 'Welcome to Alphainno Lms',
                 'meta_description' => 'A leading educational institution providing quality education.',
                 'content' => [
                     'slide1_title' => 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড',
@@ -48,13 +48,13 @@ class PageSeeder extends Seeder
             [
                 'title' => 'About Page',
                 'slug' => 'about',
-                'meta_title' => 'About Us - XYZ School',
+                'meta_title' => 'About Us - Alphainno Lms',
                 'meta_description' => 'Learn about our history, mission, and vision.',
                 'content' => [
                     'page_title' => 'আমাদের সম্পর্কে',
                     'about_image' => 'https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dW5pdmVyc2l0eXxlbnwwfHwwfHx8MA%3D%3D',
                     'about_title' => 'আমাদের ইতিহাস ও ঐতিহ্য',
-                    'about_text' => 'XYZ School & College ১৯৮৮ সালে প্রতিষ্ঠিত একটি স্বনামধন্য শিক্ষা প্রতিষ্ঠান। বিগত তিন দশক ধরে আমরা নিরলসভাবে শিক্ষা সেবা প্রদান করে আসছি। আমাদের প্রতিষ্ঠানটি ঢাকা বোর্ডের অন্যতম সেরা শিক্ষা প্রতিষ্ঠান হিসেবে স্বীকৃত।',
+                    'about_text' => 'Alphainno Lms ১৯৮৮ সালে প্রতিষ্ঠিত একটি স্বনামধন্য শিক্ষা প্রতিষ্ঠান। বিগত তিন দশক ধরে আমরা নিরলসভাবে শিক্ষা সেবা প্রদান করে আসছি। আমাদের প্রতিষ্ঠানটি ঢাকা বোর্ডের অন্যতম সেরা শিক্ষা প্রতিষ্ঠান হিসেবে স্বীকৃত।',
                     'stats_students' => '২৫০০+',
                     'stats_teachers' => '১২০+',
                     'stats_staff' => '৪৫+',
@@ -70,7 +70,7 @@ class PageSeeder extends Seeder
             [
                 'title' => 'Contact Page',
                 'slug' => 'contact',
-                'meta_title' => 'Contact Us - XYZ School',
+                'meta_title' => 'Contact Us - Alphainno Lms',
                 'meta_description' => 'Get in touch with us.',
                 'content' => [
                     'page_title' => 'যোগাযোগ করুন',

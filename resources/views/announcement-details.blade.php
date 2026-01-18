@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', $announcement->title . ' - XYZ School & College')
+@section('title', $announcement->title . ' - Alphainno Lms')
 
 @section('content')
     <div class="py-16 bg-gray-50 min-h-screen">

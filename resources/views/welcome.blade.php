@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', 'XYZ School & College - স্বাগতম')
+@section('title', 'Alphainno Lms - স্বাগতম')
 
 @push('styles')
     <style>
