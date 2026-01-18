@@ -91,6 +91,12 @@ class ExamTakingService
             $exam = $attempt->exam;
             $percentage = $exam->total_marks > 0 ? ($score / $exam->total_marks) * 100 : 0;
 
+            // Get subject name from exam title or course
+            $subjectName = $exam->title;
+            if ($exam->course) {
+                $subjectName = $exam->course->name ?? $exam->title;
+            }
+
             // Create ExamResult record with score calculation
             return ExamResult::updateOrCreate(
                 [
@@ -98,6 +104,7 @@ class ExamTakingService
                     'exam_id' => $attempt->exam_id,
                 ],
                 [
+                    'subject_name' => $subjectName,
                     'marks' => $score,
                     'obtained_marks' => $score,
                     'total_marks' => $exam->total_marks,
@@ -234,16 +241,25 @@ class ExamTakingService
 
         // Create or update exam result
         $exam = $submission->exam;
+        
+        // Get subject name from exam title or course
+        $subjectName = $exam->title;
+        if ($exam->course) {
+            $subjectName = $exam->course->name ?? $exam->title;
+        }
+        
         ExamResult::updateOrCreate(
             [
                 'student_id' => $submission->student_id,
                 'exam_id' => $submission->exam_id,
             ],
             [
+                'subject_name' => $subjectName,
                 'marks' => $marks,
+                'obtained_marks' => $marks,
                 'total_marks' => $exam->total_marks,
-                'percentage' => $exam->total_marks > 0 ? round(($marks / $exam->total_marks) * 100, 2) : 0,
                 'grade' => $this->calculateGrade(($marks / $exam->total_marks) * 100),
+                'feedback' => $feedback,
             ]
         );
 

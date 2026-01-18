@@ -114,16 +114,36 @@ class StudentManagementSeeder extends Seeder
                 // Seed Exam Results
                 $subjects = ['Mathematics', 'English', 'Science'];
                 foreach ($subjects as $subject) {
+                    // Find or create an exam for this subject and batch
+                    $exam = \App\Models\Exam::firstOrCreate(
+                        [
+                            'title' => $subject . ' - Term Exam',
+                            'batch_id' => $student->batch_id,
+                        ],
+                        [
+                            'type' => 'mcq',
+                            'course_id' => $student->batch->course_id ?? null,
+                            'total_marks' => 100,
+                            'pass_marks' => 40,
+                            'duration_minutes' => 60,
+                            'status' => 'active',
+                            'instructions' => 'Read all questions carefully.',
+                        ]
+                    );
+
                     $marks = rand(40, 99);
                     $grade = $marks >= 80 ? 'A+' : ($marks >= 70 ? 'A' : ($marks >= 60 ? 'A-' : 'B'));
 
                     ExamResult::updateOrCreate(
                         [
                             'student_id' => $student->id,
-                            'subject_name' => $subject,
+                            'exam_id' => $exam->id,
                         ],
                         [
+                            'subject_name' => $subject,
                             'marks' => $marks,
+                            'obtained_marks' => $marks,
+                            'total_marks' => 100,
                             'grade' => $grade,
                         ]
                     );

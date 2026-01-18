@@ -191,6 +191,8 @@ class StudentPortalDataSeeder extends Seeder
                     'student_id' => $student->id,
                 ],
                 [
+                    'subject_name' => $exam->title,
+                    'marks' => $obtainedMarks,
                     'obtained_marks' => $obtainedMarks,
                     'total_marks' => $totalMarks,
                     'grade' => $grade,

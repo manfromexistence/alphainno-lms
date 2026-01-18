@@ -123,10 +123,18 @@ class ExamService
                 $obtainedMarks = $this->calculateMcqScore($exam, $answers);
             }
 
+            // Get subject name from exam title or course
+            $subjectName = $exam->title;
+            if ($exam->course) {
+                $subjectName = $exam->course->name ?? $exam->title;
+            }
+
             $result = ExamResult::create([
                 'exam_id' => $exam->id,
                 'student_id' => $student->id,
+                'subject_name' => $subjectName,
                 'answers' => $answers,
+                'marks' => $obtainedMarks,
                 'total_marks' => $exam->total_marks,
                 'obtained_marks' => $obtainedMarks,
                 'grade' => $this->calculateGrade($obtainedMarks, $exam->total_marks),
@@ -326,12 +334,20 @@ class ExamService
      */
     public function recordManualResult(Exam $exam, Student $student, array $data): ExamResult
     {
+        // Get subject name from exam title or course
+        $subjectName = $exam->title;
+        if ($exam->course) {
+            $subjectName = $exam->course->name ?? $exam->title;
+        }
+
         return ExamResult::updateOrCreate(
             [
                 'exam_id' => $exam->id,
                 'student_id' => $student->id,
             ],
             [
+                'subject_name' => $subjectName,
+                'marks' => $data['obtained_marks'],
                 'obtained_marks' => $data['obtained_marks'],
                 'total_marks' => $exam->total_marks,
                 'grade' => $this->calculateGrade($data['obtained_marks'], $exam->total_marks),
