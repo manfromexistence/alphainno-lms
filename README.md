@@ -38,3 +38,9 @@ And about notice section if there is no seeded data for announcement then please
 At header even throught I am on other pages but the "হোম" is using black color please use colors like other header items there and about the top notice marqure make the animated text have less width so that it can start and end from more left side!!!
 
 When I am loggin as a student in admin panel then its showing me this view, delete and update exam button but this is only for teacher and admin not for student should only be able to do exam and all the exam is of student function is done as the .kiro/spec/student-portal-enhancement spec - now please make sure that student can only see exam and take and don't see any view, update and delete options!!!
+
+https://talent.erazehan.com/
+admin@gmail.com - password
+student@gmail.com - password
+teacher@gmail.com - password
+parent@gmail.com - password
