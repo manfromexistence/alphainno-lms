@@ -126,7 +126,7 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - _Requirements: 5.3_
 
 - [ ] 7. Build exam results display
-  - [-] 7.1 Create ExamController::viewResults() method
+  - [x] 7.1 Create ExamController::viewResults() method
     - Retrieve ExamResult for authenticated student
     - Load exam, attempt, questions, and answers
     - Calculate performance metrics (score, percentage, time taken, accuracy)
@@ -134,7 +134,7 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - Pass data to view
     - _Requirements: 7.1, 7.2, 7.4_
   
-  - [~] 7.2 Create exam-results.blade.php view
+  - [x] 7.2 Create exam-results.blade.php view
     - Display header with score, percentage, pass/fail status
     - Show performance metrics (time taken, accuracy, rank)
     - Display question-by-question breakdown

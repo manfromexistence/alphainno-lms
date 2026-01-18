@@ -66,7 +66,7 @@
             </div>
 
             <!-- Bottom Navigation -->
-            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3">
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20">
                 <!-- Previous Button -->
                 <button onclick="prevSlide()"
                     class="bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 transition">
@@ -162,9 +162,12 @@
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/3 select-none">
                             <div onclick="openCourseModal(this)" data-course='@json($course)' class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-gradient-to-br {{ $gradient }}">
-                                    @if($course->thumbnail)
-                                        <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="{{ $course->name }}"
-                                            class="w-full h-full object-cover pointer-events-none">
+                                    @if($course->image)
+                                        @if(str_starts_with($course->image, 'http'))
+                                            <img src="{{ $course->image }}" alt="{{ $course->name }}" class="w-full h-full object-cover pointer-events-none">
+                                        @else
+                                            <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->name }}" class="w-full h-full object-cover pointer-events-none">
+                                        @endif
                                     @else
                                         <div class="w-full h-full flex items-center justify-center">
                                             <div class="text-center">
@@ -543,8 +546,8 @@
             document.getElementById('modal-description').innerText = course.description || 'No description available.';
             
             let imageUrl = '';
-            if (course.thumbnail) {
-                imageUrl = course.thumbnail.startsWith('http') ? course.thumbnail : `/storage/${course.thumbnail}`;
+            if (course.image) {
+                imageUrl = course.image.startsWith('http') ? course.image : `/storage/${course.image}`;
             } else {
                 // Placeholder if no image
                 imageUrl = 'https://via.placeholder.com/640x360?text=No+Image';

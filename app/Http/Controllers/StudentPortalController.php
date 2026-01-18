@@ -448,6 +448,115 @@ class StudentPortalController extends Controller
     }
 
     /**
+     * View detailed exam results with performance analysis.
+     * 
+     * Requirements: 7.1, 7.2, 7.4
+     * 
+     * Task details:
+     * - Retrieve ExamResult for authenticated student
+     * - Load exam, attempt, questions, and answers
+     * - Calculate performance metrics (score, percentage, time taken, accuracy)
+     * - Fetch student's leaderboard rank
+     * - Pass data to view
+     */
+    public function viewResults(Exam $exam)
+    {
+        $student = $this->getStudent();
+        
+        if (!$student) {
+            return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
+        }
+
+        // Retrieve ExamResult for authenticated student
+        $result = ExamResult::where('student_id', $student->id)
+            ->where('exam_id', $exam->id)
+            ->first();
+
+        if (!$result) {
+            return redirect()->route('student.exams')->with('error', 'No result found for this exam.');
+        }
+
+        // Load exam with questions
+        $exam->load('questions');
+
+        // Load attempt with answers
+        $attempt = ExamAttempt::where('student_id', $student->id)
+            ->where('exam_id', $exam->id)
+            ->first();
+
+        if (!$attempt) {
+            return redirect()->route('student.exams')->with('error', 'No exam attempt found.');
+        }
+
+        // Get questions with student answers and correct answers
+        $questions = $exam->questions->map(function ($question) use ($attempt) {
+            $studentAnswer = $attempt->answers[$question->id] ?? null;
+            
+            return [
+                'id' => $question->id,
+                'question_text' => $question->question_text,
+                'type' => $question->type,
+                'options' => $question->options,
+                'correct_answer' => $question->correct_answer,
+                'student_answer' => $studentAnswer,
+                'is_correct' => $question->correct_answer && $studentAnswer 
+                    ? $question->isCorrectAnswer($studentAnswer) 
+                    : null,
+                'marks' => $question->marks,
+            ];
+        });
+
+        // Calculate performance metrics
+        $timeTaken = 0;
+        if ($attempt->started_at && $attempt->submitted_at) {
+            $timeTaken = $attempt->started_at->diffInSeconds($attempt->submitted_at);
+        }
+
+        // Calculate accuracy (percentage of correct answers)
+        $totalQuestions = $questions->count();
+        $correctAnswers = $questions->filter(function ($q) {
+            return $q['is_correct'] === true;
+        })->count();
+        
+        $accuracy = $totalQuestions > 0 ? round(($correctAnswers / $totalQuestions) * 100, 2) : 0;
+
+        // Fetch student's leaderboard rank
+        $rank = ExamResult::where('exam_id', $exam->id)
+            ->where(function ($query) use ($result) {
+                $query->where('obtained_marks', '>', $result->obtained_marks)
+                    ->orWhere(function ($q) use ($result) {
+                        $q->where('obtained_marks', '=', $result->obtained_marks)
+                            ->where('id', '<', $result->id);
+                    });
+            })
+            ->count() + 1;
+
+        // Build performance metrics array
+        $performance = [
+            'score' => $result->obtained_marks,
+            'total_marks' => $result->total_marks,
+            'percentage' => $result->percentage,
+            'time_taken' => $timeTaken,
+            'time_taken_formatted' => gmdate('H:i:s', $timeTaken),
+            'accuracy' => $accuracy,
+            'rank' => $rank,
+            'total_students' => ExamResult::where('exam_id', $exam->id)->count(),
+            'passed' => $result->hasPassed(),
+            'grade' => $result->grade ?? $result->calculateGrade(),
+        ];
+
+        // Pass data to view
+        return view('student.exam-results', [
+            'student' => $student,
+            'result' => $result,
+            'attempt' => $attempt,
+            'exam' => $exam,
+            'questions' => $questions,
+            'performance' => $performance,
+        ]);
+    }
+
+    /**
      * Take a CQ exam.
      * 
      * Requirements: 5.1, 5.2
