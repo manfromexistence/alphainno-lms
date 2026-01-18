@@ -326,4 +326,44 @@
         </div>
     </form>
 </div>
+
+@push('scripts')
+<script>
+    // Debug form submission
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form[action="{{ route('dashboard.settings.update') }}"]');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                console.log('Form submitting...');
+                const formData = new FormData(form);
+                
+                // Log all form data
+                console.log('Form data entries:');
+                for (let [key, value] of formData.entries()) {
+                    if (value instanceof File) {
+                        console.log(`${key}:`, {
+                            name: value.name,
+                            size: value.size,
+                            type: value.type
+                        });
+                    } else {
+                        console.log(`${key}:`, value);
+                    }
+                }
+                
+                // Check for file inputs
+                const logoFile = formData.get('institution_logo_file');
+                const faviconFile = formData.get('institution_favicon_file');
+                
+                if (logoFile && logoFile.size > 0) {
+                    console.log('Logo file found:', logoFile.name, logoFile.size, 'bytes');
+                }
+                if (faviconFile && faviconFile.size > 0) {
+                    console.log('Favicon file found:', faviconFile.name, faviconFile.size, 'bytes');
+                }
+            });
+        }
+    });
+</script>
+@endpush
 @endsection

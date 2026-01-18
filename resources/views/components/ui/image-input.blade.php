@@ -74,8 +74,8 @@
                    name="{{ $name }}_file" 
                    id="{{ $name }}-file" 
                    class="hidden" 
-                   accept="image/jpeg,image/png,image/gif,image/webp"
-                   onchange="handleImageUpload(this, '{{ $name }}')">
+                   accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml,image/webp,image/x-icon,.ico"
+                   onchange="handleImageUpload(this, '{{ $name }}')">>
         </div>
     </div>
 
@@ -144,14 +144,29 @@
             const group = input.closest('.custom-image-group');
             const isPersist = group && group.dataset.persist === 'true';
 
+            console.log('handleImageUpload called', { name, file, hasFile: !!file });
+
             if (file) {
+                console.log('File details:', { 
+                    name: file.name, 
+                    size: file.size, 
+                    type: file.type 
+                });
+
                 // Create Object URL for preview only
                 const objectUrl = URL.createObjectURL(file);
                 
                 // Update Preview (Scope to group)
                 const preview = group.querySelector('img[id$="-preview"]');
                 const placeholder = group.querySelector('div[id$="-placeholder"]');
-                const urlInput = group.querySelector('input[type="text"][name$="_url"]');
+                // Find URL input by ID instead of name attribute (since it might not have name when disabled)
+                const urlInput = group.querySelector(`input[type="text"][id="${name}-url"]`);
+                
+                console.log('Elements found:', { 
+                    preview: !!preview, 
+                    placeholder: !!placeholder, 
+                    urlInput: !!urlInput 
+                });
                 
                 if (preview) {
                     preview.src = objectUrl;
@@ -166,13 +181,20 @@
                 if(urlInput) {
                     urlInput.value = ''; 
                     urlInput.disabled = true;
+                    urlInput.removeAttribute('name'); // Remove name attribute to prevent submission
                     urlInput.placeholder = 'File selected - URL input disabled';
+                    urlInput.classList.add('bg-gray-100', 'text-gray-500');
+                    urlInput.classList.remove('bg-white');
                 }
 
                 if (isPersist) {
                     // Clear any stored URL since we're using a file now
                     localStorage.removeItem(getImageStorageKey(name));
                 }
+                
+                console.log('File upload handled successfully');
+            } else {
+                console.warn('No file selected');
             }
         }
 

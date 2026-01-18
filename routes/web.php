@@ -11,7 +11,14 @@ use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\BatchController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\TestUploadController;
 use App\Http\Controllers\HomeController;
+
+// Test Upload Routes (for debugging)
+Route::get('/test-upload', [TestUploadController::class, 'index'])->name('test-upload.index');
+Route::post('/test-upload', [TestUploadController::class, 'submit'])->name('test-upload.submit');
+Route::get('/test-upload-simple', [TestUploadController::class, 'simple'])->name('test-upload-simple.index');
+Route::post('/test-upload-simple', [TestUploadController::class, 'simpleSubmit'])->name('test-upload-simple.submit');
 
 Route::get('/', [HomeController::class, 'index']);
 
