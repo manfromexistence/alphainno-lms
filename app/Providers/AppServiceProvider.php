@@ -21,6 +21,15 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SidebarService::class, function ($app) {
             return new SidebarService();
         });
+
+        // WORKAROUND: Set upload_tmp_dir at runtime if not set
+        // This fixes the "Missing temporary folder" error on some systems
+        if (!ini_get('upload_tmp_dir') || empty(ini_get('upload_tmp_dir'))) {
+            $tempDir = sys_get_temp_dir();
+            if (is_dir($tempDir) && is_writable($tempDir)) {
+                ini_set('upload_tmp_dir', $tempDir);
+            }
+        }
     }
 
     /**
