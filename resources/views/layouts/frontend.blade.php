@@ -129,13 +129,13 @@
         .ticker { 
             display: inline-block; 
             white-space: nowrap; 
-            animation: scroll 15s linear infinite; 
+            animation: scroll 10s linear infinite; 
         }
 
-        /* Slightly faster on mobile */
+        /* Faster animation on mobile */
         @media (max-width: 768px) {
             .ticker {
-                animation: scroll 12s linear infinite;
+                animation: scroll 15s linear infinite;
             }
         }
 
