@@ -3,10 +3,15 @@
 @section('title', ($page ? $page->getContent('page_title', 'শিক্ষার্থী') : 'শিক্ষার্থী') . ' - XYZ School & College')
 
 @section('content')
+    @php
+        // Provide a local fallback so the view never throws if controller doesn't pass $primaryColor
+        $primaryColor = $primaryColor ?? '#3b82f6';
+    @endphp
+
     <!-- Page Header -->
-    <section class="bg-gradient-to-r from-[#006A4E] to-[#004d38] py-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <h1 class="text-3xl md:text-4xl font-bold text-white text-center mb-2">{{ $page ? $page->getContent('page_title', 'শিক্ষার্থী তথ্য') : 'শিক্ষার্থী তথ্য' }}</h1>
+    <section class="hero hero--gradient hero--dark">
+        <div class="hero-inner max-w-7xl mx-auto px-4">
+            <h1 class="text-3xl md:text-4xl hero-title text-white text-center mb-2">{{ $page ? $page->getContent('page_title', 'শিক্ষার্থী তথ্য') : 'শিক্ষার্থী তথ্য' }}</h1>
             <p class="text-white text-center opacity-90">{{ $page ? $page->getContent('page_subtitle', 'আমাদের শিক্ষার্থীদের সম্পর্কিত তথ্য ও পরিসংখ্যান') : 'আমাদের শিক্ষার্থীদের সম্পর্কিত তথ্য ও পরিসংখ্যান' }}</p>
         </div>
     </section>
@@ -19,25 +24,25 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
                 <!-- Stat 1 -->
                 <div class="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-all">
-                    <div class="text-5xl font-bold text-[#006A4E] mb-2">{{ $totalStudents > 0 ? $totalStudents . '+' : '০' }}</div>
+                    <div class="text-5xl font-bold text-[{{ $primaryColor }}] mb-2">{{ $totalStudents > 0 ? $totalStudents . '+' : '০' }}</div>
                     <p class="text-gray-600 font-semibold">{{ $page ? $page->getContent('total_students_label', 'মোট শিক্ষার্থী') : 'মোট শিক্ষার্থী' }}</p>
                 </div>
 
                 <!-- Stat 2 -->
                 <div class="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-all">
-                    <div class="text-5xl font-bold text-[#006A4E] mb-2">{{ $maleStudents }}</div>
+                    <div class="text-5xl font-bold text-[{{ $primaryColor }}] mb-2">{{ $maleStudents }}</div>
                     <p class="text-gray-600 font-semibold">{{ $page ? $page->getContent('male_students_label', 'ছাত্র') : 'ছাত্র' }}</p>
                 </div>
 
                 <!-- Stat 3 -->
                 <div class="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-all">
-                    <div class="text-5xl font-bold text-[#006A4E] mb-2">{{ $femaleStudents }}</div>
+                    <div class="text-5xl font-bold text-[{{ $primaryColor }}] mb-2">{{ $femaleStudents }}</div>
                     <p class="text-gray-600 font-semibold">{{ $page ? $page->getContent('female_students_label', 'ছাত্রী') : 'ছাত্রী' }}</p>
                 </div>
 
                 <!-- Stat 4 -->
                 <div class="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-all">
-                    <div class="text-5xl font-bold text-[#006A4E] mb-2">{{ $attendanceRate }}%</div>
+                    <div class="text-5xl font-bold text-[{{ $primaryColor }}] mb-2">{{ $attendanceRate }}%</div>
                     <p class="text-gray-600 font-semibold">{{ $page ? $page->getContent('attendance_rate_label', 'উপস্থিতি হার') : 'উপস্থিতি হার' }}</p>
                 </div>
             </div>
@@ -88,7 +93,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Activity 1 -->
                 <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-6 shadow-md">
-                    <div class="w-16 h-16 bg-[#006A4E] rounded-full flex items-center justify-center mb-4 text-white">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 text-white bg-primary">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -100,7 +105,7 @@
 
                 <!-- Activity 2 -->
                 <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-6 shadow-md">
-                    <div class="w-16 h-16 bg-[#006A4E] rounded-full flex items-center justify-center mb-4 text-white">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 text-white bg-primary">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -112,7 +117,7 @@
 
                 <!-- Activity 3 -->
                 <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg p-6 shadow-md">
-                    <div class="w-16 h-16 bg-[#006A4E] rounded-full flex items-center justify-center mb-4 text-white">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 text-white bg-primary">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 10V3L4 14h7v7l9-11h-7z" />

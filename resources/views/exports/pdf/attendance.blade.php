@@ -27,7 +27,7 @@
         
         /* Header with Branding */
         .header {
-            border-bottom: 3px solid #006A4E;
+            border-bottom: 3px solid {{ $primaryColor ?? '#006A4E' }};
             padding-bottom: 15px;
             margin-bottom: 20px;
         }

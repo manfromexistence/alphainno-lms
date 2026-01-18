@@ -11,7 +11,7 @@
             font-family: 'Inter', sans-serif;
         }
         .bg-bd-green {
-            background-color: #006A4E;
+            background-color: var(--color-primary);
         }
         .text-bd-green {
             color: #006A4E;
@@ -20,7 +20,7 @@
             border-color: #006A4E;
         }
         .hover\:bg-bd-green-dark:hover {
-            background-color: #005840;
+            background-color: var(--color-primary);
         }
     </style>
 </head>
@@ -64,7 +64,6 @@
                             name="email" 
                             value="{{ old('email') }}"
                             class="w-full px-4 py-3 pr-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-                            placeholder="alpha@gmail.com"
                             required
                             autofocus
                         >
@@ -85,7 +84,6 @@
                             id="password" 
                             name="password" 
                             class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-                            placeholder="••••••••"
                             required
                         >
                         <button 
@@ -113,9 +111,10 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button 
+                <button
+                class="w-full bg-bd-green hover:bg-bd-green-dark text-black font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                style="background-color: {{ $primaryColor ?? '#3b82f6' }}
                     type="submit" 
-                    class="w-full bg-bd-green hover:bg-bd-green-dark text-white font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                     Sign In
                 </button>

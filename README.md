@@ -5,7 +5,7 @@ This is the official repository for the Alphainno Learning Management System (LM
 ## Zip with windows 7-Zip
 
 ```bash
-npm run build && "/c/Program Files/7-Zip/7z.exe" a -tzip ../chapakhana-updated.zip . '-xr!node_modules' '-xr!.git' -mx=1
+npm run build && "/c/Program Files/7-Zip/7z.exe" a -tzip ../lms.zip . '-xr!node_modules' '-xr!.git' -mx=1
 ```
 
 ### Cpanle Deploy
@@ -97,3 +97,6 @@ Currently at admin panel payment, report and communication is just dummy ui - so
 notesofshahriarold/public = zed
 
 Practise Makes A Person Perfect
+
+
+make sure all of green colour of this website is primary color

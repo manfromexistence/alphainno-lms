@@ -1,4 +1,8 @@
-@props(['title', 'description', 'route', 'color' => '#006A4E'])
+@props(['title', 'description', 'route', 'color' => null])
+
+@php
+    $color = $color ?? 'var(--color-primary)';
+@endphp
 
 <a href="{{ $route }}"
    class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 group block"

@@ -28,7 +28,7 @@
     @endif
 
     <div class="relative group">
-        <div class="w-full aspect-video rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center overflow-hidden relative transition-all group-hover:border-[#006A4E]">
+        <div class="w-full aspect-video rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center overflow-hidden relative transition-all group-hover:border-[{{ $primaryColor ?? '#006A4E' }}]">
             <template x-if="previewUrl">
                 <div class="w-full h-full">
                     <!-- Basic Video Preview for direct links -->

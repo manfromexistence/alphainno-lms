@@ -27,16 +27,16 @@
 
 @section('content')
     <!-- Hero Slider -->
-    <section class="relative">
-        <div class="relative h-[420px] md:h-[520px] overflow-hidden">
+    <section class="hero hero--image hero--dark">
+        <div class="hero-inner relative h-[420px] md:h-[520px] overflow-hidden">
             <!-- Slide 1 -->
             <div class="slide active absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide1_image', 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop') : 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop' }}" alt="Students"
                     class="w-full h-full object-cover brightness-75">
-                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                    <div class="text-center text-white">
-                        <h2 class="text-4xl md:text-5xl font-bold mb-2">{{ $page ? $page->getContent('slide1_title', 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড') : 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড' }}</h2>
-                        <h3 class="text-3xl md:text-4xl font-bold">{{ $page ? $page->getContent('slide1_subtitle', 'কলেজে এর পক্ষ থেকে!') : 'কলেজে এর পক্ষ থেকে!' }}</h3>
+                <div class="absolute inset-0 hero__overlay flex items-center justify-center">
+                    <div class="text-center">
+                        <h2 class="hero-title text-4xl md:text-5xl mb-2">{{ $page ? $page->getContent('slide1_title', 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড') : 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড' }}</h2>
+                        <h3 class="hero-subtitle text-3xl md:text-4xl font-semibold">{{ $page ? $page->getContent('slide1_subtitle', 'কলেজে এর পক্ষ থেকে!') : 'কলেজে এর পক্ষ থেকে!' }}</h3>
                     </div>
                 </div>
             </div>
@@ -45,10 +45,10 @@
             <div class="slide absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide2_image', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1920') : 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1920' }}" alt="Campus"
                     class="w-full h-full object-cover brightness-75">
-                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                    <div class="text-center text-white">
-                        <h2 class="text-4xl md:text-5xl font-bold mb-2">{{ $page ? $page->getContent('slide2_title', 'শিক্ষার আলোয় আলোকিত') : 'শিক্ষার আলোয় আলোকিত' }}</h2>
-                        <h3 class="text-3xl md:text-4xl font-bold">{{ $page ? $page->getContent('slide2_subtitle', 'ভবিষ্যৎ প্রজন্ম') : 'ভবিষ্যৎ প্রজন্ম' }}</h3>
+                <div class="absolute inset-0 hero__overlay flex items-center justify-center">
+                    <div class="text-center">
+                        <h2 class="hero-title text-4xl md:text-5xl mb-2">{{ $page ? $page->getContent('slide2_title', 'শিক্ষার আলোয় আলোকিত') : 'শিক্ষার আলোয় আলোকিত' }}</h2>
+                        <h3 class="hero-subtitle text-3xl md:text-4xl font-semibold">{{ $page ? $page->getContent('slide2_subtitle', 'ভবিষ্যৎ প্রজন্ম') : 'ভবিষ্যৎ প্রজন্ম' }}</h3>
                     </div>
                 </div>
             </div>
@@ -57,10 +57,10 @@
             <div class="slide absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide3_image', 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920') : 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920' }}" alt="Learning"
                     class="w-full h-full object-cover brightness-75">
-                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                    <div class="text-center text-white">
-                        <h2 class="text-4xl md:text-5xl font-bold mb-2">{{ $page ? $page->getContent('slide3_title', 'মানসম্মত শিক্ষা') : 'মানসম্মত শিক্ষা' }}</h2>
-                        <h3 class="text-3xl md:text-4xl font-bold">{{ $page ? $page->getContent('slide3_subtitle', 'আধুনিক শিক্ষা ব্যবস্থা') : 'আধুনিক শিক্ষা ব্যবস্থা' }}</h3>
+                <div class="absolute inset-0 hero__overlay flex items-center justify-center">
+                    <div class="text-center">
+                        <h2 class="hero-title text-4xl md:text-5xl mb-2">{{ $page ? $page->getContent('slide3_title', 'মানসম্মত শিক্ষা') : 'মানসম্মত শিক্ষা' }}</h2>
+                        <h3 class="hero-subtitle text-3xl md:text-4xl font-semibold">{{ $page ? $page->getContent('slide3_subtitle', 'আধুনিক শিক্ষা ব্যবস্থা') : 'আধুনিক শিক্ষা ব্যবস্থা' }}</h3>
                     </div>
                 </div>
             </div>
@@ -109,9 +109,9 @@
                     <div class="p-8 md:p-12">
                         <div class="mb-6">
                             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                                {{ $page ? $page->getContent('banner_title', 'Alphainno') : 'Alphainno' }}<span class="text-[#006A4E]">{{ $page ? $page->getContent('banner_title_highlight', 'এর সাথেই শিখাছে') : 'এর সাথেই শিখাছে' }}</span>
+                                {{ $page ? $page->getContent('banner_title', 'Alphainno') : 'Alphainno' }}<span class="text-primary">{{ $page ? $page->getContent('banner_title_highlight', 'এর সাথেই শিখাছে') : 'এর সাথেই শিখাছে' }}</span>
                             </h2>
-                            <h3 class="text-2xl md:text-3xl font-bold text-[#006A4E] mb-4">
+                            <h3 class="text-2xl md:text-3xl font-bold text-primary mb-4">
                                 {{ $page ? $page->getContent('banner_subtitle', 'সবাই, জিতছে সবাই') : 'সবাই, জিতছে সবাই' }}
                             </h3>
                         </div>
@@ -121,7 +121,7 @@
                         </p>
 
                         <a href="{{ route('courses') }}"
-                            class="inline-block bg-[#006A4E] hover:bg-[#004432] text-white font-semibold px-8 py-3 rounded-lg transition-all shadow-lg hover:shadow-xl">
+                            class="inline-block bg-primary hover:opacity-90 text-white font-semibold px-8 py-3 rounded-lg transition-all shadow-lg hover:shadow-xl">
                             {{ $page ? $page->getContent('banner_button', 'আমাদের সম্পর্কে জেনে নাও') : 'আমাদের সম্পর্কে জেনে নাও' }}
                         </a>
                     </div>
@@ -225,7 +225,7 @@
 
             <div class="text-center mt-8">
                 <a href="{{ route('courses') }}"
-                    class="inline-flex items-center gap-2 bg-[#006A4E] hover:bg-[#005a42] text-white font-semibold px-8 py-3 rounded-lg transition-all shadow-lg">
+                    class="inline-flex items-center gap-2 bg-primary hover:opacity-90 text-white font-semibold px-8 py-3 rounded-lg transition-all shadow-lg">
                     <span>সকল কোর্স দেখুন</span>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -307,7 +307,7 @@
 
             <div class="text-center mt-8">
                 <a href="{{ route('students') }}"
-                    class="inline-flex items-center gap-2 bg-[#006A4E] hover:bg-[#005a42] text-white font-semibold px-8 py-3 rounded-lg transition-all shadow-lg">
+                    class="inline-flex items-center gap-2 bg-primary hover:opacity-90 text-white font-semibold px-8 py-3 rounded-lg transition-all shadow-lg">
                     <span>সকল শিক্ষার্থী দেখুন</span>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -404,7 +404,7 @@
 
             <div class="text-center mt-8">
                 <a href="{{ route('students') }}"
-                    class="inline-flex items-center gap-2 bg-[#006A4E] hover:bg-[#005a42] text-white font-semibold px-8 py-3 rounded-lg transition-all shadow-lg">
+                    class="inline-flex items-center gap-2 bg-primary hover:opacity-90 text-white font-semibold px-8 py-3 rounded-lg transition-all shadow-lg">
                     <span>সকল শিক্ষার্থী দেখুন</span>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -432,7 +432,9 @@
                                 <p class="text-gray-600 leading-relaxed mb-4 text-sm">{{ $page ? $page->getContent('about_section_text2', 'প্রতিষ্ঠানটি ১৯৮৮ সালে প্রতিষ্ঠিত হয়। আমাদের লক্ষ্য মানসম্মত শিক্ষা প্রদান করা...') : 'প্রতিষ্ঠানটি ১৯৮৮ সালে প্রতিষ্ঠিত হয়। আমাদের লক্ষ্য মানসম্মত শিক্ষা প্রদান করা...' }}</p>
                             </div>
                             <a href="{{ route('about') }}"
-                                class="block w-full text-center bg-[#006A4E] text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-[#005a42] transition mt-4">{{ $page ? $page->getContent('about_section_button', 'বিস্তারিত পড়ুন') : 'বিস্তারিত পড়ুন' }}</a>
+                                class="block w-full text-center bg-primary text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] transition mt-4">
+                                {{ $page ? $page->getContent('about_section_button', 'বিস্তারিত পড়ুন') : 'বিস্তারিত পড়ুন' }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -452,13 +454,13 @@
                                 class="flex-shrink-0 w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold">
                                 1</div>
                             <div class="flex-1">
-                                <p class="text-sm text-gray-700 group-hover:text-[#006A4E]">{{ $page ? $page->getContent('notice_1', 'নতুন শিক্ষাবর্ষের ভর্তি কার্যক্রম শুরু...') : 'নতুন শিক্ষাবর্ষের ভর্তি কার্যক্রম শুরু...' }}</p>
+                                <p class="text-sm text-gray-700 group-hover:text-primary">{{ $page ? $page->getContent('notice_1', 'নতুন শিক্ষাবর্ষের ভর্তি কার্যক্রম শুরু...') : 'নতুন শিক্ষাবর্ষের ভর্তি কার্যক্রম শুরু...' }}</p>
                             </div>
                         </a>
                     </div>
                     <div class="mt-4 text-center">
                         <a href="#"
-                            class="inline-flex items-center gap-1 text-[#006A4E] text-sm font-medium hover:underline"><span>{{ $page ? $page->getContent('notice_view_all', 'সকল নোটিশ') : 'সকল নোটিশ' }}</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="inline-flex items-center gap-1 text-[{{ $primaryColor ?? '#006A4E' }}] text-sm font-medium hover:underline"><span>{{ $page ? $page->getContent('notice_view_all', 'সকল নোটিশ') : 'সকল নোটিশ' }}</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg></a>
                     </div>

@@ -4,9 +4,9 @@
 
 @section('content')
     <!-- Page Header -->
-    <section class="bg-gradient-to-r from-[#006A4E] to-[#004d38] py-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <h1 class="text-3xl md:text-4xl font-bold text-white text-center mb-2">{{ $page ? $page->getContent('page_title', 'যোগাযোগ করুন') : 'যোগাযোগ করুন' }}</h1>
+    <section class="hero hero--solid hero--dark">
+        <div class="hero-inner max-w-7xl mx-auto px-4">
+            <h1 class="text-3xl md:text-4xl hero-title text-white text-center mb-2">{{ $page ? $page->getContent('page_title', 'যোগাযোগ করুন') : 'যোগাযোগ করুন' }}</h1>
             <p class="text-white text-center opacity-90">{{ $page ? $page->getContent('page_subtitle', 'আমাদের সাথে যোগাযোগ করার বিভিন্ন মাধ্যম') : 'আমাদের সাথে যোগাযোগ করার বিভিন্ন মাধ্যম' }}</p>
         </div>
     </section>
@@ -23,26 +23,26 @@
                             <div>
                                 <label class="block text-gray-700 font-semibold mb-2">আপনার নাম</label>
                                 <input type="text" placeholder="নাম লিখুন"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent">
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] focus:border-transparent">
                             </div>
                             <div>
                                 <label class="block text-gray-700 font-semibold mb-2">ইমেইল ঠিকানা</label>
                                 <input type="email" placeholder="ইমেইল লিখুন"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent">
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] focus:border-transparent">
                             </div>
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-2">বিষয়</label>
                             <input type="text" placeholder="বিষয় লিখুন"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent">
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] focus:border-transparent">
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-2">বার্তা</label>
                             <textarea rows="5" placeholder="আপনার বার্তাটি এখানে লিখুন"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"></textarea>
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] focus:border-transparent"></textarea>
                         </div>
                         <button type="submit"
-                            class="w-full bg-[#006A4E] hover:bg-[#005a42] text-white font-bold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl">
+                            class="w-full bg-primary hover:opacity-90 text-white font-bold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl">
                             বার্তা পাঠান
                         </button>
                     </form>
@@ -52,9 +52,9 @@
                 <div class="space-y-8">
                     <!-- Info Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#006A4E]">
+                        <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-primary">
                             <div
-                                class="w-12 h-12 bg-[#006A4E] bg-opacity-10 rounded-full flex items-center justify-center mb-4 text-[#006A4E]">
+                                class="w-12 h-12 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mb-4 text-primary">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -66,9 +66,9 @@
                             <p class="text-gray-600">{{ $page ? $page->getContent('address', 'এক্সওয়াইজেডস স্কুল এন্ড কলেজ, জামালপুর সদর, জামালপুর, বাংলাদেশ') : 'এক্সওয়াইজেডস স্কুল এন্ড কলেজ, জামালপুর সদর, জামালপুর, বাংলাদেশ' }}</p>
                         </div>
 
-                        <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#006A4E]">
+                        <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-primary">
                             <div
-                                class="w-12 h-12 bg-[#006A4E] bg-opacity-10 rounded-full flex items-center justify-center mb-4 text-[#006A4E]">
+                                class="w-12 h-12 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mb-4 text-primary">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />

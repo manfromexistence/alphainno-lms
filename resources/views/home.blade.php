@@ -22,9 +22,9 @@
             font-family: 'Noto Sans Bengali', sans-serif;
         }
         
-        /* Bangladesh Flag Colors */
+        /* Bangladesh Flag Colors — use configured primary so all greens stay consistent */
         .bg-bd-green {
-            background-color: #006A4E;
+            background-color: var(--color-primary);
         }
         
         .bg-bd-red {
@@ -32,21 +32,21 @@
         }
         
         .text-bd-green {
-            color: #006A4E;
+            color: var(--color-primary);
         }
         
         .text-bd-red {
             color: #F42A41;
         }
         
-        /* Gradient inspired by Bangladesh landscape */
+        /* Gradient inspired by Bangladesh landscape — reuse primary for the green stop */
         .hero-gradient {
-            background: linear-gradient(135deg, #006A4E 0%, #00876B 50%, #FFB800 100%);
+            background: linear-gradient(135deg, var(--color-primary) 0%, #00876B 50%, #FFB800 100%);
         }
         
-        /* Subtle pattern background */
+        /* Subtle pattern background (inject primary hex into the data-uri; keep a safe fallback) */
         .pattern-bg {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23006A4E' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23{{ ltrim($primaryColor ?? '#006A4E', '#') }}' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
         
         /* Animation */

@@ -27,7 +27,7 @@
         
         /* Header with Branding */
         .header {
-            border-bottom: 3px solid #006A4E;
+            border-bottom: 3px solid {{ $primaryColor ?? '#006A4E' }};
             padding-bottom: 15px;
             margin-bottom: 20px;
         }
@@ -46,7 +46,7 @@
         .logo-placeholder {
             width: 60px;
             height: 60px;
-            background: #006A4E;
+            background: {{ $primaryColor ?? '#006A4E' }};
             border-radius: 8px;
             text-align: center;
             line-height: 60px;
@@ -64,7 +64,7 @@
         .institution-name {
             font-size: 20px;
             font-weight: bold;
-            color: #006A4E;
+            color: {{ $primaryColor ?? '#006A4E' }};
             margin-bottom: 3px;
         }
         
@@ -86,13 +86,13 @@
             background: #f8f9fa;
             padding: 12px 15px;
             margin-bottom: 15px;
-            border-left: 4px solid #006A4E;
+            border-left: 4px solid {{ $primaryColor ?? '#006A4E' }};
         }
         
         .report-title {
             font-size: 16px;
             font-weight: bold;
-            color: #006A4E;
+            color: {{ $primaryColor ?? '#006A4E' }};
             margin-bottom: 5px;
         }
         

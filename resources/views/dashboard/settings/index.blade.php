@@ -3,6 +3,30 @@
 @section('title', 'System Settings')
 @section('page-title', 'System Settings')
 
+@push('scripts')
+<script>
+    // Sync color picker with text input
+    document.addEventListener('DOMContentLoaded', function() {
+        const primaryColorPicker = document.getElementById('theme_primary_color');
+        const primaryColorText = document.getElementById('theme_primary_color_text');
+        const secondaryColorPicker = document.getElementById('theme_secondary_color');
+        const secondaryColorText = document.getElementById('theme_secondary_color_text');
+
+        if (primaryColorPicker && primaryColorText) {
+            primaryColorPicker.addEventListener('input', function() {
+                primaryColorText.value = this.value;
+            });
+        }
+
+        if (secondaryColorPicker && secondaryColorText) {
+            secondaryColorPicker.addEventListener('input', function() {
+                secondaryColorText.value = this.value;
+            });
+        }
+    });
+</script>
+@endpush
+
 @section('content')
 <div class="max-w-4xl mx-auto">
     <form action="{{ route('dashboard.settings.update') }}" method="POST" class="space-y-8">
@@ -178,6 +202,50 @@
                         <x-ui.label for="invoice_prefix">Invoice Prefix</x-ui.label>
                         <x-ui.input type="text" name="invoice_prefix" id="invoice_prefix" 
                             value="{{ $settings['payment']['invoice_prefix']['value'] ?? 'INV' }}" />
+                    </div>
+                </div>
+            </x-ui.card-content>
+        </x-ui.card>
+
+        <!-- Theme Settings -->
+        <x-ui.card>
+            <x-ui.card-header>
+                <div class="flex items-center gap-4">
+                    <div class="h-10 w-10 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-600">
+                        <i class="fas fa-palette text-lg"></i>
+                    </div>
+                    <div>
+                        <x-ui.card-title>Theme Colors</x-ui.card-title>
+                        <x-ui.card-description>Customize the primary and secondary colors of your website</x-ui.card-description>
+                    </div>
+                </div>
+            </x-ui.card-header>
+            <x-ui.card-content>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <x-ui.label for="theme_primary_color">Primary Color</x-ui.label>
+                        <div class="flex gap-3 items-center">
+                            <input type="color" name="theme_primary_color" id="theme_primary_color" 
+                                value="{{ $settings['theme']['theme_primary_color']['value'] ?? '#3b82f6' }}"
+                                class="h-10 w-20 rounded border border-input cursor-pointer" />
+                            <x-ui.input type="text" id="theme_primary_color_text" 
+                                value="{{ $settings['theme']['theme_primary_color']['value'] ?? '#3b82f6' }}"
+                                placeholder="#3b82f6" class="flex-1" readonly />
+                        </div>
+                        <p class="text-[0.8rem] text-muted-foreground">Main brand color used throughout the site</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <x-ui.label for="theme_secondary_color">Secondary Color</x-ui.label>
+                        <div class="flex gap-3 items-center">
+                            <input type="color" name="theme_secondary_color" id="theme_secondary_color" 
+                                value="{{ $settings['theme']['theme_secondary_color']['value'] ?? '#8b5cf6' }}"
+                                class="h-10 w-20 rounded border border-input cursor-pointer" />
+                            <x-ui.input type="text" id="theme_secondary_color_text" 
+                                value="{{ $settings['theme']['theme_secondary_color']['value'] ?? '#8b5cf6' }}"
+                                placeholder="#8b5cf6" class="flex-1" readonly />
+                        </div>
+                        <p class="text-[0.8rem] text-muted-foreground">Accent color for highlights and CTAs</p>
                     </div>
                 </div>
             </x-ui.card-content>

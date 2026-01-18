@@ -14,11 +14,23 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
+    
+    @php
+        $settingsService = app(\App\Services\SettingsService::class);
+        $primaryColor = $settingsService->get('theme_primary_color', '#3b82f6');
+        $secondaryColor = $settingsService->get('theme_secondary_color', '#8b5cf6');
+    @endphp
+    
     <style>
+        :root {
+            --color-primary: {{ $primaryColor }};
+            --color-secondary: {{ $secondaryColor }};
+        }
+        
         /* 1. Standard approach for Firefox */
         * {
             scrollbar-width: thin;
-            scrollbar-color: #2e7d32 #e8f5e9;
+            scrollbar-color: var(--color-primary) #e8f5e9;
         }
 
         /* 2. WebKit approach for Chrome, Edge, and Safari */
@@ -31,13 +43,13 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background-color: #2e7d32;
+            background-color: var(--color-primary);
             border-radius: 10px;
             border: 3px solid #e8f5e9;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background-color: #1b5e20;
+            filter: brightness(0.9);
         }
 
         body {
@@ -74,7 +86,7 @@
         /* Custom Scrollbar Styling */
         .sidebar-nav {
             scrollbar-width: thin;
-            scrollbar-color: #006A4E #e5e7eb;
+            scrollbar-color: var(--color-primary) #e5e7eb;
         }
 
         .sidebar-nav::-webkit-scrollbar {
@@ -87,12 +99,12 @@
         }
 
         .sidebar-nav::-webkit-scrollbar-thumb {
-            background: #006A4E;
+            background: var(--color-primary);
             border-radius: 3px;
         }
 
         .sidebar-nav::-webkit-scrollbar-thumb:hover {
-            background: #005840;
+            filter: brightness(0.9);
         }
 
         /* Sidebar Layout */

@@ -58,6 +58,10 @@ class SettingsController extends Controller
             'currency' => 'nullable|string|max:10',
             'receipt_prefix' => 'nullable|string|max:10',
             'invoice_prefix' => 'nullable|string|max:10',
+
+            // Theme Settings
+            'theme_primary_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'theme_secondary_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
         ]);
 
         try {

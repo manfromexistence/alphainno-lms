@@ -133,6 +133,18 @@ class SettingsService
             'group' => 'payment',
             'type' => 'string',
         ],
+
+        // Theme Settings
+        'theme_primary_color' => [
+            'value' => '#3b82f6',
+            'group' => 'theme',
+            'type' => 'string',
+        ],
+        'theme_secondary_color' => [
+            'value' => '#8b5cf6',
+            'group' => 'theme',
+            'type' => 'string',
+        ],
     ];
 
     /**

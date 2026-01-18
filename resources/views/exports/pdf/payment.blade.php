@@ -27,7 +27,7 @@
         
         /* Header with Branding */
         .header {
-            border-bottom: 3px solid #006A4E;
+            border-bottom: 3px solid {{ $primaryColor ?? '#006A4E' }};
             padding-bottom: 15px;
             margin-bottom: 20px;
         }
@@ -64,7 +64,7 @@
         .institution-name {
             font-size: 20px;
             font-weight: bold;
-            color: #006A4E;
+            color: {{ $primaryColor ?? '#006A4E' }};
             margin-bottom: 3px;
         }
         
@@ -86,7 +86,7 @@
             background: #f8f9fa;
             padding: 12px 15px;
             margin-bottom: 15px;
-            border-left: 4px solid #006A4E;
+            border-left: 4px solid {{ $primaryColor ?? '#006A4E' }};
         }
         
         .report-title {
@@ -159,8 +159,8 @@
         }
         
         .summary-card.revenue {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
+            background: {{ $primaryColor ?? '#d4edda' }};
+            border: 1px solid {{ $primaryColor ?? '#c3e6cb' }};
         }
         
         .summary-card.pending {
@@ -199,7 +199,7 @@
         }
         
         .data-table thead {
-            background: #006A4E;
+            background: {{ $primaryColor ?? '#006A4E' }};
         }
         
         .data-table th {
@@ -208,7 +208,7 @@
             text-align: left;
             font-weight: bold;
             font-size: 9px;
-            border: 1px solid #005840;
+            border: 1px solid {{ $primaryColor ?? '#005840' }};
         }
         
         .data-table td {
@@ -232,7 +232,7 @@
         }
         
         .amount-positive {
-            color: #155724;
+            color: {{ $primaryColor ?? '#155724' }};
         }
         
         .amount-negative {

@@ -12,8 +12,8 @@
 
 @section('content')
     <!-- Page Header -->
-    <div class="relative bg-[#006A4E] pt-32 pb-20 px-4">
-        <div class="max-w-7xl mx-auto text-center">
+    <section class="hero hero--solid hero--dark">
+        <div class="hero-inner max-w-7xl mx-auto text-center">
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6">{{ $page ? $page->getContent('page_title', 'Explore Our Courses') : 'Explore Our Courses' }}</h1>
             <p class="text-xl text-emerald-50 max-w-2xl mx-auto">{{ $page ? $page->getContent('page_subtitle', 'Enhance your skills with our expert-led programs.') : 'Enhance your skills with our expert-led programs.' }}</p>
         </div>
@@ -40,7 +40,7 @@
                         />
                     </div>
                     <div>
-                        <x-ui.button type="submit" class="w-full bg-[#006A4E] text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition">
+                        <x-ui.button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition">
                             {{ $page ? $page->getContent('search_button', 'খুঁজুন') : 'খুঁজুন' }}
                         </x-ui.button>
                     </div>
@@ -94,8 +94,8 @@
                                 </span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-xl font-bold text-[#006A4E]">{{ $price }}</span>
-                                <button type="button" class="bg-[#006A4E] text-white px-4 py-2 rounded-lg text-sm hover:bg-emerald-700 transition">বিস্তারিত</button>
+                                <span class="text-xl font-bold text-primary">{{ $price }}</span>
+                                <button type="button" class="bg-primary text-white px-4 py-2 rounded-lg text-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] transition">বিস্তারিত</button>
                             </div>
                         </div>
                     </div>
@@ -134,7 +134,7 @@
             <div id="modalContent" class="p-6">
                 <!-- Content will be loaded here -->
                 <div class="text-center py-12">
-                    <svg class="animate-spin h-8 w-8 text-[#006A4E] mx-auto" fill="none" viewBox="0 0 24 24">
+                    <svg class="animate-spin h-8 w-8 text-primary mx-auto" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -162,9 +162,9 @@
             
             let enrollButton = '';
             if (!isAuthenticated) {
-                enrollButton = `<a href="{{ route('login') }}" class="w-full bg-[#006A4E] text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition font-semibold text-center block">লগইন করে ভর্তি হন</a>`;
+                enrollButton = `<a href="{{ route('login') }}" class="w-full bg-primary text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition font-semibold text-center block">লগইন করে ভর্তি হন</a>`;
             } else if (isStudent) {
-                enrollButton = `<button onclick="enrollCourse(${course.id})" class="w-full bg-[#006A4E] text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition font-semibold">এখনই ভর্তি হন</button>`;
+                enrollButton = `<button onclick="enrollCourse(${course.id})" class="w-full bg-primary text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition font-semibold">এখনই ভর্তি হন</button>`;
             } else {
                 enrollButton = `<p class="text-center text-gray-500 py-3">শুধুমাত্র শিক্ষার্থীরা কোর্সে ভর্তি হতে পারবেন</p>`;
             }
@@ -181,7 +181,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div class="bg-blue-50 p-4 rounded-lg text-center">
                         <p class="text-sm text-gray-600">মূল্য</p>
-                        <p class="text-2xl font-bold text-[#006A4E]">৳${course.price ? Number(course.price).toLocaleString() : '0'}</p>
+                        <p class="text-2xl font-bold text-primary">৳${course.price ? Number(course.price).toLocaleString() : '0'}</p>
                     </div>
                     <div class="bg-purple-50 p-4 rounded-lg text-center">
                         <p class="text-sm text-gray-600">শিক্ষার্থী</p>

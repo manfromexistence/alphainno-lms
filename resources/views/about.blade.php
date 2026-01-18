@@ -8,7 +8,7 @@
         <div class="max-w-7xl mx-auto px-4">
             <h1 class="text-4xl font-bold text-gray-900 text-center mb-4">{{ $page ? $page->getContent('page_title', 'প্রতিষ্ঠান পরিচিতি') : 'প্রতিষ্ঠান পরিচিতি' }}</h1>
             <div class="flex items-center justify-center gap-2 text-sm">
-                <a href="{{ url('/') }}" class="text-gray-600 hover:text-[#006A4E] flex items-center gap-1">
+                <a href="{{ url('/') }}" class="text-gray-600 hover:text-primary flex items-center gap-1">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path
                             d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
@@ -16,7 +16,7 @@
                     মূলপাতা
                 </a>
                 <span class="text-gray-400">></span>
-                <span class="text-[#006A4E] font-medium">{{ $page ? $page->getContent('page_title', 'প্রতিষ্ঠান পরিচিতি') : 'প্রতিষ্ঠান পরিচিতি' }}</span>
+                <span class="text-primary font-medium">{{ $page ? $page->getContent('page_title', 'প্রতিষ্ঠান পরিচিতি') : 'প্রতিষ্ঠান পরিচিতি' }}</span>
             </div>
         </div>
     </section>
@@ -34,7 +34,7 @@
                 <!-- Content -->
                 <div>
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ $page ? $page->getContent('about_title', 'প্রতিষ্ঠান সম্পর্কে') : 'প্রতিষ্ঠান সম্পর্কে' }}</h2>
-                    <div class="w-16 h-1 bg-[#006A4E] mb-6"></div>
+                    <div class="w-16 h-1 bg-primary mb-6"></div>
 
                     <div class="text-gray-700 leading-relaxed space-y-4">
                         {!! nl2br(e($page ? $page->getContent('about_text', 'এক্সওয়াইজেডস স্কুল এন্ড কলেজ জামালপুর জেলার অন্যতম প্রধান শিক্ষা প্রতিষ্ঠান।') : 'এক্সওয়াইজেডস স্কুল এন্ড কলেজ জামালপুর জেলার অন্যতম প্রধান শিক্ষা প্রতিষ্ঠান।')) !!}
@@ -63,7 +63,7 @@
                     <div class="flex flex-col items-center">
                         <div
                             class="w-32 h-32 rounded-full border-4 border-gray-200 flex flex-col items-center justify-center mb-4 bg-white">
-                            <span class="text-4xl font-bold text-[#006A4E]">{{ $stat['val'] }}</span>
+                            <span class="text-4xl font-bold text-primary">{{ $stat['val'] }}</span>
                         </div>
                         <p class="text-gray-700 font-medium text-center">{{ $stat['label'] }}</p>
                     </div>
@@ -79,7 +79,7 @@
                 <!-- Mission -->
                 <div>
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ $page ? $page->getContent('mission_title', 'প্রতিষ্ঠানের মিশন') : 'প্রতিষ্ঠানের মিশন' }}</h2>
-                    <div class="w-16 h-1 bg-[#006A4E] mb-6"></div>
+                    <div class="w-16 h-1 bg-primary mb-6"></div>
                     <div class="text-gray-700 leading-relaxed">
                         {!! nl2br(e($page ? $page->getContent('mission_text', 'এক্সওয়াইজেডস স্কুল এন্ড কলেজের মিশন হল শিক্ষার্থীদের একটি উচ্চমানের শিক্ষা প্রদান করা...') : 'এক্সওয়াইজেডস স্কুল এন্ড কলেজের মিশন হল শিক্ষার্থীদের একটি উচ্চমানের শিক্ষা প্রদান করা...')) !!}
                     </div>
@@ -92,7 +92,7 @@
                             class="rounded-lg shadow-lg w-full h-auto object-cover">
                     </div>
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ $page ? $page->getContent('vision_title', 'প্রতিষ্ঠানের ভিশন') : 'প্রতিষ্ঠানের ভিশন' }}</h2>
-                    <div class="w-16 h-1 bg-[#006A4E] mb-6"></div>
+                    <div class="w-16 h-1 bg-primary mb-6"></div>
                     <div class="text-gray-700 leading-relaxed">
                         {!! nl2br(e($page ? $page->getContent('vision_text', 'এক্সওয়াইজেডস স্কুল এন্ড কলেজের ভিশন হল একটি বিশ্বমানের শিক্ষা প্রতিষ্ঠান হিসাবে গড়ে তুলা...') : 'এক্সওয়াইজেডস স্কুল এন্ড কলেজের ভিশন হল একটি বিশ্বমানের শিক্ষা প্রতিষ্ঠান হিসাবে গড়ে তুলা...')) !!}
                     </div>

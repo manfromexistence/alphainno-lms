@@ -1,4 +1,9 @@
-<div class="bg-[#006A4E] text-white py-2 px-4 text-xs">
+@php
+    $settingsService = app(\App\Services\SettingsService::class);
+    $primaryColor = $settingsService->get('theme_primary_color', '#3b82f6');
+@endphp
+
+<div class="text-white py-2 px-4 text-xs bg-primary">
     <div class="max-w-7xl mx-auto px-4 flex justify-between items-center gap-4">
         <div class="flex-1 overflow-hidden">
             <div class="ticker">

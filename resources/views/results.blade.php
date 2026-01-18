@@ -4,8 +4,8 @@
 
 @section('content')
     <!-- Page Header -->
-    <section class="bg-gradient-to-r from-[#006A4E] to-[#004d38] py-12">
-        <div class="max-w-7xl mx-auto px-4">
+    <section class="hero hero--solid hero--dark">
+        <div class="hero-inner max-w-7xl mx-auto px-4">
             <h1 class="text-3xl md:text-4xl font-bold text-white text-center mb-2">{{ $page ? $page->getContent('page_title', 'পরীক্ষার ফলাফল') : 'পরীক্ষার ফলাফল' }}</h1>
             <p class="text-white text-center opacity-90">{{ $page ? $page->getContent('page_subtitle', 'আপনার ফলাফল অনুসন্ধান করুন') : 'আপনার ফলাফল অনুসন্ধান করুন' }}</p>
         </div>
@@ -56,9 +56,9 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <x-ui.button type="submit" class="w-full bg-[#006A4E] hover:bg-[#005a42]">
+                        <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] transition">
                             {{ $page ? $page->getContent('search_button', 'ফলাফল দেখুন') : 'ফলাফল দেখুন' }}
-                        </x-ui.button>
+                        </button>
                     </form>
                 </x-ui.card-content>
             </x-ui.card>
@@ -111,7 +111,7 @@
                                 @if($searchResult->rank)
                                     <div class="pt-4 border-t">
                                         <p class="text-sm text-gray-600">র‍্যাংক</p>
-                                        <p class="font-semibold text-2xl text-[#006A4E]">{{ $searchResult->rank }}</p>
+                                        <p class="font-semibold text-2xl text-primary">{{ $searchResult->rank }}</p>
                                     </div>
                                 @endif
                             </div>
@@ -216,28 +216,28 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <x-ui.card class="text-center hover:shadow-xl transition-shadow">
                     <x-ui.card-content class="pt-6">
-                        <div class="text-5xl font-bold text-[#006A4E] mb-2">{{ $avgPassRate }}%</div>
+                        <div class="text-5xl font-bold text-primary mb-2">{{ $avgPassRate }}%</div>
                         <p class="text-gray-600 font-semibold">{{ $page ? $page->getContent('avg_pass_rate_label', 'গড় পাসের হার') : 'গড় পাসের হার' }}</p>
                     </x-ui.card-content>
                 </x-ui.card>
                 
                 <x-ui.card class="text-center hover:shadow-xl transition-shadow">
                     <x-ui.card-content class="pt-6">
-                        <div class="text-5xl font-bold text-[#006A4E] mb-2">{{ $totalGpa5 }}+</div>
+                        <div class="text-5xl font-bold text-primary mb-2">{{ $totalGpa5 }}+</div>
                         <p class="text-gray-600 font-semibold">{{ $page ? $page->getContent('gpa5_label', 'GPA 5 প্রাপ্ত শিক্ষার্থী') : 'GPA 5 প্রাপ্ত শিক্ষার্থী' }}</p>
                     </x-ui.card-content>
                 </x-ui.card>
                 
                 <x-ui.card class="text-center hover:shadow-xl transition-shadow">
                     <x-ui.card-content class="pt-6">
-                        <div class="text-5xl font-bold text-[#006A4E] mb-2">{{ $totalGpa4Plus }}+</div>
+                        <div class="text-5xl font-bold text-primary mb-2">{{ $totalGpa4Plus }}+</div>
                         <p class="text-gray-600 font-semibold">{{ $page ? $page->getContent('aplus_label', 'A+ গ্রেড প্রাপ্ত') : 'A+ গ্রেড প্রাপ্ত' }}</p>
                     </x-ui.card-content>
                 </x-ui.card>
                 
                 <x-ui.card class="text-center hover:shadow-xl transition-shadow">
                     <x-ui.card-content class="pt-6">
-                        <div class="text-5xl font-bold text-[#006A4E] mb-2">{{ $totalExams }}</div>
+                        <div class="text-5xl font-bold text-primary mb-2">{{ $totalExams }}</div>
                         <p class="text-gray-600 font-semibold">{{ $page ? $page->getContent('total_exams_label', 'মোট পরীক্ষা') : 'মোট পরীক্ষা' }}</p>
                     </x-ui.card-content>
                 </x-ui.card>

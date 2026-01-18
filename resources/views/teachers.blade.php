@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Page Header -->
-    <section class="bg-gradient-to-r from-[#006A4E] to-[#004d38] py-12">
+    <section class="hero hero--gradient hero--dark">
         <div class="max-w-7xl mx-auto px-4">
             <h1 class="text-3xl md:text-4xl font-bold text-white text-center mb-2">{{ $page ? $page->getContent('page_title', 'আমাদের শিক্ষকমণ্ডলী') : 'আমাদের শিক্ষকমণ্ডলী' }}</h1>
             <p class="text-white text-center opacity-90">{{ $page ? $page->getContent('page_subtitle', 'অভিজ্ঞ ও দক্ষ শিক্ষকদের তালিকা') : 'অভিজ্ঞ ও দক্ষ শিক্ষকদের তালিকা' }}</p>
@@ -23,7 +23,7 @@
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">মোঃ আব্দুল করিম</h3>
-                        <p class="text-[#006A4E] font-semibold mb-2">প্রধান শিক্ষক</p>
+                        <p class="text-primary font-semibold mb-2">প্রধান শিক্ষক</p>
                         <p class="text-gray-600 text-sm mb-3">এম.এ (বাংলা), বি.এড</p>
                         <p class="text-gray-600 text-sm">শিক্ষকতার অভিজ্ঞতা: ২৫ বছর</p>
                     </div>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">সুমাইয়া আক্তার</h3>
-                        <p class="text-[#006A4E] font-semibold mb-2">সহকারী শিক্ষক (ইংরেজি)</p>
+                        <p class="text-primary font-semibold mb-2">সহকারী শিক্ষক (ইংরেজি)</p>
                         <p class="text-gray-600 text-sm mb-3">এম.এ (ইংরেজি), বি.এড</p>
                         <p class="text-gray-600 text-sm">শিক্ষকতার অভিজ্ঞতা: ১৫ বছর</p>
                     </div>
@@ -51,7 +51,7 @@
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">ড. রাজিব হোসেন</h3>
-                        <p class="text-[#006A4E] font-semibold mb-2">সহকারী শিক্ষক (গণিত)</p>
+                        <p class="text-primary font-semibold mb-2">সহকারী শিক্ষক (গণিত)</p>
                         <p class="text-gray-600 text-sm mb-3">এম.এস.সি (গণিত), পি.এইচ.ডি</p>
                         <p class="text-gray-600 text-sm">শিক্ষকতার অভিজ্ঞতা: ২০ বছর</p>
                     </div>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">নাসরিন সুলতানা</h3>
-                        <p class="text-[#006A4E] font-semibold mb-2">সহকারী শিক্ষক (পদার্থবিজ্ঞান)</p>
+                        <p class="text-primary font-semibold mb-2">সহকারী শিক্ষক (পদার্থবিজ্ঞান)</p>
                         <p class="text-gray-600 text-sm mb-3">এম.এস.সি (পদার্থবিজ্ঞান), বি.এড</p>
                         <p class="text-gray-600 text-sm">শিক্ষকতার অভিজ্ঞতা: ১২ বছর</p>
                     </div>
@@ -79,7 +79,7 @@
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">মোঃ জাহিদুল ইসলাম</h3>
-                        <p class="text-[#006A4E] font-semibold mb-2">সহকারী শিক্ষক (রসায়ন)</p>
+                        <p class="text-primary font-semibold mb-2">সহকারী শিক্ষক (রসায়ন)</p>
                         <p class="text-gray-600 text-sm mb-3">এম.এস.সি (রসায়ন), বি.এড</p>
                         <p class="text-gray-600 text-sm">শিক্ষকতার অভিজ্ঞতা: ১৮ বছর</p>
                     </div>
@@ -93,7 +93,7 @@
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">ফারহানা ইয়াসমিন</h3>
-                        <p class="text-[#006A4E] font-semibold mb-2">সহকারী শিক্ষক (জীববিজ্ঞান)</p>
+                        <p class="text-primary font-semibold mb-2">সহকারী শিক্ষক (জীববিজ্ঞান)</p>
                         <p class="text-gray-600 text-sm mb-3">এম.এস.সি (উদ্ভিদবিজ্ঞান), বি.এড</p>
                         <p class="text-gray-600 text-sm">শিক্ষকতার অভিজ্ঞতা: ১০ বছর</p>
                     </div>
