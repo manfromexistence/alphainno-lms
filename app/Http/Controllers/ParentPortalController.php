@@ -17,8 +17,13 @@ class ParentPortalController extends Controller
      */
     private function getParent(): ?ParentModel
     {
-        // For now, get the first parent (you can modify this to use Auth later)
-        return ParentModel::with('students')->first();
+        $user = Auth::user();
+        if (!$user) {
+            return null;
+        }
+        
+        // Find parent by email
+        return ParentModel::where('email', $user->email)->with('students')->first();
     }
 
     public function index()

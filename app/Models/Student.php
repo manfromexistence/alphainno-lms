@@ -87,6 +87,14 @@ class Student extends Model
     }
 
     /**
+     * Get the student's name (uses name_bn as fallback).
+     */
+    public function getNameAttribute(): string
+    {
+        return $this->name_bn ?? 'Unknown Student';
+    }
+
+    /**
      * Bootstrap the model and its traits.
      */
     protected static function boot()

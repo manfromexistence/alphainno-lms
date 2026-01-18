@@ -139,4 +139,12 @@ class User extends Authenticatable
     {
         return $this->hasRole('student');
     }
+
+    /**
+     * Check if the user is a Parent.
+     */
+    public function isParent(): bool
+    {
+        return $this->hasRole('parent');
+    }
 }

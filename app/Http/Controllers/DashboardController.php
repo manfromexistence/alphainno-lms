@@ -25,6 +25,10 @@ class DashboardController extends Controller
             return redirect()->route('teacher.dashboard');
         }
         
+        if ($role === 'parent' || $user->hasRole('parent')) {
+            return redirect()->route('dashboard.children');
+        }
+        
         // Admin and Super Admin see the main dashboard
         $widgets = $this->dashboardService->getWidgetsForRole($role);
         $statistics = $this->dashboardService->getStatisticsForRole($role, $user->id);
