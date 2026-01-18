@@ -8,15 +8,12 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // Disable model events for faster seeding
-        \Illuminate\Database\Eloquent\Model::unguard();
+        // Note: Model events are enabled to allow registration number generation
         
         $this->call([
             RoleSeeder::class,
@@ -38,7 +35,5 @@ class DatabaseSeeder extends Seeder
             // AccountSeeder::class,
             // AdminFeaturesSeeder::class,
         ]);
-        
-        \Illuminate\Database\Eloquent\Model::reguard();
     }
 }
