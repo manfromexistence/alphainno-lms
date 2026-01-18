@@ -39,7 +39,7 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - Pass data to view
     - _Requirements: 2.1, 5.1, 5.2_
   
-  - [-] 3.3 Create mcq-exam.blade.php view with timer and navigation
+  - [x] 3.3 Create mcq-exam.blade.php view with timer and navigation
     - Display countdown timer with remaining time
     - Add question navigation controls (next/previous/jump to question)
     - Show progress indicators for answered/unanswered questions
@@ -47,7 +47,7 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - Add submit button
     - _Requirements: 2.1, 2.3, 2.5_
   
-  - [~] 3.4 Implement JavaScript for MCQ exam functionality
+  - [-] 3.4 Implement JavaScript for MCQ exam functionality
     - Create timer countdown with auto-submit at zero
     - Implement AJAX auto-save for answer selections
     - Add question navigation handlers
