@@ -27,68 +27,60 @@
 
 @section('content')
     <!-- Hero Slider -->
-    <section class="hero hero--image hero--dark !p-0 flex items-center justify-center !bg-white">
-        <div class="hero-inner relative h-[85vh] overflow-hidden !w-full !lg:max-w-7xl !mx-auto !p-0 px-0! !bg-white">
+    <!-- Hero Slider -->
+    <section class="bg-white py-6">
+        <div class="hero-inner relative h-[500px] lg:h-[700px] w-full max-w-[95%] 2xl:max-w-[90rem] mx-auto rounded-[2.5rem] overflow-hidden shadow-2xl isolate transform translate-z-0 draggable-slider cursor-grab">
             <!-- Slide 1 -->
             <div class="slide active absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide1_image', 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop') : 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop' }}" alt="Students"
-                    class="w-full h-full object-cover brightness-75">
-                <div class="absolute inset-0 flex items-center justify-center bg-black/40 !mix-blend-normal z-10">
-                    <div class="text-center px-4 max-w-5xl mx-auto">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-xl leading-tight opacity-100">{{ $page ? $page->getContent('slide1_title', 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড') : 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড' }}</h2>
-                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-lg opacity-100">{{ $page ? $page->getContent('slide1_subtitle', 'কলেজে এর পক্ষ থেকে!') : 'কলেজে এর পক্ষ থেকে!' }}</h3>
-                    </div>
+                    class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
+                <div class="absolute bottom-24 left-0 right-0 text-center px-4 z-20">
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 text-white drop-shadow-xl leading-tight">{{ $page ? $page->getContent('slide1_title', 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড') : 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড' }}</h2>
+                    <h3 class="text-xl md:text-3xl font-semibold text-white drop-shadow-lg">{{ $page ? $page->getContent('slide1_subtitle', 'কলেজে এর পক্ষ থেকে!') : 'কলেজে এর পক্ষ থেকে!' }}</h3>
                 </div>
             </div>
 
             <!-- Slide 2 -->
             <div class="slide absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide2_image', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1920') : 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1920' }}" alt="Campus"
-                    class="w-full h-full object-cover brightness-75">
-                <div class="absolute inset-0 flex items-center justify-center bg-black/40 !mix-blend-normal z-10">
-                    <div class="text-center px-4">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-lg leading-tight opacity-100">{{ $page ? $page->getContent('slide2_title', 'শিক্ষার আলোয় আলোকিত') : 'শিক্ষার আলোয় আলোকিত' }}</h2>
-                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-md opacity-100">{{ $page ? $page->getContent('slide2_subtitle', 'ভবিষ্যৎ প্রজন্ম') : 'ভবিষ্যৎ প্রজন্ম' }}</h3>
-                    </div>
+                    class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
+                <div class="absolute bottom-24 left-0 right-0 text-center px-4 z-20">
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide2_title', 'শিক্ষার আলোয় আলোকিত') : 'শিক্ষার আলোয় আলোকিত' }}</h2>
+                    <h3 class="text-xl md:text-3xl font-semibold text-white drop-shadow-md">{{ $page ? $page->getContent('slide2_subtitle', 'ভবিষ্যৎ প্রজন্ম') : 'ভবিষ্যৎ প্রজন্ম' }}</h3>
                 </div>
             </div>
 
             <!-- Slide 3 -->
             <div class="slide absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide3_image', 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920') : 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920' }}" alt="Learning"
-                    class="w-full h-full object-cover brightness-75">
-                <div class="absolute inset-0 flex items-center justify-center bg-black/40 !mix-blend-normal z-10">
-                    <div class="text-center px-4">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-lg leading-tight opacity-100">{{ $page ? $page->getContent('slide3_title', 'মানসম্মত শিক্ষা') : 'মানসম্মত শিক্ষা' }}</h2>
-                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-md opacity-100">{{ $page ? $page->getContent('slide3_subtitle', 'আধুনিক শিক্ষা ব্যবস্থা') : 'আধুনিক শিক্ষা ব্যবস্থা' }}</h3>
-                    </div>
+                    class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
+                <div class="absolute bottom-24 left-0 right-0 text-center px-4 z-20">
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide3_title', 'মানসম্মত শিক্ষা') : 'মানসম্মত শিক্ষা' }}</h2>
+                    <h3 class="text-xl md:text-3xl font-semibold text-white drop-shadow-md">{{ $page ? $page->getContent('slide3_subtitle', 'আধুনিক শিক্ষা ব্যবস্থা') : 'আধুনিক শিক্ষা ব্যবস্থা' }}</h3>
                 </div>
             </div>
 
-            <!-- Bottom Navigation -->
-            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20">
-                <!-- Previous Button -->
-                <button onclick="prevSlide()"
-                    class="bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 transition">
-                    <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-
-                <!-- Dots -->
-                <div class="flex gap-2">
-                    <button onclick="goToSlide(0)" class="dot border border-white w-3 h-3 rounded-full bg-white"></button>
-                    <button onclick="goToSlide(1)" class="dot border border-white w-3 h-3 rounded-full bg-white bg-opacity-50"></button>
-                    <button onclick="goToSlide(2)" class="dot border border-white w-3 h-3 rounded-full bg-white bg-opacity-50"></button>
+            <!-- Controls (Bottom) -->
+            <div class="absolute bottom-8 left-0 right-0 px-8 lg:px-12 flex justify-between items-end z-30 select-none pointer-events-none">
+                <!-- Dots (Left) -->
+                <div class="flex gap-3 mb-2 pointer-events-auto">
+                    <button onclick="goToSlide(0)" class="dot w-4 h-4 rounded-full bg-primary transition-all duration-300 shadow-md"></button>
+                    <button onclick="goToSlide(1)" class="dot w-4 h-4 rounded-full bg-gray-400/80 hover:bg-primary/80 transition-all duration-300 shadow-md"></button>
+                    <button onclick="goToSlide(2)" class="dot w-4 h-4 rounded-full bg-gray-400/80 hover:bg-primary/80 transition-all duration-300 shadow-md"></button>
                 </div>
 
-                <!-- Next Button -->
-                <button onclick="nextSlide()"
-                    class="bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 transition">
-                    <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
+                <!-- Arrows (Right) -->
+                <div class="flex gap-3 pointer-events-auto">
+                    <button onclick="prevSlide()" class="w-10 h-10 lg:w-12 lg:h-12 bg-primary hover:bg-secondary text-white flex items-center justify-center rounded-md shadow-lg transition-transform hover:scale-105 active:scale-95">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button onclick="nextSlide()" class="w-10 h-10 lg:w-12 lg:h-12 bg-primary hover:bg-secondary text-white flex items-center justify-center rounded-md shadow-lg transition-transform hover:scale-105 active:scale-95">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -527,18 +519,85 @@
         function showSlide(index) {
             slides.forEach((slide, i) => {
                 slide.classList.remove('active');
-                dots[i].classList.remove('bg-white');
-                dots[i].classList.add('bg-opacity-50');
+                if (dots[i]) {
+                    dots[i].classList.remove('bg-primary', 'scale-125');
+                    dots[i].classList.add('bg-gray-400/80');
+                }
             });
             slides[index].classList.add('active');
-            dots[index].classList.add('bg-white');
-            dots[index].classList.remove('bg-opacity-50');
+            if (dots[index]) {
+                dots[index].classList.remove('bg-gray-400/80');
+                dots[index].classList.add('bg-primary', 'scale-125');
+            }
         }
 
         function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; showSlide(currentSlide); }
         function prevSlide() { currentSlide = (currentSlide - 1 + slides.length) % slides.length; showSlide(currentSlide); }
         function goToSlide(index) { currentSlide = index; showSlide(currentSlide); }
-        setInterval(nextSlide, 5000);
+        
+        let slideInterval = setInterval(nextSlide, 5000);
+
+        // Drag and Touch Support
+        const sliderContainer = document.querySelector('.draggable-slider');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let isDragging = false;
+
+        const startDragging = (e) => {
+            isDown = true;
+            sliderContainer.classList.add('cursor-grabbing');
+            sliderContainer.classList.remove('cursor-grab');
+            startX = (e.pageX || e.touches[0].pageX);
+            isDragging = false;
+            // Pause auto-slide logic if needed, or clear interval
+            clearInterval(slideInterval);
+        };
+
+        const stopDragging = (e) => {
+            if (!isDown) return;
+            isDown = false;
+            sliderContainer.classList.remove('cursor-grabbing');
+            sliderContainer.classList.add('cursor-grab');
+            slideInterval = setInterval(nextSlide, 5000); // Restart auto-slide based only on drag end
+
+            if (!isDragging) return; // If it was just a click, do nothing
+            
+            const endX = (e.pageX || e.changedTouches[0].pageX);
+            const diff = startX - endX;
+
+            if (Math.abs(diff) > 50) { // Threshold for swipe
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+            isDragging = false;
+        };
+
+        const moveDragging = (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = (e.pageX || e.touches[0].pageX);
+            const walk = (x - startX); 
+            if (Math.abs(walk) > 10) {
+                isDragging = true;
+            }
+        };
+
+        // Mouse Events
+        sliderContainer.addEventListener('mousedown', startDragging);
+        sliderContainer.addEventListener('mouseleave', () => {
+            if(isDown) stopDragging({ pageX: startX }); // Cancel drag if leaving
+        });
+        sliderContainer.addEventListener('mouseup', stopDragging);
+        sliderContainer.addEventListener('mousemove', moveDragging);
+
+        // Touch Events
+        sliderContainer.addEventListener('touchstart', startDragging);
+        sliderContainer.addEventListener('touchend', stopDragging);
+        sliderContainer.addEventListener('touchmove', moveDragging);
 
         function openCourseModal(element) {
             const course = JSON.parse(element.getAttribute('data-course'));
