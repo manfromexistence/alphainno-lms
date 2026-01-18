@@ -27,7 +27,7 @@ class AdminUserSeeder extends Seeder
             $superAdmin->roles()->syncWithoutDetaching([$superAdminRole->id]);
         }
 
-        // Create Admin user with admin@gmail.com
+        // Create Admin user with admin@gmail.com as Super Admin
         $admin = User::updateOrCreate(
             ['email' => 'admin@gmail.com'],
             [
@@ -37,10 +37,9 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        // Assign Admin role
-        $adminRole = Role::where('slug', 'admin')->first();
-        if ($adminRole) {
-            $admin->roles()->syncWithoutDetaching([$adminRole->id]);
+        // Assign Super Admin role to admin@gmail.com
+        if ($superAdminRole) {
+            $admin->roles()->sync([$superAdminRole->id]);
         }
 
         // Also create admin@alpha.com for backward compatibility
@@ -53,8 +52,9 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        if ($adminRole) {
-            $adminAlpha->roles()->syncWithoutDetaching([$adminRole->id]);
+        // Assign Super Admin role to admin@alpha.com as well
+        if ($superAdminRole) {
+            $adminAlpha->roles()->syncWithoutDetaching([$superAdminRole->id]);
         }
 
         // Create sample Teacher user with teacher@gmail.com

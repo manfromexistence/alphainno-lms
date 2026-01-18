@@ -83,6 +83,12 @@ class PermissionSeeder extends Seeder
             $superAdmin->permissions()->sync(Permission::pluck('id')->toArray());
         }
 
+        // Admin gets all permissions (same as super-admin)
+        $admin = Role::where('slug', 'admin')->first();
+        if ($admin) {
+            $admin->permissions()->sync(Permission::pluck('id')->toArray());
+        }
+
         // Teacher permissions
         $teacher = Role::where('slug', 'teacher')->first();
         if ($teacher) {
