@@ -27,16 +27,16 @@
 
 @section('content')
     <!-- Hero Slider -->
-    <section class="hero hero--image hero--dark">
-        <div class="hero-inner relative h-[420px] md:h-[520px] overflow-hidden">
+    <section class="hero hero--image hero--dark p-0!">
+        <div class="hero-inner relative h-screen overflow-hidden">
             <!-- Slide 1 -->
             <div class="slide active absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide1_image', 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop') : 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop' }}" alt="Students"
                     class="w-full h-full object-cover brightness-75">
                 <div class="absolute inset-0 hero__overlay flex items-center justify-center">
-                    <div class="text-center">
-                        <h2 class="hero-title text-4xl md:text-5xl mb-2">{{ $page ? $page->getContent('slide1_title', 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড') : 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড' }}</h2>
-                        <h3 class="hero-subtitle text-3xl md:text-4xl font-semibold">{{ $page ? $page->getContent('slide1_subtitle', 'কলেজে এর পক্ষ থেকে!') : 'কলেজে এর পক্ষ থেকে!' }}</h3>
+                    <div class="text-center px-4">
+                        <h2 class="hero-title text-4xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide1_title', 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড') : 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড' }}</h2>
+                        <h3 class="hero-subtitle text-2xl md:text-3xl font-semibold text-white/90 drop-shadow-md">{{ $page ? $page->getContent('slide1_subtitle', 'কলেজে এর পক্ষ থেকে!') : 'কলেজে এর পক্ষ থেকে!' }}</h3>
                     </div>
                 </div>
             </div>
@@ -46,9 +46,9 @@
                 <img src="{{ $page ? $page->getContent('slide2_image', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1920') : 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1920' }}" alt="Campus"
                     class="w-full h-full object-cover brightness-75">
                 <div class="absolute inset-0 hero__overlay flex items-center justify-center">
-                    <div class="text-center">
-                        <h2 class="hero-title text-4xl md:text-5xl mb-2">{{ $page ? $page->getContent('slide2_title', 'শিক্ষার আলোয় আলোকিত') : 'শিক্ষার আলোয় আলোকিত' }}</h2>
-                        <h3 class="hero-subtitle text-3xl md:text-4xl font-semibold">{{ $page ? $page->getContent('slide2_subtitle', 'ভবিষ্যৎ প্রজন্ম') : 'ভবিষ্যৎ প্রজন্ম' }}</h3>
+                    <div class="text-center px-4">
+                        <h2 class="hero-title text-4xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide2_title', 'শিক্ষার আলোয় আলোকিত') : 'শিক্ষার আলোয় আলোকিত' }}</h2>
+                        <h3 class="hero-subtitle text-2xl md:text-3xl font-semibold text-white/90 drop-shadow-md">{{ $page ? $page->getContent('slide2_subtitle', 'ভবিষ্যৎ প্রজন্ম') : 'ভবিষ্যৎ প্রজন্ম' }}</h3>
                     </div>
                 </div>
             </div>
@@ -58,9 +58,9 @@
                 <img src="{{ $page ? $page->getContent('slide3_image', 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920') : 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920' }}" alt="Learning"
                     class="w-full h-full object-cover brightness-75">
                 <div class="absolute inset-0 hero__overlay flex items-center justify-center">
-                    <div class="text-center">
-                        <h2 class="hero-title text-4xl md:text-5xl mb-2">{{ $page ? $page->getContent('slide3_title', 'মানসম্মত শিক্ষা') : 'মানসম্মত শিক্ষা' }}</h2>
-                        <h3 class="hero-subtitle text-3xl md:text-4xl font-semibold">{{ $page ? $page->getContent('slide3_subtitle', 'আধুনিক শিক্ষা ব্যবস্থা') : 'আধুনিক শিক্ষা ব্যবস্থা' }}</h3>
+                    <div class="text-center px-4">
+                        <h2 class="hero-title text-4xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide3_title', 'মানসম্মত শিক্ষা') : 'মানসম্মত শিক্ষা' }}</h2>
+                        <h3 class="hero-subtitle text-2xl md:text-3xl font-semibold text-white/90 drop-shadow-md">{{ $page ? $page->getContent('slide3_subtitle', 'আধুনিক শিক্ষা ব্যবস্থা') : 'আধুনিক শিক্ষা ব্যবস্থা' }}</h3>
                     </div>
                 </div>
             </div>
@@ -160,7 +160,7 @@
                             $color = $colors[$index % count($colors)];
                         @endphp
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/3 select-none">
-                            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
+                            <div onclick="openCourseModal(this)" data-course='@json($course)' class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-gradient-to-br {{ $gradient }}">
                                     @if($course->thumbnail)
                                         <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="{{ $course->name }}"
@@ -468,6 +468,51 @@
             </div>
         </div>
     </section>
+
+    <!-- Course Modal -->
+    <div id="courseModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeCourseModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
+                <div class="relative bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="absolute top-0 right-0 pt-4 pr-4">
+                        <button type="button" class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none" onclick="closeCourseModal()">
+                            <span class="sr-only">Close</span>
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-xl leading-6 font-bold text-gray-900 mb-4" id="modal-title">Course Title</h3>
+                            <div class="mt-2">
+                                <img id="modal-image" src="" alt="Course Image" class="w-full h-48 object-cover rounded-lg mb-4 shadow-sm">
+                                <div class="prose prose-sm text-gray-500">
+                                    <p id="modal-description">Course Description</p>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center text-sm text-gray-600">
+                                     <span id="modal-videos" class="flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                        <span id="modal-videos-text"></span>
+                                     </span>
+                                     <span id="modal-category" class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs font-semibold"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary/90 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm" onclick="closeCourseModal()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -491,5 +536,42 @@
         function prevSlide() { currentSlide = (currentSlide - 1 + slides.length) % slides.length; showSlide(currentSlide); }
         function goToSlide(index) { currentSlide = index; showSlide(currentSlide); }
         setInterval(nextSlide, 5000);
+
+        function openCourseModal(element) {
+            const course = JSON.parse(element.getAttribute('data-course'));
+            document.getElementById('modal-title').innerText = course.name;
+            document.getElementById('modal-description').innerText = course.description || 'No description available.';
+            
+            let imageUrl = '';
+            if (course.thumbnail) {
+                imageUrl = course.thumbnail.startsWith('http') ? course.thumbnail : `/storage/${course.thumbnail}`;
+            } else {
+                // Placeholder if no image
+                imageUrl = 'https://via.placeholder.com/640x360?text=No+Image';
+            }
+            document.getElementById('modal-image').src = imageUrl;
+
+            if (course.videos_count) {
+                 document.getElementById('modal-videos-text').innerText = `${course.videos_count} টি ভিডিও`;
+                 document.getElementById('modal-videos').style.display = 'flex';
+            } else {
+                 document.getElementById('modal-videos').style.display = 'none';
+            }
+            
+            if (course.category) {
+                document.getElementById('modal-category').innerText = course.category;
+                document.getElementById('modal-category').style.display = 'inline-block';
+            } else {
+                document.getElementById('modal-category').style.display = 'none';
+            }
+
+            document.getElementById('courseModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeCourseModal() {
+            document.getElementById('courseModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
     </script>
 @endpush

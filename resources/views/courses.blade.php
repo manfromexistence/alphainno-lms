@@ -11,15 +11,14 @@
 @endpush
 
 @section('content')
-    <!-- Page Header -->
-    <section class="hero hero--solid hero--dark">
+    <div>
+            <section class="hero hero--solid hero--dark">
         <div class="hero-inner max-w-7xl mx-auto text-center">
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6">{{ $page ? $page->getContent('page_title', 'Explore Our Courses') : 'Explore Our Courses' }}</h1>
             <p class="text-xl text-emerald-50 max-w-2xl mx-auto">{{ $page ? $page->getContent('page_subtitle', 'Enhance your skills with our expert-led programs.') : 'Enhance your skills with our expert-led programs.' }}</p>
         </div>
     </div>
 
-    <!-- Search and Filter Section -->
     <section class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4">
             <form action="{{ route('courses') }}" method="GET" class="bg-white p-6 rounded-2xl shadow-lg mb-8">
@@ -119,6 +118,7 @@
         </div>
     </section>
 
+    </div>
     <!-- Course Details Modal -->
     <div id="courseModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">

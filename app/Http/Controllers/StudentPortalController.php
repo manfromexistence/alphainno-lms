@@ -246,6 +246,78 @@ class StudentPortalController extends Controller
     }
 
     /**
+     * Take an MCQ exam.
+     * 
+     * Requirements: 2.1, 5.1, 5.2
+     */
+    public function takeMCQ(Exam $exam)
+    {
+        $student = $this->getStudent();
+        
+        if (!$student) {
+            return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
+        }
+
+        // Verify student has access to this exam (same batch)
+        if ($exam->batch_id !== $student->batch_id) {
+            abort(403, 'Unauthorized access to this exam.');
+        }
+
+        // Validate exam time window using ExamTimeValidator
+        $timeValidator = app(\App\Services\ExamTimeValidator::class);
+        
+        if (!$timeValidator->canStartExam($exam)) {
+            $timeStatus = $timeValidator->getTimeStatus($exam);
+            $message = $timeValidator->getTimeStatusMessage($exam);
+            
+            return redirect()->route('student.exams')
+                ->with('error', $message);
+        }
+
+        // Create or retrieve ExamAttempt for student
+        $attempt = ExamAttempt::firstOrCreate(
+            [
+                'student_id' => $student->id,
+                'exam_id' => $exam->id,
+                'status' => 'in_progress',
+            ],
+            [
+                'started_at' => now(),
+                'answers' => [],
+                'cheating_events' => [],
+                'ip_address' => request()->ip(),
+            ]
+        );
+
+        // If attempt was just created, set started_at
+        if (!$attempt->wasRecentlyCreated && !$attempt->started_at) {
+            $attempt->update(['started_at' => now()]);
+        }
+
+        // Load exam questions with options
+        $questions = $exam->questions()
+            ->where('type', 'mcq')
+            ->orderBy('order')
+            ->get();
+
+        // Get saved answers from the attempt
+        $savedAnswers = $attempt->answers ?? [];
+
+        // Calculate remaining time
+        $remainingTime = $timeValidator->getRemainingTime($attempt);
+
+        // Pass data to view
+        return view('student.mcq-exam', [
+            'student' => $student,
+            'exam' => $exam,
+            'attempt' => $attempt,
+            'questions' => $questions,
+            'timeRemaining' => $remainingTime,
+            'savedAnswers' => $savedAnswers,
+        ]);
+    }
+
+    /**
      * Save answer via AJAX.
      */
     public function saveAnswer(Request $request, ExamAttempt $attempt)

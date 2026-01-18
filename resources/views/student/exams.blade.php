@@ -10,6 +10,9 @@
             <p class="text-gray-600">View and take your exams</p>
         </div>
 
+        {{-- Student View: Only shows "Take Exam" actions for available exams --}}
+        {{-- Admin actions (Edit, View, Delete) are hidden for students --}}
+        
         <!-- Upcoming Exams -->
         <div class="bg-white shadow rounded-lg overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200 bg-indigo-50">
@@ -38,7 +41,7 @@
                         @if($exam->scheduled_at->isPast())
                         <a href="{{ $exam->type === 'mcq' ? route('student.exams.start', $exam) : route('student.exams.cq', $exam) }}" 
                            class="mt-2 inline-flex items-center px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700">
-                            Start Exam
+                            Take Exam
                         </a>
                         @else
                         <span class="text-sm text-gray-500">Starts {{ $exam->scheduled_at->diffForHumans() }}</span>

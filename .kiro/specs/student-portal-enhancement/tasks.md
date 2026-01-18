@@ -20,18 +20,18 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - Apply middleware to exam routes
     - _Requirements: 1.2_
   
-  - [-] 2.2 Update student exam list view to show only "Take Exam" actions
+  - [x] 2.2 Update student exam list view to show only "Take Exam" actions
     - Modify exam list Blade template to hide edit/view/delete buttons for students
     - Show only "Take Exam" button for available exams
     - _Requirements: 1.1, 1.3_
 
 - [ ] 3. Build MCQ exam interface
-  - [~] 3.1 Create ExamTimeValidator service class
+  - [x] 3.1 Create ExamTimeValidator service class
     - Implement canStartExam(), getTimeStatus(), and getRemainingTime() methods
     - Add validation logic for exam time windows
     - _Requirements: 5.1, 5.2_
   
-  - [~] 3.2 Create ExamController::takeMCQ() method
+  - [x] 3.2 Create ExamController::takeMCQ() method
     - Validate exam time window using ExamTimeValidator
     - Create or retrieve ExamAttempt for student
     - Load exam questions with options
@@ -39,7 +39,7 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - Pass data to view
     - _Requirements: 2.1, 5.1, 5.2_
   
-  - [~] 3.3 Create mcq-exam.blade.php view with timer and navigation
+  - [-] 3.3 Create mcq-exam.blade.php view with timer and navigation
     - Display countdown timer with remaining time
     - Add question navigation controls (next/previous/jump to question)
     - Show progress indicators for answered/unanswered questions
