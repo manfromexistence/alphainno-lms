@@ -456,7 +456,7 @@
                             </div>
                             <div class="flex-1">
                                 <p class="text-sm text-gray-700 group-hover:text-primary font-medium line-clamp-2">{{ $announcement->title }}</p>
-                                <span class="text-xs text-gray-500">{{ $announcement->published_at ? $announcement->published_at->format('d M, Y') : $announcement->created_at->format('d M, Y') }}</span>
+                                <span class="text-xs text-gray-500">{{ $announcement->starts_at ? $announcement->starts_at->format('d M, Y') : $announcement->created_at->format('d M, Y') }}</span>
                             </div>
                         </a>
                         @empty
@@ -696,10 +696,16 @@
                 document.getElementById('modal-category').style.display = 'none';
             }
 
-            // Set Buy Link
+            // Set Buy Link with authentication check
             const buyBtn = document.getElementById('modal-buy-btn');
             if (buyBtn) {
-                buyBtn.href = `/student/courses/${course.id}/enroll`;
+                @auth
+                    // User is authenticated, redirect to enrollment
+                    buyBtn.href = `/student/courses/${course.id}/enroll`;
+                @else
+                    // User is not authenticated, redirect to login
+                    buyBtn.href = `/login`;
+                @endauth
             }
 
             document.getElementById('courseModal').classList.remove('hidden');

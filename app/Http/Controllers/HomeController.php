@@ -29,8 +29,8 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
-        $announcements = Announcement::where('status', 'published')
-            ->orderBy('published_at', 'desc')
+        $announcements = Announcement::where('is_active', true)
+            ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
 
