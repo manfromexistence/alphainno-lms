@@ -6,7 +6,9 @@ use Illuminate\Database\Seeder;
 use App\Models\{
     Course, CourseVideo, CourseMaterial, Batch, Student, Teacher, ClassSchedule,
     Attendance, Exam, Question, ExamResult, ExamAttempt,
-    Invoice, Payment, ParentModel, Announcement, User, Setting
+    Invoice, Payment, ParentModel, Announcement, User, Setting,
+    Income, Expense, InventoryItem, InventoryTransaction,
+    MessageTemplate, SmsLog, ActivityLog
 };
 use Illuminate\Support\Facades\Hash;
 
@@ -683,6 +685,314 @@ class ComprehensiveDataSeeder extends Seeder
         $this->command->info("✓ Created {$parentCount} parent accounts with {$relationshipCount} relationships");
     }
 
+    /**
+     * Seed accounts data (Income and Expenses)
+     */
+    private function seedAccountsData(): void
+    {
+        $this->command->info('💰 Seeding accounts data...');
+        
+        $incomeCount = 0;
+        $expenseCount = 0;
+        
+        // Income categories
+        $incomeCategories = [
+            'Tuition Fees',
+            'Admission Fees',
+            'Exam Fees',
+            'Library Fees',
+            'Lab Fees',
+            'Sports Fees',
+            'Transport Fees',
+            'Donations',
+            'Government Grant',
+            'Other Income'
+        ];
+        
+        // Expense categories
+        $expenseCategories = [
+            'Salary',
+            'Utilities',
+            'Maintenance',
+            'Supplies',
+            'Equipment',
+            'Transportation',
+            'Marketing',
+            'Insurance',
+            'Rent',
+            'Other Expenses'
+        ];
+        
+        // Create income records for the last 6 months
+        for ($month = 6; $month >= 0; $month--) {
+            $numIncomes = rand(5, 10);
+            
+            for ($i = 0; $i < $numIncomes; $i++) {
+                $date = now()->subMonths($month)->addDays(rand(1, 28));
+                $category = $incomeCategories[array_rand($incomeCategories)];
+                $amount = rand(5000, 50000);
+                
+                Income::create([
+                    'income_date' => $date,
+                    'category' => collect(['admission', 'tuition', 'materials', 'other'])->random(),
+                    'amount' => $amount,
+                    'description' => $this->generateIncomeDescription($category),
+                    'reference' => 'INC-' . strtoupper(substr(md5(uniqid()), 0, 8)),
+                    'created_by' => 1, // Admin user
+                ]);
+                
+                $incomeCount++;
+            }
+        }
+        
+        // Create expense records for the last 6 months
+        for ($month = 6; $month >= 0; $month--) {
+            $numExpenses = rand(8, 15);
+            
+            for ($i = 0; $i < $numExpenses; $i++) {
+                $date = now()->subMonths($month)->addDays(rand(1, 28));
+                $category = $expenseCategories[array_rand($expenseCategories)];
+                $amount = rand(2000, 30000);
+                
+                Expense::create([
+                    'expense_date' => $date,
+                    'category' => collect(['rent', 'salary', 'bills', 'advertisement', 'furniture', 'paper', 'stationary', 'other'])->random(),
+                    'amount' => $amount,
+                    'description' => $this->generateExpenseDescription($category),
+                    'receipt_number' => 'EXP-' . strtoupper(substr(md5(uniqid()), 0, 8)),
+                    'notes' => 'Paid to ' . $this->generateVendorName($category),
+                    'created_by' => 1, // Admin user
+                ]);
+                
+                $expenseCount++;
+            }
+        }
+        
+        $this->command->info("✓ Created {$incomeCount} income records and {$expenseCount} expense records");
+    }
+
+    /**
+     * Seed inventory data
+     */
+    private function seedInventoryData(): void
+    {
+        $this->command->info('📦 Seeding inventory data...');
+        
+        $categories = [
+            'Furniture',
+            'Electronics',
+            'Sports Equipment',
+            'Lab Equipment',
+            'Stationery',
+            'Books',
+            'Computers',
+            'Cleaning Supplies',
+            'Medical Supplies',
+            'Office Equipment'
+        ];
+        
+        $itemCount = 0;
+        $transactionCount = 0;
+        
+        // Create inventory items
+        foreach ($categories as $category) {
+            $numItems = rand(3, 8);
+            
+            for ($i = 1; $i <= $numItems; $i++) {
+                $quantity = rand(5, 100);
+                $unitPrice = rand(100, 5000);
+                
+                $item = InventoryItem::create([
+                    'name' => $this->generateInventoryItemName($category, $i),
+                    'category' => $category,
+                    'description' => 'High quality ' . strtolower($category) . ' for institutional use',
+                    'quantity' => $quantity,
+                    'unit' => collect(['pcs', 'box', 'set', 'unit', 'pack'])->random(),
+                    'unit_price' => $unitPrice,
+                    'low_stock_threshold' => rand(5, 20),
+                    'location' => collect(['Store Room A', 'Store Room B', 'Office', 'Lab', 'Library'])->random(),
+                ]);
+                
+                $itemCount++;
+                
+                // Create transactions for this item
+                $numTransactions = rand(3, 8);
+                
+                for ($t = 0; $t < $numTransactions; $t++) {
+                    $type = collect(['in', 'out'])->random();
+                    $qty = rand(1, 10);
+                    $date = now()->subDays(rand(1, 180));
+                    
+                    InventoryTransaction::create([
+                        'inventory_item_id' => $item->id,
+                        'type' => collect(['purchase', 'usage', 'adjustment'])->random(),
+                        'quantity' => $qty,
+                        'unit_price' => $item->unit_price,
+                        'total_amount' => $qty * $item->unit_price,
+                        'supplier' => $type === 'purchase' ? $this->generateSupplierName() : null,
+                        'purpose' => $type === 'usage' ? collect(['classroom', 'lab', 'office', 'maintenance'])->random() : null,
+                        'transaction_date' => $date,
+                        'notes' => $type === 'purchase' ? 'Stock received from supplier' : 'Issued for use',
+                        'created_by' => 1, // Admin user
+                    ]);
+                    
+                    $transactionCount++;
+                }
+            }
+        }
+        
+        $this->command->info("✓ Created {$itemCount} inventory items and {$transactionCount} transactions");
+    }
+
+    /**
+     * Seed communication data (SMS logs and templates)
+     */
+    private function seedCommunicationData(): void
+    {
+        $this->command->info('📱 Seeding communication data...');
+        
+        $templateCount = 0;
+        $smsLogCount = 0;
+        
+        // Create SMS templates
+        $templates = [
+            [
+                'name' => 'Attendance Alert',
+                'slug' => 'attendance-alert',
+                'type' => 'sms',
+                'content' => 'Dear Parent, Your child {student_name} was absent on {date}. Please contact the school if this is unexpected.',
+                'placeholders' => ['student_name', 'date'],
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Fee Reminder',
+                'slug' => 'fee-reminder',
+                'type' => 'sms',
+                'content' => 'Dear Parent, This is a reminder that {student_name}\'s fee of {amount} is due on {due_date}. Please pay at your earliest convenience.',
+                'placeholders' => ['student_name', 'amount', 'due_date'],
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Exam Notification',
+                'slug' => 'exam-notification',
+                'type' => 'sms',
+                'content' => 'Dear Student, Your {exam_name} is scheduled for {exam_date} at {exam_time}. Please be on time. Good luck!',
+                'placeholders' => ['exam_name', 'exam_date', 'exam_time'],
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Result Published',
+                'slug' => 'result-published',
+                'type' => 'sms',
+                'content' => 'Dear {student_name}, Your {exam_name} result is now available. You scored {marks}/{total_marks}. Check your portal for details.',
+                'placeholders' => ['student_name', 'exam_name', 'marks', 'total_marks'],
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Holiday Notice',
+                'slug' => 'holiday-notice',
+                'type' => 'sms',
+                'content' => 'Dear All, The institution will remain closed on {date} due to {reason}. Classes will resume on {resume_date}.',
+                'placeholders' => ['date', 'reason', 'resume_date'],
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Meeting Invitation',
+                'slug' => 'meeting-invitation',
+                'type' => 'sms',
+                'content' => 'Dear Parent, You are invited to attend a parent-teacher meeting on {date} at {time}. Your presence is highly appreciated.',
+                'placeholders' => ['date', 'time'],
+                'is_active' => true,
+            ],
+        ];
+        
+        foreach ($templates as $template) {
+            MessageTemplate::create($template);
+            $templateCount++;
+        }
+        
+        // Create SMS logs
+        $students = Student::with('user')->take(20)->get();
+        
+        if ($students->isNotEmpty()) {
+            foreach ($students as $student) {
+                $numSms = rand(3, 8);
+                
+                for ($i = 0; $i < $numSms; $i++) {
+                    $status = collect(['sent', 'sent', 'sent', 'failed', 'pending'])->random();
+                    $sentAt = now()->subDays(rand(1, 90));
+                    
+                    SmsLog::create([
+                        'phone' => $student->phone ?? '01700000000',
+                        'message' => $this->generateSmsMessage($student),
+                        'status' => $status,
+                        'type' => collect(['attendance', 'payment', 'exam', 'announcement'])->random(),
+                        'sent_at' => $status === 'sent' ? $sentAt : null,
+                    ]);
+                    
+                    $smsLogCount++;
+                }
+            }
+        }
+        
+        $this->command->info("✓ Created {$templateCount} SMS templates and {$smsLogCount} SMS logs");
+    }
+
+    /**
+     * Seed activity logs
+     */
+    private function seedActivityLogs(): void
+    {
+        $this->command->info('📋 Seeding activity logs...');
+        
+        $users = User::take(10)->get();
+        
+        if ($users->isEmpty()) {
+            $this->command->warn('No users found. Skipping activity logs.');
+            return;
+        }
+        
+        $actions = [
+            'created' => ['student', 'teacher', 'course', 'batch', 'exam', 'payment', 'invoice'],
+            'updated' => ['student', 'teacher', 'course', 'batch', 'exam', 'settings'],
+            'deleted' => ['student', 'teacher', 'course', 'announcement'],
+            'viewed' => ['report', 'dashboard', 'student_list', 'payment_list'],
+            'exported' => ['students', 'payments', 'attendance', 'results'],
+            'imported' => ['students', 'teachers'],
+            'sent' => ['sms', 'email', 'notification'],
+        ];
+        
+        $logCount = 0;
+        
+        foreach ($users as $user) {
+            $numLogs = rand(10, 30);
+            
+            for ($i = 0; $i < $numLogs; $i++) {
+                $action = array_rand($actions);
+                $subject = $actions[$action][array_rand($actions[$action])];
+                $createdAt = now()->subDays(rand(1, 90))->subHours(rand(0, 23));
+                
+                ActivityLog::create([
+                    'user_id' => $user->id,
+                    'action' => $action,
+                    'model_type' => 'App\\Models\\' . ucfirst($subject),
+                    'model_id' => rand(1, 100),
+                    'changes' => [
+                        'description' => $this->generateActivityDescription($action, $subject, $user->name),
+                    ],
+                    'ip_address' => $this->generateIpAddress(),
+                    'user_agent' => $this->generateUserAgent(),
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
+                ]);
+                
+                $logCount++;
+            }
+        }
+        
+        $this->command->info("✓ Created {$logCount} activity logs");
+    }
+
     // Helper methods
     
     private function weightedRandom(array $values, array $weights): string
@@ -889,5 +1199,139 @@ class ComprehensiveDataSeeder extends Seeder
         ];
         
         return $descriptions[$type];
+    }
+
+    private function generateIncomeDescription(string $category): string
+    {
+        $descriptions = [
+            'Tuition Fees' => 'Monthly tuition fee collection from students',
+            'Admission Fees' => 'New student admission and registration fees',
+            'Exam Fees' => 'Examination and assessment fees',
+            'Library Fees' => 'Library membership and book rental fees',
+            'Lab Fees' => 'Laboratory usage and equipment fees',
+            'Sports Fees' => 'Sports activities and equipment fees',
+            'Transport Fees' => 'Student transportation service fees',
+            'Donations' => 'Charitable donations and contributions',
+            'Government Grant' => 'Government funding and grants',
+            'Other Income' => 'Miscellaneous income',
+        ];
+        
+        return $descriptions[$category] ?? 'Income received';
+    }
+
+    private function generateExpenseDescription(string $category): string
+    {
+        $descriptions = [
+            'Salary' => 'Staff salary and wages payment',
+            'Utilities' => 'Electricity, water, and internet bills',
+            'Maintenance' => 'Building and equipment maintenance',
+            'Supplies' => 'Office and classroom supplies purchase',
+            'Equipment' => 'New equipment and furniture purchase',
+            'Transportation' => 'Vehicle fuel and maintenance',
+            'Marketing' => 'Advertising and promotional expenses',
+            'Insurance' => 'Insurance premium payment',
+            'Rent' => 'Building rent payment',
+            'Other Expenses' => 'Miscellaneous expenses',
+        ];
+        
+        return $descriptions[$category] ?? 'Expense paid';
+    }
+
+    private function generateVendorName(string $category): string
+    {
+        $vendors = [
+            'Salary' => collect(['Staff', 'Teachers', 'Admin Staff'])->random(),
+            'Utilities' => collect(['DESCO', 'WASA', 'ISP Provider'])->random(),
+            'Maintenance' => collect(['ABC Maintenance', 'XYZ Services', 'Local Contractor'])->random(),
+            'Supplies' => collect(['Office Mart', 'Stationery Plus', 'Supply House'])->random(),
+            'Equipment' => collect(['Tech Solutions', 'Furniture World', 'Equipment Store'])->random(),
+            'Transportation' => collect(['Fuel Station', 'Transport Service', 'Vehicle Maintenance'])->random(),
+            'Marketing' => collect(['Ad Agency', 'Print House', 'Digital Marketing'])->random(),
+            'Insurance' => collect(['Insurance Company A', 'Insurance Company B'])->random(),
+            'Rent' => 'Property Owner',
+            'Other Expenses' => 'Various Vendors',
+        ];
+        
+        return $vendors[$category] ?? 'Vendor';
+    }
+
+    private function generateInventoryItemName(string $category, int $number): string
+    {
+        $items = [
+            'Furniture' => ['Desk', 'Chair', 'Table', 'Cabinet', 'Shelf', 'Bench'],
+            'Electronics' => ['Projector', 'Speaker', 'Microphone', 'Monitor', 'Printer', 'Scanner'],
+            'Sports Equipment' => ['Football', 'Cricket Bat', 'Volleyball', 'Badminton Racket', 'Basketball'],
+            'Lab Equipment' => ['Microscope', 'Beaker', 'Test Tube', 'Bunsen Burner', 'Flask'],
+            'Stationery' => ['Pen', 'Pencil', 'Notebook', 'Marker', 'Eraser', 'Ruler'],
+            'Books' => ['Textbook', 'Reference Book', 'Workbook', 'Dictionary', 'Atlas'],
+            'Computers' => ['Desktop PC', 'Laptop', 'Keyboard', 'Mouse', 'Webcam'],
+            'Cleaning Supplies' => ['Broom', 'Mop', 'Detergent', 'Dustbin', 'Cleaning Cloth'],
+            'Medical Supplies' => ['First Aid Kit', 'Bandage', 'Antiseptic', 'Thermometer', 'Mask'],
+            'Office Equipment' => ['Stapler', 'Punch', 'Calculator', 'Whiteboard', 'Notice Board'],
+        ];
+        
+        $itemList = $items[$category] ?? ['Item'];
+        return $itemList[array_rand($itemList)] . ' ' . $number;
+    }
+
+    private function generateSupplierName(): string
+    {
+        $suppliers = [
+            'ABC Suppliers Ltd',
+            'XYZ Trading Company',
+            'Quality Goods Store',
+            'Premium Suppliers',
+            'Best Buy Wholesale',
+            'Top Quality Traders',
+            'Reliable Suppliers',
+            'Express Trading',
+        ];
+        
+        return $suppliers[array_rand($suppliers)];
+    }
+
+    private function generateSmsMessage(Student $student): string
+    {
+        $messages = [
+            "Dear Parent, {$student->user->name} attended class today. Thank you.",
+            "Reminder: Fee payment due for {$student->user->name}. Please pay at your earliest convenience.",
+            "Dear {$student->user->name}, Your exam is scheduled for tomorrow. Good luck!",
+            "Parent-teacher meeting scheduled for next week. Your presence is appreciated.",
+            "Dear Parent, {$student->user->name} has shown excellent progress this month.",
+        ];
+        
+        return $messages[array_rand($messages)];
+    }
+
+    private function generateActivityDescription(string $action, string $subject, string $userName): string
+    {
+        $descriptions = [
+            'created' => "{$userName} created a new {$subject}",
+            'updated' => "{$userName} updated {$subject} information",
+            'deleted' => "{$userName} deleted a {$subject}",
+            'viewed' => "{$userName} viewed {$subject}",
+            'exported' => "{$userName} exported {$subject} data",
+            'imported' => "{$userName} imported {$subject} data",
+            'sent' => "{$userName} sent {$subject}",
+        ];
+        
+        return $descriptions[$action] ?? "{$userName} performed {$action} on {$subject}";
+    }
+
+    private function generateIpAddress(): string
+    {
+        return rand(1, 255) . '.' . rand(0, 255) . '.' . rand(0, 255) . '.' . rand(1, 255);
+    }
+
+    private function generateUserAgent(): string
+    {
+        $agents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        ];
+        
+        return $agents[array_rand($agents)];
     }
 }
