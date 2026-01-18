@@ -91,7 +91,7 @@
         <!-- URL input - disabled when showing existing storage path or default asset to prevent validation errors -->
         <input 
             type="text" 
-            name="{{ $name }}_url" 
+            @if(!$shouldDisableUrlInput) name="{{ $name }}_url" @endif
             id="{{ $name }}-url"
             value="{{ $displayUrl }}"
             oninput="handleUrlInput(this, '{{ $name }}')"
@@ -182,6 +182,14 @@
             const preview = group.querySelector('img[id$="-preview"]');
             const placeholder = group.querySelector('div[id$="-placeholder"]');
             const isPersist = group && group.dataset.persist === 'true';
+            
+            // Enable the input and add name attribute when user starts typing
+            if (input.disabled) {
+                input.disabled = false;
+                input.setAttribute('name', name + '_url');
+                input.classList.remove('bg-gray-100', 'text-gray-500');
+                input.classList.add('bg-white');
+            }
             
             if (url) {
                 if (preview) {
