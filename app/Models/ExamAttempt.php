@@ -18,12 +18,14 @@ class ExamAttempt extends Model
         'submitted_at',
         'auto_submitted_at',
         'answers',
+        'screenshots',
         'time_per_question',
         'status',
         'ip_address',
         'tab_switches',
         'flagged_for_cheating',
         'cheating_notes',
+        'cheating_events',
     ];
 
     protected function casts(): array
@@ -33,6 +35,8 @@ class ExamAttempt extends Model
             'submitted_at' => 'datetime',
             'auto_submitted_at' => 'datetime',
             'answers' => 'array',
+            'screenshots' => 'array',
+            'cheating_events' => 'array',
             'time_per_question' => 'array',
             'flagged_for_cheating' => 'boolean',
         ];

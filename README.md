@@ -13,6 +13,7 @@ npm run build && "/c/Program Files/7-Zip/7z.exe" a -tzip ../lms.zip . '-xr!node_
 ```bash
 php artisan key:generate && php artisan migrate:fresh --seed && rm -rf public/storage && php artisan storage:link
 ```
+Please learn from .kiro/specs/students-port-enhancement and make sure to do these as fast as possible!!!
 
 Now, I have logged in as parent and as you can see that the parent dashboard is empty so please our custom data table, select from resources/views/components/ui and other components and show nice charts dashboard for parents
 
@@ -27,4 +28,3 @@ pages I am seeing view and edit exam - but students should only be able to take 
 
 we already have most of the task complete - just mostly need to connects things so please remove all tests from the spec and make the spec in a way that its faster to add main functionalities correctly!!!
 
-Please learn from .kiro/specs/students-port-enhancement and make sure to do these as fast as possible!!!

@@ -15,12 +15,18 @@ class Payment extends Model
      */
     protected $fillable = [
         'student_id',
+        'course_id',
         'invoice_id',
         'amount',
         'payment_method',
         'receipt_number',
         'transaction_id',
+        'screenshot_path',
         'payment_date',
+        'submitted_at',
+        'reviewed_at',
+        'reviewed_by',
+        'admin_notes',
         'notes',
         'status',
     ];
@@ -35,6 +41,8 @@ class Payment extends Model
         return [
             'amount' => 'decimal:2',
             'payment_date' => 'date',
+            'submitted_at' => 'datetime',
+            'reviewed_at' => 'datetime',
         ];
     }
 
@@ -47,11 +55,27 @@ class Payment extends Model
     }
 
     /**
+     * Get the course associated with this payment (for course enrollment payments).
+     */
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    /**
      * Get the invoice associated with this payment (if any).
      */
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    /**
+     * Get the admin user who reviewed this payment.
+     */
+    public function reviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 
     /**
@@ -61,6 +85,14 @@ class Payment extends Model
     {
         return $this->hasOne(Income::class);
     }
+
+    // Payment status constants for course enrollment workflow
+    const STATUS_PENDING = 'pending';
+    const STATUS_APPROVED = 'approved';
+    const STATUS_REJECTED = 'rejected';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_FAILED = 'failed';
+    const STATUS_REFUNDED = 'refunded';
 
     /**
      * Check if the payment is completed.
@@ -80,6 +112,26 @@ class Payment extends Model
     public function isPending(): bool
     {
         return $this->status === 'pending';
+    }
+
+    /**
+     * Check if the payment is approved (for course enrollment workflow).
+     *
+     * @return bool
+     */
+    public function isApproved(): bool
+    {
+        return $this->status === 'approved';
+    }
+
+    /**
+     * Check if the payment is rejected (for course enrollment workflow).
+     *
+     * @return bool
+     */
+    public function isRejected(): bool
+    {
+        return $this->status === 'rejected';
     }
 
     /**
