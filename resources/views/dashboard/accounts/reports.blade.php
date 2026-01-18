@@ -66,7 +66,7 @@
                 <x-ui.card-title>Income by Category</x-ui.card-title>
             </x-ui.card-header>
             <x-ui.card-content>
-                <div class="h-[300px]">
+                <div style="height: 300px; position: relative;">
                     <canvas id="incomeChart"></canvas>
                 </div>
             </x-ui.card-content>
@@ -77,7 +77,7 @@
                 <x-ui.card-title>Expense by Category</x-ui.card-title>
             </x-ui.card-header>
             <x-ui.card-content>
-                <div class="h-[300px]">
+                <div style="height: 300px; position: relative;">
                     <canvas id="expenseChart"></canvas>
                 </div>
             </x-ui.card-content>
@@ -119,49 +119,85 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
     // Income Chart
-    new Chart(document.getElementById('incomeChart').getContext('2d'), {
-        type: 'doughnut',
-        data: {
-            labels: Object.keys(@json($report['income_by_category'])),
-            datasets: [{
-                data: Object.values(@json($report['income_by_category'])),
-                backgroundColor: ['#3b82f6', '#10b981', '#06b6d4', '#f59e0b', '#ef4444'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+    const incomeCtx = document.getElementById('incomeChart');
+    if (incomeCtx) {
+        new Chart(incomeCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: @json(array_keys($report['income_by_category']->toArray())),
+                datasets: [{
+                    data: @json(array_values($report['income_by_category']->toArray())),
+                    backgroundColor: ['#3b82f6', '#10b981', '#06b6d4', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ৳' + context.parsed.toLocaleString();
+                            }
+                        }
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
     // Expense Chart
-    new Chart(document.getElementById('expenseChart').getContext('2d'), {
-        type: 'doughnut',
-        data: {
-            labels: Object.keys(@json($report['expense_by_category'])),
-            datasets: [{
-                data: Object.values(@json($report['expense_by_category'])),
-                backgroundColor: ['#ef4444', '#f59e0b', '#06b6d4', '#10b981', '#3b82f6'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+    const expenseCtx = document.getElementById('expenseChart');
+    if (expenseCtx) {
+        new Chart(expenseCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: @json(array_keys($report['expense_by_category']->toArray())),
+                datasets: [{
+                    data: @json(array_values($report['expense_by_category']->toArray())),
+                    backgroundColor: ['#ef4444', '#f59e0b', '#06b6d4', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ৳' + context.parsed.toLocaleString();
+                            }
+                        }
+                    }
                 }
             }
-        }
-    });
+        });
+    }
+});
 </script>
 @endpush
 @endsection

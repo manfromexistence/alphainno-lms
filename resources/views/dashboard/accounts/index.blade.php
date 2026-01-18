@@ -50,7 +50,9 @@
                     <x-ui.card-title>Financial Overview (Last 6 Months)</x-ui.card-title>
                 </x-ui.card-header>
                 <x-ui.card-content>
-                    <canvas id="financialChart" class="w-full max-h-[400px]"></canvas>
+                    <div style="height: 400px; position: relative;">
+                        <canvas id="financialChart"></canvas>
+                    </div>
                 </x-ui.card-content>
             </x-ui.card>
         </div>
@@ -93,50 +95,72 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('financialChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: @json(array_column($chartData, 'month')),
-            datasets: [{
-                label: 'Income',
-                data: @json(array_column($chartData, 'income')),
-                backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                borderColor: 'rgba(59, 130, 246, 1)',
-                borderWidth: 1,
-                borderRadius: 4
-            }, {
-                label: 'Expense',
-                data: @json(array_column($chartData, 'expense')),
-                backgroundColor: 'rgba(239, 68, 68, 0.5)',
-                borderColor: 'rgba(239, 68, 68, 1)',
-                borderWidth: 1,
-                borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0,0,0,0.05)'
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('financialChart');
+    if (ctx) {
+        new Chart(ctx.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: @json(array_column($chartData, 'month')),
+                datasets: [{
+                    label: 'Income',
+                    data: @json(array_column($chartData, 'income')),
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1,
+                    borderRadius: 6
+                }, {
+                    label: 'Expense',
+                    data: @json(array_column($chartData, 'expense')),
+                    backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    borderWidth: 1,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '৳' + value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
                     }
                 },
-                x: {
-                    grid: {
-                        display: false
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ৳' + context.parsed.y.toLocaleString();
+                            }
+                        }
                     }
                 }
-            },
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
             }
-        }
-    });
+        });
+    }
+});
 </script>
 @endpush
 @endsection
