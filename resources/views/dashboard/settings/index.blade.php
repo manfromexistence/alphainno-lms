@@ -82,21 +82,38 @@
 
                     <!-- Logo Upload -->
                     <div class="md:col-span-2">
+                        @php
+                            $settingsService = app(\App\Services\SettingsService::class);
+                            $currentLogo = $settings['institution']['institution_logo']['value'] ?? '';
+                            // If empty, use the default logo URL for preview
+                            $logoPreview = empty($currentLogo) ? asset('logo.png') : $currentLogo;
+                            $logoHelperText = empty($currentLogo) 
+                                ? 'Currently using default logo.png. Upload a file to replace it. Recommended size: 200x200px. Supports JPG, PNG, SVG, WebP'
+                                : 'Recommended size: 200x200px. Supports JPG, PNG, SVG, WebP';
+                        @endphp
                         <x-ui.image-input 
                             name="institution_logo" 
                             label="Institution Logo"
-                            :value="$settings['institution']['institution_logo']['value'] ?? ''"
-                            helperText="Recommended size: 200x200px. Supports JPG, PNG, SVG, WebP"
+                            :value="$logoPreview"
+                            :helperText="$logoHelperText"
                         />
                     </div>
 
                     <!-- Favicon Upload -->
                     <div class="md:col-span-2">
+                        @php
+                            $currentFavicon = $settings['institution']['institution_favicon']['value'] ?? '';
+                            // If empty, use the default favicon URL for preview
+                            $faviconPreview = empty($currentFavicon) ? asset('favicon.ico') : $currentFavicon;
+                            $faviconHelperText = empty($currentFavicon)
+                                ? 'Currently using default favicon.ico. Upload a file to replace it. Recommended size: 32x32px or 64x64px. Supports ICO, PNG, SVG'
+                                : 'Recommended size: 32x32px or 64x64px. Supports ICO, PNG, SVG';
+                        @endphp
                         <x-ui.image-input 
                             name="institution_favicon" 
                             label="Favicon"
-                            :value="$settings['institution']['institution_favicon']['value'] ?? ''"
-                            helperText="Recommended size: 32x32px or 64x64px. Supports ICO, PNG, SVG"
+                            :value="$faviconPreview"
+                            :helperText="$faviconHelperText"
                         />
                     </div>
                 </div>

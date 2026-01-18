@@ -13,6 +13,12 @@
     // Clear blob URLs as they don't persist across reloads
     $urlValue = str_starts_with($urlValue ?? '', 'blob:') ? '' : $urlValue;
     
+    // Check if this is a default asset (logo.png or favicon.ico)
+    $isDefaultAsset = $urlValue && (
+        str_contains($urlValue, '/logo.png') || 
+        str_contains($urlValue, '/favicon.ico')
+    );
+    
     // Determine if the value is a storage path (not an external URL)
     $isStoragePath = $urlValue && !str_starts_with($urlValue, 'http://') && !str_starts_with($urlValue, 'https://');
     
@@ -28,9 +34,8 @@
     // For display in URL input: show the full URL
     $displayUrl = $previewUrl;
     
-    // For submission: only submit external URLs, not storage paths
-    // Storage paths are already saved in DB, no need to resubmit
-    $shouldDisableUrlInput = $isStoragePath;
+    // For submission: disable URL input for storage paths and default assets
+    $shouldDisableUrlInput = $isStoragePath || $isDefaultAsset;
     
     $hasFileError = $errors->has($name . '_file') || $errors->has($name);
 @endphp
@@ -77,11 +82,13 @@
     <div class="space-y-1 mt-3">
         <label class="block text-xs font-medium text-gray-500">
             Image URL (or upload above)
-            @if($shouldDisableUrlInput)
+            @if($isDefaultAsset)
+                <span class="text-gray-400 font-normal">- Using default image</span>
+            @elseif($shouldDisableUrlInput)
                 <span class="text-gray-400 font-normal">- Current image shown</span>
             @endif
         </label>
-        <!-- URL input - disabled when showing existing storage path to prevent validation errors -->
+        <!-- URL input - disabled when showing existing storage path or default asset to prevent validation errors -->
         <input 
             type="text" 
             name="{{ $name }}_url" 
