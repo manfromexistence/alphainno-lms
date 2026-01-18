@@ -26,17 +26,17 @@ class DatabaseSeeder extends Seeder
             BatchSeeder::class,
             StudentManagementSeeder::class,
             TeacherManagementSeeder::class,
-            // DemoDataSeeder::class, // Skip if not needed
             PageSeeder::class,
-            // ClassCoursesBatchesSeeder::class, // Skip if not needed
-            // CourseVideoSeeder::class, // Skip if not needed
-            // ClassScheduleSeeder::class, // Skip if not needed
-            // PaymentInvoiceSeeder::class, // Skip if not needed
-            // ExamSeeder::class, // Skip if not needed
-            // InventorySeeder::class, // Skip if not needed
-            // AccountSeeder::class, // Skip if not needed
-            // AdminFeaturesSeeder::class, // Skip if not needed
-            // StudentPortalDataSeeder::class, // Skip if not needed
+            
+            // Comprehensive data seeder - populates all missing data
+            ComprehensiveDataSeeder::class,
+            
+            // Optional seeders (uncomment if needed)
+            // DemoDataSeeder::class,
+            // ClassCoursesBatchesSeeder::class,
+            // InventorySeeder::class,
+            // AccountSeeder::class,
+            // AdminFeaturesSeeder::class,
         ]);
         
         \Illuminate\Database\Eloquent\Model::reguard();

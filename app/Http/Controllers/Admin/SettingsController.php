@@ -61,7 +61,9 @@ class SettingsController extends Controller
 
             // Theme Settings
             'theme_primary_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'theme_primary_foreground' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
             'theme_secondary_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'theme_secondary_foreground' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
         ]);
 
         try {

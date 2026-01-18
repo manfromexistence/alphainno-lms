@@ -140,8 +140,18 @@ class SettingsService
             'group' => 'theme',
             'type' => 'string',
         ],
+        'theme_primary_foreground' => [
+            'value' => '#ffffff',
+            'group' => 'theme',
+            'type' => 'string',
+        ],
         'theme_secondary_color' => [
             'value' => '#8b5cf6',
+            'group' => 'theme',
+            'type' => 'string',
+        ],
+        'theme_secondary_foreground' => [
+            'value' => '#ffffff',
             'group' => 'theme',
             'type' => 'string',
         ],

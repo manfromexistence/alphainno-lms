@@ -7,22 +7,23 @@
 <script>
     // Sync color picker with text input
     document.addEventListener('DOMContentLoaded', function() {
-        const primaryColorPicker = document.getElementById('theme_primary_color');
-        const primaryColorText = document.getElementById('theme_primary_color_text');
-        const secondaryColorPicker = document.getElementById('theme_secondary_color');
-        const secondaryColorText = document.getElementById('theme_secondary_color_text');
+        const colorInputs = [
+            { picker: 'theme_primary_color', text: 'theme_primary_color_text' },
+            { picker: 'theme_primary_foreground', text: 'theme_primary_foreground_text' },
+            { picker: 'theme_secondary_color', text: 'theme_secondary_color_text' },
+            { picker: 'theme_secondary_foreground', text: 'theme_secondary_foreground_text' }
+        ];
 
-        if (primaryColorPicker && primaryColorText) {
-            primaryColorPicker.addEventListener('input', function() {
-                primaryColorText.value = this.value;
-            });
-        }
-
-        if (secondaryColorPicker && secondaryColorText) {
-            secondaryColorPicker.addEventListener('input', function() {
-                secondaryColorText.value = this.value;
-            });
-        }
+        colorInputs.forEach(({ picker, text }) => {
+            const pickerEl = document.getElementById(picker);
+            const textEl = document.getElementById(text);
+            
+            if (pickerEl && textEl) {
+                pickerEl.addEventListener('input', function() {
+                    textEl.value = this.value;
+                });
+            }
+        });
     });
 </script>
 @endpush
@@ -223,7 +224,7 @@
             <x-ui.card-content>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
-                        <x-ui.label for="theme_primary_color">Primary Color</x-ui.label>
+                        <x-ui.label for="theme_primary_color">Primary Background Color</x-ui.label>
                         <div class="flex gap-3 items-center">
                             <input type="color" name="theme_primary_color" id="theme_primary_color" 
                                 value="{{ $settings['theme']['theme_primary_color']['value'] ?? '#3b82f6' }}"
@@ -232,11 +233,24 @@
                                 value="{{ $settings['theme']['theme_primary_color']['value'] ?? '#3b82f6' }}"
                                 placeholder="#3b82f6" class="flex-1" readonly />
                         </div>
-                        <p class="text-[0.8rem] text-muted-foreground">Main brand color used throughout the site</p>
+                        <p class="text-[0.8rem] text-muted-foreground">Main brand background color</p>
                     </div>
 
                     <div class="space-y-2">
-                        <x-ui.label for="theme_secondary_color">Secondary Color</x-ui.label>
+                        <x-ui.label for="theme_primary_foreground">Primary Text Color</x-ui.label>
+                        <div class="flex gap-3 items-center">
+                            <input type="color" name="theme_primary_foreground" id="theme_primary_foreground" 
+                                value="{{ $settings['theme']['theme_primary_foreground']['value'] ?? '#ffffff' }}"
+                                class="h-10 w-20 rounded border border-input cursor-pointer" />
+                            <x-ui.input type="text" id="theme_primary_foreground_text" 
+                                value="{{ $settings['theme']['theme_primary_foreground']['value'] ?? '#ffffff' }}"
+                                placeholder="#ffffff" class="flex-1" readonly />
+                        </div>
+                        <p class="text-[0.8rem] text-muted-foreground">Text color on primary background</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <x-ui.label for="theme_secondary_color">Secondary Background Color</x-ui.label>
                         <div class="flex gap-3 items-center">
                             <input type="color" name="theme_secondary_color" id="theme_secondary_color" 
                                 value="{{ $settings['theme']['theme_secondary_color']['value'] ?? '#8b5cf6' }}"
@@ -245,7 +259,20 @@
                                 value="{{ $settings['theme']['theme_secondary_color']['value'] ?? '#8b5cf6' }}"
                                 placeholder="#8b5cf6" class="flex-1" readonly />
                         </div>
-                        <p class="text-[0.8rem] text-muted-foreground">Accent color for highlights and CTAs</p>
+                        <p class="text-[0.8rem] text-muted-foreground">Accent background color</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <x-ui.label for="theme_secondary_foreground">Secondary Text Color</x-ui.label>
+                        <div class="flex gap-3 items-center">
+                            <input type="color" name="theme_secondary_foreground" id="theme_secondary_foreground" 
+                                value="{{ $settings['theme']['theme_secondary_foreground']['value'] ?? '#ffffff' }}"
+                                class="h-10 w-20 rounded border border-input cursor-pointer" />
+                            <x-ui.input type="text" id="theme_secondary_foreground_text" 
+                                value="{{ $settings['theme']['theme_secondary_foreground']['value'] ?? '#ffffff' }}"
+                                placeholder="#ffffff" class="flex-1" readonly />
+                        </div>
+                        <p class="text-[0.8rem] text-muted-foreground">Text color on secondary background</p>
                     </div>
                 </div>
             </x-ui.card-content>
