@@ -27,11 +27,11 @@ class AdminUserSeeder extends Seeder
             $superAdmin->roles()->syncWithoutDetaching([$superAdminRole->id]);
         }
 
-        // Create Admin user
+        // Create Admin user with admin@gmail.com
         $admin = User::updateOrCreate(
-            ['email' => 'admin@alpha.com'],
+            ['email' => 'admin@gmail.com'],
             [
-                'name' => 'Alpha Admin',
+                'name' => 'Admin User',
                 'password' => Hash::make('password'),
                 'email_verified_at' => now(),
             ]
@@ -43,9 +43,23 @@ class AdminUserSeeder extends Seeder
             $admin->roles()->syncWithoutDetaching([$adminRole->id]);
         }
 
-        // Create sample Teacher user
+        // Also create admin@alpha.com for backward compatibility
+        $adminAlpha = User::updateOrCreate(
+            ['email' => 'admin@alpha.com'],
+            [
+                'name' => 'Alpha Admin',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        if ($adminRole) {
+            $adminAlpha->roles()->syncWithoutDetaching([$adminRole->id]);
+        }
+
+        // Create sample Teacher user with teacher@gmail.com
         $teacher = User::updateOrCreate(
-            ['email' => 'teacher@alpha.com'],
+            ['email' => 'teacher@gmail.com'],
             [
                 'name' => 'Demo Teacher',
                 'password' => Hash::make('password'),
@@ -59,9 +73,23 @@ class AdminUserSeeder extends Seeder
             $teacher->roles()->syncWithoutDetaching([$teacherRole->id]);
         }
 
-        // Create sample Student user
+        // Also create teacher@alpha.com for backward compatibility
+        $teacherAlpha = User::updateOrCreate(
+            ['email' => 'teacher@alpha.com'],
+            [
+                'name' => 'Demo Teacher Alpha',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        if ($teacherRole) {
+            $teacherAlpha->roles()->syncWithoutDetaching([$teacherRole->id]);
+        }
+
+        // Create sample Student user with student@gmail.com
         $student = User::updateOrCreate(
-            ['email' => 'student@alpha.com'],
+            ['email' => 'student@gmail.com'],
             [
                 'name' => 'Demo Student',
                 'password' => Hash::make('password'),
@@ -73,6 +101,20 @@ class AdminUserSeeder extends Seeder
         $studentRole = Role::where('slug', 'student')->first();
         if ($studentRole) {
             $student->roles()->syncWithoutDetaching([$studentRole->id]);
+        }
+
+        // Also create student@alpha.com for backward compatibility
+        $studentAlpha = User::updateOrCreate(
+            ['email' => 'student@alpha.com'],
+            [
+                'name' => 'Demo Student Alpha',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        if ($studentRole) {
+            $studentAlpha->roles()->syncWithoutDetaching([$studentRole->id]);
         }
     }
 }

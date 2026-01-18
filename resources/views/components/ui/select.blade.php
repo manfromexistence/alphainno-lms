@@ -33,7 +33,7 @@
             type="button" 
             id="select-btn-{{ $name }}"
             onclick="toggleCustomSelect('{{ $name }}')"
-            class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-left focus:border-[{{ $primaryColor ?? '#006A4E' }}] transition-all outline-none flex items-center justify-between group"
+            class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-left focus:border-primary transition-all outline-none flex items-center justify-between group"
         >
             <span id="select-text-{{ $name }}" class="text-gray-900 truncate">Select Option</span>
             <svg id="select-arrow-{{ $name }}" class="w-4 h-4 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,7 +120,7 @@
                 if (option.value === "" && option.disabled) return;
 
                 const li = document.createElement('li');
-                li.className = 'px-4 py-2 hover:bg-emerald-50 cursor-pointer text-sm text-gray-700 hover:text-bd-green transition-colors';
+                li.className = 'px-4 py-2 hover:bg-primary/10 cursor-pointer text-sm text-gray-700 hover:text-primary transition-colors';
                 li.textContent = option.textContent;
                 li.onclick = () => selectOption(name, option.value, option.textContent);
                 

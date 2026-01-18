@@ -124,6 +124,12 @@ class StudentManagementSeeder extends Seeder
         // Add a few random "cool" students with images/real names just for demo if they don't exist
         $demoStudents = [
             [
+                'name' => 'Demo Student',
+                'email' => 'student@gmail.com',
+                'class' => '10',
+                'image' => 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            ],
+            [
                 'name' => 'Rahim Ahmed',
                 'email' => 'rahim@example.com',
                 'class' => '10',

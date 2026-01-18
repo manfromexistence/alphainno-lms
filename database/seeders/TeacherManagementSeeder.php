@@ -38,6 +38,13 @@ class TeacherManagementSeeder extends Seeder
         // 2. Create Teachers
         $teachersData = [
             [
+                'name' => 'Demo Teacher',
+                'email' => 'teacher@gmail.com',
+                'department' => 'Computer Science',
+                'salary' => 50000,
+                'image' => 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            ],
+            [
                 'name' => 'Dr. Arifuzzaman',
                 'email' => 'arif@example.com',
                 'department' => 'Computer Science',

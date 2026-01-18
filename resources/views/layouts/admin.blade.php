@@ -18,13 +18,17 @@
     @php
         $settingsService = app(\App\Services\SettingsService::class);
         $primaryColor = $settingsService->get('theme_primary_color', '#3b82f6');
+        $primaryForeground = $settingsService->get('theme_primary_foreground', '#ffffff');
         $secondaryColor = $settingsService->get('theme_secondary_color', '#8b5cf6');
+        $secondaryForeground = $settingsService->get('theme_secondary_foreground', '#ffffff');
     @endphp
     
     <style>
         :root {
             --color-primary: {{ $primaryColor }};
+            --color-primary-foreground: {{ $primaryForeground }};
             --color-secondary: {{ $secondaryColor }};
+            --color-secondary-foreground: {{ $secondaryForeground }};
         }
         
         /* 1. Standard approach for Firefox */
@@ -58,6 +62,83 @@
 
         .bengali-text {
             font-family: 'Noto Sans Bengali', sans-serif;
+        }
+        
+        /* Theme color utilities */
+        .bg-primary {
+            background-color: var(--color-primary) !important;
+        }
+        
+        .text-primary {
+            color: var(--color-primary) !important;
+        }
+        
+        .text-primary-foreground {
+            color: var(--color-primary-foreground) !important;
+        }
+        
+        .bg-secondary {
+            background-color: var(--color-secondary) !important;
+        }
+        
+        .text-secondary {
+            color: var(--color-secondary) !important;
+        }
+        
+        .text-secondary-foreground {
+            color: var(--color-secondary-foreground) !important;
+        }
+        
+        .border-primary {
+            border-color: var(--color-primary) !important;
+        }
+        
+        .hover\:bg-primary\/90:hover {
+            background-color: var(--color-primary) !important;
+            opacity: 0.9;
+        }
+        
+        .hover\:bg-secondary\/80:hover {
+            background-color: var(--color-secondary) !important;
+            opacity: 0.8;
+        }
+        
+        .hover\:bg-primary\/10:hover {
+            background-color: var(--color-primary) !important;
+            opacity: 0.1;
+        }
+        
+        .hover\:text-primary:hover {
+            color: var(--color-primary) !important;
+        }
+        
+        .focus\:border-primary:focus {
+            border-color: var(--color-primary) !important;
+        }
+        
+        .focus\:ring-primary:focus {
+            --tw-ring-color: var(--color-primary) !important;
+        }
+        
+        .checked\:bg-primary:checked {
+            background-color: var(--color-primary) !important;
+        }
+        
+        .checked\:border-primary:checked {
+            border-color: var(--color-primary) !important;
+        }
+        
+        .checked\:text-primary-foreground:checked {
+            color: var(--color-primary-foreground) !important;
+        }
+        
+        .accent-primary {
+            accent-color: var(--color-primary) !important;
+        }
+        
+        .hover\:bg-primary\/80:hover {
+            background-color: var(--color-primary) !important;
+            opacity: 0.8;
         }
 
         .no-transition {

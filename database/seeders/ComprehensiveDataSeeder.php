@@ -383,11 +383,57 @@ class ComprehensiveDataSeeder extends Seeder
         $relationshipCount = 0;
         $createdParents = [];
         
-        foreach ($students as $index => $student) {
+        // First, create the main parent@gmail.com account
+        $mainParent = ParentModel::updateOrCreate(
+            ['email' => 'parent@gmail.com'],
+            [
+                'name' => 'Demo Parent',
+                'phone' => '01700000001',
+                'password' => Hash::make('password'),
+                'notification_preferences' => [
+                    'email_notifications' => true,
+                    'sms_notifications' => true,
+                    'exam_alerts' => true,
+                    'attendance_alerts' => true,
+                    'payment_reminders' => true,
+                ],
+                'email_verified_at' => now(),
+                'phone_verified_at' => now(),
+            ]
+        );
+        
+        $createdParents[] = $mainParent;
+        $parentCount++;
+        
+        // Link the main parent to the first 2 students (as children)
+        $firstStudents = $students->take(2);
+        foreach ($firstStudents as $index => $student) {
+            $relationshipType = $index === 0 ? 'father' : 'mother';
+            
+            // Check if relationship already exists
+            $exists = \DB::table('parent_student')
+                ->where('parent_id', $mainParent->id)
+                ->where('student_id', $student->id)
+                ->exists();
+            
+            if (!$exists) {
+                $mainParent->students()->attach($student->id, [
+                    'relationship_type' => $relationshipType,
+                    'status' => 'approved',
+                    'approved_by' => 1,
+                    'approved_at' => now(),
+                ]);
+                
+                $relationshipCount++;
+            }
+        }
+        
+        // Continue with other students
+        foreach ($students->skip(2) as $index => $student) {
             // 80% chance student has a parent account
             if (rand(1, 100) <= 80) {
                 // 25% chance to reuse existing parent (siblings)
-                if (rand(1, 100) <= 25 && count($createdParents) > 0) {
+                if (rand(1, 100) <= 25 && count($createdParents) > 1) {
                     $parent = $createdParents[array_rand($createdParents)];
                 } else {
                     // Create new parent
@@ -414,14 +460,22 @@ class ComprehensiveDataSeeder extends Seeder
                 // Link parent to student
                 $relationshipType = $this->getRandomRelationship();
                 
-                $parent->students()->attach($student->id, [
-                    'relationship_type' => $relationshipType,
-                    'status' => 'approved',
-                    'approved_by' => 1,
-                    'approved_at' => now(),
-                ]);
+                // Check if relationship already exists
+                $exists = \DB::table('parent_student')
+                    ->where('parent_id', $parent->id)
+                    ->where('student_id', $student->id)
+                    ->exists();
                 
-                $relationshipCount++;
+                if (!$exists) {
+                    $parent->students()->attach($student->id, [
+                        'relationship_type' => $relationshipType,
+                        'status' => 'approved',
+                        'approved_by' => 1,
+                        'approved_at' => now(),
+                    ]);
+                    
+                    $relationshipCount++;
+                }
             }
         }
         
