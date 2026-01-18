@@ -74,16 +74,22 @@ class StudentManagementSeeder extends Seeder
                     $user->roles()->attach($studentRole->id);
                 }
 
-                // Create Student Profile
+                // Create Student Profile with all required fields
                 $student = Student::updateOrCreate(
                     ['user_id' => $user->id],
                     [
                         'batch_id' => $batch->id,
                         'class' => (string)$class,
+                        'roll' => str_pad(rand(1, 50), 3, '0', STR_PAD_LEFT),
+                        'section' => collect(['A', 'B', 'C', 'D'])->random(),
+                        'group' => $class >= 9 ? collect(['Science', 'Commerce', 'Arts', 'Humanities'])->random() : null,
+                        'shift' => collect(['Morning', 'Day', 'Evening'])->random(),
                         'course_name' => $course->name, // Legacy field
                         'phone' => '017' . str_pad((string)$class, 2, '0', STR_PAD_LEFT) . rand(100000, 999999),
                         'profile_image' => collect($studentImages)->random(),
                         'featured' => rand(1, 10) === 1, // Randomly mark ~10% as featured
+                        'gender' => collect(['Male', 'Female'])->random(),
+                        'blood_group' => collect(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'])->random(),
                     ]
                 );
 
@@ -167,10 +173,16 @@ class StudentManagementSeeder extends Seeder
                 [
                     'batch_id' => $batch->id,
                     'class' => $data['class'],
+                    'roll' => str_pad(rand(1, 50), 3, '0', STR_PAD_LEFT),
+                    'section' => collect(['A', 'B', 'C', 'D'])->random(),
+                    'group' => $data['class'] >= 9 ? collect(['Science', 'Commerce', 'Arts', 'Humanities'])->random() : null,
+                    'shift' => collect(['Morning', 'Day', 'Evening'])->random(),
                     'course_name' => $course->name,
                     'phone' => '01700000000',
                     'profile_image' => $data['image'],
                     'featured' => true, // Mark demo students as featured
+                    'gender' => collect(['Male', 'Female'])->random(),
+                    'blood_group' => collect(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'])->random(),
                 ]
             );
         }
