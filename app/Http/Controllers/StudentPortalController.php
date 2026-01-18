@@ -523,6 +523,83 @@ class StudentPortalController extends Controller
     }
 
     /**
+     * Upload screenshot for CQ exam answer.
+     * 
+     * Requirements: 3.3, 3.4
+     * 
+     * Task details:
+     * - Validate file type (jpg/png/pdf) and size (max 5MB)
+     * - Store file in storage/app/exam-screenshots
+     * - Update exam_attempts screenshots JSON column
+     * - Return success response with file path
+     */
+    public function uploadScreenshot(Request $request)
+    {
+        $student = $this->getStudent();
+        
+        if (!$student) {
+            return response()->json(['error' => 'Student profile not found'], 403);
+        }
+
+        // Validate request
+        $request->validate([
+            'attempt_id' => 'required|exists:exam_attempts,id',
+            'question_id' => 'required|integer',
+            'screenshot' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120', // 5MB = 5120KB
+        ]);
+
+        // Get the exam attempt
+        $attempt = ExamAttempt::findOrFail($request->attempt_id);
+
+        // Verify ownership
+        if ($attempt->student_id !== $student->id) {
+            return response()->json(['error' => 'Unauthorized access to this exam attempt'], 403);
+        }
+
+        // Verify attempt is still in progress
+        if ($attempt->status !== 'in_progress') {
+            return response()->json(['error' => 'This exam attempt is no longer active'], 400);
+        }
+
+        try {
+            // Store the file
+            $file = $request->file('screenshot');
+            $filename = 'exam_' . $attempt->exam_id . '_student_' . $student->id . '_q' . $request->question_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('exam-screenshots', $filename);
+
+            // Get existing screenshots or initialize empty array
+            $screenshots = $attempt->screenshots ?? [];
+            
+            // Add new screenshot to the array
+            $screenshots[$request->question_id] = [
+                'path' => $path,
+                'original_name' => $file->getClientOriginalName(),
+                'uploaded_at' => now()->toISOString(),
+                'size' => $file->getSize(),
+            ];
+
+            // Update attempt with new screenshots
+            $attempt->update([
+                'screenshots' => $screenshots,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Screenshot uploaded successfully',
+                'file_path' => $path,
+                'question_id' => $request->question_id,
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Screenshot upload failed: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Failed to upload screenshot. Please try again.',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
      * Show CQ exam question paper.
      */
     public function showCqExam(Exam $exam)

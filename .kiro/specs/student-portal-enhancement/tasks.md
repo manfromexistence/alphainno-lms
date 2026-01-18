@@ -79,46 +79,46 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - Pass data to view
     - _Requirements: 5.1, 5.2_
   
-  - [-] 4.2 Create cq-exam.blade.php view with text editor and upload
+  - [x] 4.2 Create cq-exam.blade.php view with text editor and upload
     - Display CQ questions with text editor for each (use TinyMCE or similar)
     - Add screenshot upload field for each question
     - Include timer and submit button
     - _Requirements: 3.1, 3.2_
   
-  - [~] 4.3 Create ExamController::uploadScreenshot() method
+  - [x] 4.3 Create ExamController::uploadScreenshot() method
     - Validate file type (jpg/png/pdf) and size (max 5MB)
     - Store file in storage/app/exam-screenshots
     - Update exam_attempts screenshots JSON column
     - Return success response with file path
     - _Requirements: 3.3, 3.4_
   
-  - [~] 4.4 Add JavaScript for CQ exam functionality
+  - [x] 4.4 Add JavaScript for CQ exam functionality
     - Implement file upload with validation
     - Add auto-save for text answers
     - Include timer and anti-cheating measures (reuse from MCQ)
     - _Requirements: 3.3, 6.1, 6.2, 6.3_
 
 - [ ] 5. Build live exam interface
-  - [~] 5.1 Create ExamController::takeLive() method
+  - [x] 5.1 Create ExamController::takeLive() method
     - Validate exam is currently live
     - Create ExamAttempt
     - Load questions
     - Pass live status to view
     - _Requirements: 4.2_
   
-  - [~] 5.2 Create live-exam.blade.php view
+  - [x] 5.2 Create live-exam.blade.php view
     - Display "LIVE" badge prominently
     - Show exam interface similar to MCQ with real-time indicators
     - Include timer and navigation
     - _Requirements: 4.3_
   
-  - [~] 5.3 Add real-time synchronization for live exam responses
+  - [x] 5.3 Add real-time synchronization for live exam responses
     - Implement AJAX polling or WebSocket for response sync
     - Update UI to show real-time status
     - _Requirements: 4.2_
 
 - [ ] 6. Implement automatic exam submission
-  - [~] 6.1 Create scheduled job to auto-submit expired exams
+  - [x] 6.1 Create scheduled job to auto-submit expired exams
     - Create AutoSubmitExpiredExams job
     - Query for active exam attempts past end time
     - Submit each expired attempt
@@ -126,7 +126,7 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - _Requirements: 5.3_
 
 - [ ] 7. Build exam results display
-  - [~] 7.1 Create ExamController::viewResults() method
+  - [-] 7.1 Create ExamController::viewResults() method
     - Retrieve ExamResult for authenticated student
     - Load exam, attempt, questions, and answers
     - Calculate performance metrics (score, percentage, time taken, accuracy)

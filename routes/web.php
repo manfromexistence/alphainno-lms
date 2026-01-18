@@ -311,6 +311,7 @@ Route::middleware('auth')->group(function () {
         // CQ Exams
         Route::get('/exams/{exam}/cq', [\App\Http\Controllers\StudentPortalController::class, 'showCqExam'])->name('exams.cq');
         Route::post('/exams/{exam}/cq/upload', [\App\Http\Controllers\StudentPortalController::class, 'uploadCqAnswer'])->name('exams.cq.upload');
+        Route::post('/exams/screenshot/upload', [\App\Http\Controllers\StudentPortalController::class, 'uploadScreenshot'])->name('exams.screenshot.upload');
         Route::get('/cq-submission/{submission}', [\App\Http\Controllers\StudentPortalController::class, 'viewCqSubmission'])->name('cq-submission');
         
         // Results

@@ -33,10 +33,10 @@
             <div class="slide active absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide1_image', 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop') : 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop' }}" alt="Students"
                     class="w-full h-full object-cover brightness-75">
-                <div class="absolute inset-0 hero__overlay flex items-center justify-center bg-black/30">
+                <div class="absolute inset-0 flex items-center justify-center bg-black/40 !mix-blend-normal z-10">
                     <div class="text-center px-4 max-w-5xl mx-auto">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-xl leading-tight">{{ $page ? $page->getContent('slide1_title', 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড') : 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড' }}</h2>
-                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-lg">{{ $page ? $page->getContent('slide1_subtitle', 'কলেজে এর পক্ষ থেকে!') : 'কলেজে এর পক্ষ থেকে!' }}</h3>
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-xl leading-tight opacity-100">{{ $page ? $page->getContent('slide1_title', 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড') : 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড' }}</h2>
+                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-lg opacity-100">{{ $page ? $page->getContent('slide1_subtitle', 'কলেজে এর পক্ষ থেকে!') : 'কলেজে এর পক্ষ থেকে!' }}</h3>
                     </div>
                 </div>
             </div>
@@ -45,10 +45,10 @@
             <div class="slide absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide2_image', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1920') : 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1920' }}" alt="Campus"
                     class="w-full h-full object-cover brightness-75">
-                <div class="absolute inset-0 hero__overlay flex items-center justify-center">
+                <div class="absolute inset-0 flex items-center justify-center bg-black/40 !mix-blend-normal z-10">
                     <div class="text-center px-4">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide2_title', 'শিক্ষার আলোয় আলোকিত') : 'শিক্ষার আলোয় আলোকিত' }}</h2>
-                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-md">{{ $page ? $page->getContent('slide2_subtitle', 'ভবিষ্যৎ প্রজন্ম') : 'ভবিষ্যৎ প্রজন্ম' }}</h3>
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-lg leading-tight opacity-100">{{ $page ? $page->getContent('slide2_title', 'শিক্ষার আলোয় আলোকিত') : 'শিক্ষার আলোয় আলোকিত' }}</h2>
+                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-md opacity-100">{{ $page ? $page->getContent('slide2_subtitle', 'ভবিষ্যৎ প্রজন্ম') : 'ভবিষ্যৎ প্রজন্ম' }}</h3>
                     </div>
                 </div>
             </div>
@@ -57,10 +57,10 @@
             <div class="slide absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide3_image', 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920') : 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920' }}" alt="Learning"
                     class="w-full h-full object-cover brightness-75">
-                <div class="absolute inset-0 hero__overlay flex items-center justify-center">
+                <div class="absolute inset-0 flex items-center justify-center bg-black/40 !mix-blend-normal z-10">
                     <div class="text-center px-4">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide3_title', 'মানসম্মত শিক্ষা') : 'মানসম্মত শিক্ষা' }}</h2>
-                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-md">{{ $page ? $page->getContent('slide3_subtitle', 'আধুনিক শিক্ষা ব্যবস্থা') : 'আধুনিক শিক্ষা ব্যবস্থা' }}</h3>
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-lg leading-tight opacity-100">{{ $page ? $page->getContent('slide3_title', 'মানসম্মত শিক্ষা') : 'মানসম্মত শিক্ষা' }}</h2>
+                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-md opacity-100">{{ $page ? $page->getContent('slide3_subtitle', 'আধুনিক শিক্ষা ব্যবস্থা') : 'আধুনিক শিক্ষা ব্যবস্থা' }}</h3>
                     </div>
                 </div>
             </div>
