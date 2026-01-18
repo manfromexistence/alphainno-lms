@@ -4,9 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\{
-    Course, CourseVideo, Batch, Student, Teacher, ClassSchedule,
+    Course, CourseVideo, CourseMaterial, Batch, Student, Teacher, ClassSchedule,
     Attendance, Exam, Question, ExamResult, ExamAttempt,
-    Invoice, Payment, ParentModel
+    Invoice, Payment, ParentModel, Announcement, User
 };
 use Illuminate\Support\Facades\Hash;
 
@@ -21,11 +21,13 @@ class ComprehensiveDataSeeder extends Seeder
         
         // Seed in order of dependencies
         $this->seedCourseVideos();
+        $this->seedCourseMaterials();
         $this->seedClassSchedules();
         $this->seedAttendanceRecords();
         $this->seedExamsAndResults();
         $this->seedInvoicesAndPayments();
         $this->seedParentAccounts();
+        $this->seedAnnouncements();
         
         $this->command->info('✅ Comprehensive seeding completed successfully!');
     }
@@ -98,6 +100,203 @@ class ComprehensiveDataSeeder extends Seeder
         }
         
         $this->command->info("✓ Created {$videoCount} course videos");
+    }
+
+    /**
+     * Seed course materials (PDFs, documents, links)
+     */
+    private function seedCourseMaterials(): void
+    {
+        $this->command->info('📚 Seeding course materials...');
+        
+        $courses = Course::all();
+        
+        if ($courses->isEmpty()) {
+            $this->command->warn('No courses found. Skipping materials seeding.');
+            return;
+        }
+        
+        $materialTypes = ['pdf', 'document', 'link', 'video'];
+        $materialCount = 0;
+        
+        foreach ($courses as $course) {
+            // Add 5-10 materials per course
+            $numMaterials = rand(5, 10);
+            
+            for ($i = 1; $i <= $numMaterials; $i++) {
+                $type = $materialTypes[array_rand($materialTypes)];
+                
+                $materialData = [
+                    'course_id' => $course->id,
+                    'title' => $this->generateMaterialTitle($type, $i),
+                    'type' => $type,
+                    'description' => $this->generateMaterialDescription($type),
+                    'order' => $i,
+                ];
+                
+                // Add appropriate URL based on type
+                if ($type === 'link') {
+                    $materialData['external_url'] = 'https://example.com/resource-' . $i;
+                } elseif ($type === 'video') {
+                    $materialData['external_url'] = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+                } else {
+                    // For PDF and documents, use a placeholder path
+                    $materialData['file_path'] = "materials/{$course->code}/material-{$i}.pdf";
+                }
+                
+                CourseMaterial::create($materialData);
+                $materialCount++;
+            }
+        }
+        
+        $this->command->info("✓ Created {$materialCount} course materials");
+    }
+
+    /**
+     * Seed announcements for different target types
+     */
+    private function seedAnnouncements(): void
+    {
+        $this->command->info('📢 Seeding announcements...');
+        
+        $batches = Batch::all();
+        $courses = Course::all();
+        $adminUser = User::whereHas('roles', function($q) {
+            $q->where('slug', 'admin');
+        })->first();
+        
+        if (!$adminUser) {
+            $adminUser = User::first();
+        }
+        
+        if (!$adminUser) {
+            $this->command->warn('No admin user found. Skipping announcement seeding.');
+            return;
+        }
+        
+        $announcementCount = 0;
+        
+        // Create 'all' target announcements
+        $allAnnouncements = [
+            [
+                'title' => 'Welcome to the New Academic Year!',
+                'content' => 'We are excited to welcome all students to the new academic year. Please check your schedules and ensure you have all required materials.',
+                'priority' => 'high',
+                'starts_at' => now()->subDays(30),
+                'expires_at' => now()->addDays(30),
+            ],
+            [
+                'title' => 'Important: Exam Schedule Released',
+                'content' => 'The examination schedule for this term has been released. Please check your student portal for detailed information.',
+                'priority' => 'urgent',
+                'starts_at' => now()->subDays(10),
+                'expires_at' => now()->addDays(20),
+            ],
+            [
+                'title' => 'Library Hours Extended',
+                'content' => 'Good news! Library hours have been extended until 9 PM on weekdays to support your studies.',
+                'priority' => 'normal',
+                'starts_at' => now()->subDays(5),
+                'expires_at' => now()->addDays(60),
+            ],
+            [
+                'title' => 'Payment Reminder',
+                'content' => 'This is a friendly reminder to clear any pending fees by the end of this month to avoid late charges.',
+                'priority' => 'high',
+                'starts_at' => now()->subDays(3),
+                'expires_at' => now()->addDays(15),
+            ],
+            [
+                'title' => 'Holiday Notice',
+                'content' => 'The institution will remain closed on Friday for the national holiday. Regular classes will resume on Saturday.',
+                'priority' => 'normal',
+                'starts_at' => now()->subDays(2),
+                'expires_at' => now()->addDays(5),
+            ],
+        ];
+        
+        foreach ($allAnnouncements as $data) {
+            Announcement::create([
+                'title' => $data['title'],
+                'content' => $data['content'],
+                'target_type' => 'all',
+                'target_id' => null,
+                'priority' => $data['priority'],
+                'starts_at' => $data['starts_at'],
+                'expires_at' => $data['expires_at'],
+                'is_active' => true,
+                'created_by' => $adminUser->id,
+            ]);
+            $announcementCount++;
+        }
+        
+        // Create batch-specific announcements
+        if ($batches->isNotEmpty()) {
+            foreach ($batches->take(5) as $batch) {
+                $batchAnnouncements = [
+                    [
+                        'title' => "Class Schedule Update - {$batch->name}",
+                        'content' => "There has been a minor change in the class schedule for {$batch->name}. Please check the updated schedule in your portal.",
+                        'priority' => 'high',
+                    ],
+                    [
+                        'title' => "Extra Class Scheduled - {$batch->name}",
+                        'content' => "An extra revision class has been scheduled for {$batch->name} this Saturday at 10 AM. Attendance is highly recommended.",
+                        'priority' => 'normal',
+                    ],
+                ];
+                
+                foreach ($batchAnnouncements as $data) {
+                    Announcement::create([
+                        'title' => $data['title'],
+                        'content' => $data['content'],
+                        'target_type' => 'batch',
+                        'target_id' => $batch->id,
+                        'priority' => $data['priority'],
+                        'starts_at' => now()->subDays(rand(1, 7)),
+                        'expires_at' => now()->addDays(rand(10, 30)),
+                        'is_active' => true,
+                        'created_by' => $adminUser->id,
+                    ]);
+                    $announcementCount++;
+                }
+            }
+        }
+        
+        // Create course-specific announcements
+        if ($courses->isNotEmpty()) {
+            foreach ($courses->take(5) as $course) {
+                $courseAnnouncements = [
+                    [
+                        'title' => "New Study Materials - {$course->name}",
+                        'content' => "New study materials and video lectures have been uploaded for {$course->name}. Check the course materials section.",
+                        'priority' => 'normal',
+                    ],
+                    [
+                        'title' => "Assignment Deadline - {$course->name}",
+                        'content' => "Reminder: The assignment for {$course->name} is due next week. Please submit on time to avoid penalties.",
+                        'priority' => 'high',
+                    ],
+                ];
+                
+                foreach ($courseAnnouncements as $data) {
+                    Announcement::create([
+                        'title' => $data['title'],
+                        'content' => $data['content'],
+                        'target_type' => 'course',
+                        'target_id' => $course->id,
+                        'priority' => $data['priority'],
+                        'starts_at' => now()->subDays(rand(1, 5)),
+                        'expires_at' => now()->addDays(rand(7, 21)),
+                        'is_active' => true,
+                        'created_by' => $adminUser->id,
+                    ]);
+                    $announcementCount++;
+                }
+            }
+        }
+        
+        $this->command->info("✓ Created {$announcementCount} announcements");
     }
 
     /**
@@ -644,5 +843,49 @@ class ComprehensiveDataSeeder extends Seeder
         ];
         
         return $firstNames[array_rand($firstNames)] . ' ' . $lastNames[array_rand($lastNames)];
+    }
+
+    private function generateMaterialTitle(string $type, int $number): string
+    {
+        $titles = [
+            'pdf' => [
+                'Lecture Notes - Chapter ' . $number,
+                'Study Guide - Unit ' . $number,
+                'Practice Problems Set ' . $number,
+                'Reference Material ' . $number,
+            ],
+            'document' => [
+                'Assignment ' . $number . ' Instructions',
+                'Project Guidelines ' . $number,
+                'Reading Material ' . $number,
+                'Supplementary Notes ' . $number,
+            ],
+            'link' => [
+                'External Resource ' . $number,
+                'Recommended Reading ' . $number,
+                'Online Tutorial ' . $number,
+                'Reference Link ' . $number,
+            ],
+            'video' => [
+                'Video Lecture ' . $number,
+                'Tutorial Video ' . $number,
+                'Demonstration ' . $number,
+                'Recorded Session ' . $number,
+            ],
+        ];
+        
+        return $titles[$type][array_rand($titles[$type])];
+    }
+
+    private function generateMaterialDescription(string $type): string
+    {
+        $descriptions = [
+            'pdf' => 'Comprehensive study material covering key concepts and examples.',
+            'document' => 'Detailed document with instructions and guidelines.',
+            'link' => 'External resource for additional learning and reference.',
+            'video' => 'Video content explaining important topics with visual demonstrations.',
+        ];
+        
+        return $descriptions[$type];
     }
 }

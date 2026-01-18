@@ -249,7 +249,11 @@
                                      'class' => $student->class,
                                      'batch' => $student->batch->name ?? null,
                                      'registration_no' => $student->registration_no,
-                                     'phone' => $student->phone
+                                     'phone' => $student->phone,
+                                     'roll' => $student->roll,
+                                     'section' => $student->section,
+                                     'group' => $student->group,
+                                     'shift' => $student->shift
                                  ]), ENT_QUOTES, 'UTF-8') }}"
                                  class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-linear-to-br from-blue-400 to-purple-500">
@@ -356,7 +360,11 @@
                                      'class' => $student->class,
                                      'batch' => $student->batch->name ?? null,
                                      'registration_no' => $student->registration_no,
-                                     'phone' => $student->phone
+                                     'phone' => $student->phone,
+                                     'roll' => $student->roll,
+                                     'section' => $student->section,
+                                     'group' => $student->group,
+                                     'shift' => $student->shift
                                  ]), ENT_QUOTES, 'UTF-8') }}"
                                  class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-linear-to-br {{ $studentGradient }}">
@@ -571,6 +579,22 @@
                                         <p class="text-xs text-gray-500 uppercase tracking-wide">Registration No</p>
                                         <p class="font-semibold text-gray-800" id="student-modal-registration">-</p>
                                     </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Roll</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-roll">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Section</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-section">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Group</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-group">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Shift</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-shift">-</p>
+                                    </div>
                                     <div class="col-span-2">
                                         <p class="text-xs text-gray-500 uppercase tracking-wide">Phone</p>
                                         <p class="font-semibold text-gray-800" id="student-modal-phone">-</p>
@@ -763,6 +787,10 @@
                 document.getElementById('student-modal-class').innerText = student.class ? `Class ${student.class}` : 'N/A';
                 document.getElementById('student-modal-batch').innerText = student.batch || '-';
                 document.getElementById('student-modal-registration').innerText = student.registration_no || '-';
+                document.getElementById('student-modal-roll').innerText = student.roll || '-';
+                document.getElementById('student-modal-section').innerText = student.section || '-';
+                document.getElementById('student-modal-group').innerText = student.group || '-';
+                document.getElementById('student-modal-shift').innerText = student.shift || '-';
                 document.getElementById('student-modal-phone').innerText = student.phone || '-';
                 
                 let imageUrl = '';

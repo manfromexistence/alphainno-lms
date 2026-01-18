@@ -20,6 +20,10 @@ class Student extends Model
         'user_id',
         'batch_id',
         'class',
+        'roll',
+        'section',
+        'group',
+        'shift',
         'registration_no',
         'name_bn',
         'dob', // Date
