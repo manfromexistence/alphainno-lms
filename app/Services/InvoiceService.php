@@ -37,8 +37,9 @@ class InvoiceService
                 $month = date('m');
 
                 // Lock the invoices table for reading to prevent race conditions
-                $lastInvoice = Invoice::whereYear('created_at', $year)
-                    ->whereMonth('created_at', $month)
+                $startOfMonth = Carbon::create($year, $month, 1)->startOfMonth();
+                $endOfMonth = Carbon::create($year, $month, 1)->endOfMonth();
+                $lastInvoice = Invoice::whereBetween('created_at', [$startOfMonth, $endOfMonth])
                     ->lockForUpdate()
                     ->orderBy('id', 'desc')
                     ->first();

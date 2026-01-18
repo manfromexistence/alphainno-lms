@@ -28,7 +28,7 @@
 @section('content')
     <!-- Hero Slider -->
     <section class="bg-white py-6">
-        <div class="hero-inner relative h-[500px] lg:h-[700px] w-full max-w-[95%] 2xl:max-w-[90rem] mx-auto rounded-[2.5rem] overflow-hidden shadow-2xl isolate transform translate-z-0 draggable-slider cursor-grab">
+        <div class="hero-inner relative h-[500px] lg:h-[700px] w-full max-w-[95%] 2xl:max-w-[90rem] mx-auto rounded-[2.5rem] overflow-hidden shadow-2xl isolate transform translate-z-0">
             <!-- Slide 1 -->
             <div class="slide active absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide1_image', 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop') : 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop' }}" alt="Students"
@@ -635,68 +635,6 @@
         function goToSlide(index) { currentSlide = index; showSlide(currentSlide); }
         
         let slideInterval = setInterval(nextSlide, 5000);
-
-        // Drag and Touch Support
-        const sliderContainer = document.querySelector('.draggable-slider');
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-        let isDragging = false;
-
-        const startDragging = (e) => {
-            isDown = true;
-            sliderContainer.classList.add('cursor-grabbing');
-            sliderContainer.classList.remove('cursor-grab');
-            startX = (e.pageX || e.touches[0].pageX);
-            isDragging = false;
-            // Pause auto-slide logic if needed, or clear interval
-            clearInterval(slideInterval);
-        };
-
-        const stopDragging = (e) => {
-            if (!isDown) return;
-            isDown = false;
-            sliderContainer.classList.remove('cursor-grabbing');
-            sliderContainer.classList.add('cursor-grab');
-            slideInterval = setInterval(nextSlide, 5000); // Restart auto-slide based only on drag end
-
-            if (!isDragging) return; // If it was just a click, do nothing
-            
-            const endX = (e.pageX || e.changedTouches[0].pageX);
-            const diff = startX - endX;
-
-            if (Math.abs(diff) > 50) { // Threshold for swipe
-                if (diff > 0) {
-                    nextSlide();
-                } else {
-                    prevSlide();
-                }
-            }
-            isDragging = false;
-        };
-
-        const moveDragging = (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = (e.pageX || e.touches[0].pageX);
-            const walk = (x - startX); 
-            if (Math.abs(walk) > 10) {
-                isDragging = true;
-            }
-        };
-
-        // Mouse Events
-        sliderContainer.addEventListener('mousedown', startDragging);
-        sliderContainer.addEventListener('mouseleave', () => {
-            if(isDown) stopDragging({ pageX: startX }); // Cancel drag if leaving
-        });
-        sliderContainer.addEventListener('mouseup', stopDragging);
-        sliderContainer.addEventListener('mousemove', moveDragging);
-
-        // Touch Events
-        sliderContainer.addEventListener('touchstart', startDragging);
-        sliderContainer.addEventListener('touchend', stopDragging);
-        sliderContainer.addEventListener('touchmove', moveDragging);
 
         function openCourseModal(element) {
             try {

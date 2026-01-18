@@ -206,8 +206,8 @@ class DashboardService
     protected function calculateTodayAttendanceRate(): float
     {
         $today = now()->toDateString();
-        $total = Attendance::whereDate('date', $today)->count();
-        $present = Attendance::whereDate('date', $today)->where('status', 'present')->count();
+        $total = Attendance::where('date', $today)->count();
+        $present = Attendance::where('date', $today)->where('status', 'present')->count();
         
         return $total > 0 ? round(($present / $total) * 100, 1) : 0;
     }
@@ -258,10 +258,11 @@ class DashboardService
         $data = [];
         for ($i = 5; $i >= 0; $i--) {
             $month = now()->subMonths($i);
+            $startOfMonth = $month->copy()->startOfMonth();
+            $endOfMonth = $month->copy()->endOfMonth();
             $data[] = [
                 'month' => $month->format('M Y'),
-                'amount' => Payment::whereYear('created_at', $month->year)
-                    ->whereMonth('created_at', $month->month)
+                'amount' => Payment::whereBetween('created_at', [$startOfMonth, $endOfMonth])
                     ->sum('amount'),
             ];
         }
@@ -272,11 +273,11 @@ class DashboardService
     {
         $data = [];
         for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i);
-            $total = Attendance::whereDate('date', $date)->count();
-            $present = Attendance::whereDate('date', $date)->where('status', 'present')->count();
+            $date = now()->subDays($i)->toDateString();
+            $total = Attendance::where('date', $date)->count();
+            $present = Attendance::where('date', $date)->where('status', 'present')->count();
             $data[] = [
-                'date' => $date->format('D'),
+                'date' => now()->subDays($i)->format('D'),
                 'rate' => $total > 0 ? round(($present / $total) * 100, 1) : 0,
             ];
         }
@@ -288,10 +289,11 @@ class DashboardService
         $data = [];
         for ($i = 5; $i >= 0; $i--) {
             $month = now()->subMonths($i);
+            $startOfMonth = $month->copy()->startOfMonth();
+            $endOfMonth = $month->copy()->endOfMonth();
             $data[] = [
                 'month' => $month->format('M'),
-                'count' => Student::whereYear('created_at', $month->year)
-                    ->whereMonth('created_at', $month->month)
+                'count' => Student::whereBetween('created_at', [$startOfMonth, $endOfMonth])
                     ->count(),
             ];
         }

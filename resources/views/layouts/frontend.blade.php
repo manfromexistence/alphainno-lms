@@ -126,7 +126,18 @@
             100% { transform: translateX(-100%); }
         }
 
-        .ticker { display: inline-block; white-space: nowrap; animation: scroll 20s linear infinite; }
+        .ticker { 
+            display: inline-block; 
+            white-space: nowrap; 
+            animation: scroll 20s linear infinite; 
+        }
+
+        /* Faster animation on mobile */
+        @media (max-width: 768px) {
+            .ticker {
+                animation: scroll 10s linear infinite;
+            }
+        }
 
         .bg-primary { background-color: var(--color-primary) !important; }
         .text-primary { color: var(--color-primary) !important; }

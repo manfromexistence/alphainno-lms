@@ -50,9 +50,9 @@ class PaymentController extends Controller
 
         // Calculate totals for display
         $totalRevenue = Payment::where('status', 'completed')->sum('amount');
+        $currentMonth = now();
         $monthlyRevenue = Payment::where('status', 'completed')
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
+            ->whereBetween('created_at', [$currentMonth->copy()->startOfMonth(), $currentMonth->copy()->endOfMonth()])
             ->sum('amount');
         $pendingAmount = Payment::where('status', 'pending')->sum('amount');
         $totalTransactions = Payment::count();

@@ -58,72 +58,93 @@
 
                 const isHorizontal = root.dataset.orientation === 'horizontal';
                 
-                // Scroll Logic
+                // Get all carousel items
+                const items = container.querySelectorAll('[data-carousel-item]');
+                let currentIndex = 0;
+
+                // Scroll Logic - Snap to full items
                 const scrollNext = () => {
-                    const scrollAmount = isHorizontal ? viewport.clientWidth : viewport.clientHeight;
-                    viewport.scrollBy({
-                        left: isHorizontal ? scrollAmount : 0,
-                        top: isHorizontal ? 0 : scrollAmount,
+                    if (items.length === 0) return;
+                    
+                    // Calculate how many items are visible
+                    const itemWidth = items[0].offsetWidth;
+                    const viewportWidth = viewport.clientWidth;
+                    const visibleItems = Math.floor(viewportWidth / itemWidth);
+                    
+                    // Move to next set of items
+                    currentIndex = Math.min(currentIndex + visibleItems, items.length - visibleItems);
+                    
+                    // Scroll to the item
+                    const scrollPosition = items[currentIndex].offsetLeft - container.offsetLeft;
+                    viewport.scrollTo({
+                        left: scrollPosition,
                         behavior: 'smooth'
                     });
                 };
 
                 const scrollPrev = () => {
-                    const scrollAmount = isHorizontal ? viewport.clientWidth : viewport.clientHeight;
-                    viewport.scrollBy({
-                        left: isHorizontal ? -scrollAmount : 0,
-                        top: isHorizontal ? 0 : -scrollAmount,
+                    if (items.length === 0) return;
+                    
+                    // Calculate how many items are visible
+                    const itemWidth = items[0].offsetWidth;
+                    const viewportWidth = viewport.clientWidth;
+                    const visibleItems = Math.floor(viewportWidth / itemWidth);
+                    
+                    // Move to previous set of items
+                    currentIndex = Math.max(currentIndex - visibleItems, 0);
+                    
+                    // Scroll to the item
+                    const scrollPosition = items[currentIndex].offsetLeft - container.offsetLeft;
+                    viewport.scrollTo({
+                        left: scrollPosition,
                         behavior: 'smooth'
                     });
                 };
 
                 const updateButtons = () => {
-                    if (!prevBtn || !nextBtn) return;
+                    if (!prevBtn || !nextBtn || items.length === 0) return;
                     
-                    const scrollLeft = viewport.scrollLeft;
-                    const scrollWidth = viewport.scrollWidth;
-                    const clientWidth = viewport.clientWidth;
-
-                    // Simple tolerance specific logic
-                    prevBtn.disabled = scrollLeft <= 1; // Tolerance
-                    nextBtn.disabled = scrollLeft + clientWidth >= scrollWidth - 1;
+                    const itemWidth = items[0].offsetWidth;
+                    const viewportWidth = viewport.clientWidth;
+                    const visibleItems = Math.floor(viewportWidth / itemWidth);
+                    
+                    // Disable prev if at start
+                    prevBtn.disabled = currentIndex <= 0;
+                    
+                    // Disable next if at end
+                    nextBtn.disabled = currentIndex >= items.length - visibleItems;
+                    
+                    // Hide buttons if all items fit in viewport
+                    if (items.length <= visibleItems) {
+                        prevBtn.style.display = 'none';
+                        nextBtn.style.display = 'none';
+                    } else {
+                        prevBtn.style.display = 'flex';
+                        nextBtn.style.display = 'flex';
+                    }
                 };
 
-                // Mouse Drag Logic
-                let isDown = false;
-                let startX;
-                let scrollLeft;
-
-                viewport.addEventListener('mousedown', (e) => {
-                    isDown = true;
-                    viewport.classList.add('cursor-grabbing');
-                    viewport.classList.remove('cursor-grab');
-                    startX = e.pageX - viewport.offsetLeft;
-                    scrollLeft = viewport.scrollLeft;
+                // Snap to nearest item on scroll end
+                let scrollTimeout;
+                viewport.addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        if (items.length === 0) return;
+                        
+                        // Find the closest item to current scroll position
+                        const scrollLeft = viewport.scrollLeft;
+                        const itemWidth = items[0].offsetWidth;
+                        const nearestIndex = Math.round(scrollLeft / itemWidth);
+                        currentIndex = Math.max(0, Math.min(nearestIndex, items.length - 1));
+                        
+                        // Snap to it
+                        const scrollPosition = items[currentIndex].offsetLeft - container.offsetLeft;
+                        viewport.scrollTo({
+                            left: scrollPosition,
+                            behavior: 'smooth'
+                        });
+                    }, 150);
                 });
-
-                viewport.addEventListener('mouseleave', () => {
-                    isDown = false;
-                    viewport.classList.remove('cursor-grabbing');
-                    viewport.classList.add('cursor-grab');
-                });
-
-                viewport.addEventListener('mouseup', () => {
-                    isDown = false;
-                    viewport.classList.remove('cursor-grabbing');
-                    viewport.classList.add('cursor-grab');
-                });
-
-                viewport.addEventListener('mousemove', (e) => {
-                    if (!isDown) return;
-                    e.preventDefault();
-                    const x = e.pageX - viewport.offsetLeft;
-                    const walk = (x - startX) * 2; // Scroll-fast
-                    viewport.scrollLeft = scrollLeft - walk;
-                });
-                
-                // Add initial grab cursor
-                viewport.classList.add('cursor-grab');
 
                 if (prevBtn) prevBtn.addEventListener('click', scrollPrev);
                 if (nextBtn) nextBtn.addEventListener('click', scrollNext);

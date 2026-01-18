@@ -152,8 +152,9 @@ class Invoice extends Model
         $year = date('Y');
         $month = date('m');
 
-        $lastInvoice = static::whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
+        $startOfMonth = \Carbon\Carbon::create($year, $month, 1)->startOfMonth();
+        $endOfMonth = \Carbon\Carbon::create($year, $month, 1)->endOfMonth();
+        $lastInvoice = static::whereBetween('created_at', [$startOfMonth, $endOfMonth])
             ->orderBy('id', 'desc')
             ->first();
 

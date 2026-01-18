@@ -238,7 +238,9 @@ class Student extends Model
      */
     public function scopeEnrolledInYear($query, int $year)
     {
-        return $query->whereYear('created_at', $year);
+        $startOfYear = \Carbon\Carbon::create($year, 1, 1)->startOfYear();
+        $endOfYear = \Carbon\Carbon::create($year, 12, 31)->endOfYear();
+        return $query->whereBetween('created_at', [$startOfYear, $endOfYear]);
     }
 
     /**

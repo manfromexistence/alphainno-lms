@@ -44,3 +44,8 @@ admin@gmail.com - password
 student@gmail.com - password
 teacher@gmail.com - password
 parent@gmail.com - password
+
+Don't create useless files or any spec and just complete these tasks as fast as possible:
+1. at mobile please make the welcome homepage at frontend top notice maquri text to show up left to right faster and more often
+2. at homepage heroslider at welcome home there is drag and drop like features so please remove it
+3. At frontend homepage there are many carosel but when they are in smaller screens I see that even through there is no carosel items in that side but still that side's carosel showing when it should be hidden and when I clik on any next or prev button then its not going to another items but a hardcoded position where its looking bad so please make sure that it always show a full item of carosel not a position where the the item is not placed correctly!!!

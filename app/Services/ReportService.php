@@ -364,8 +364,9 @@ class ReportService
             $months = collect();
             for ($i = 11; $i >= 0; $i--) {
                 $date = now()->subMonths($i);
-                $count = Student::whereYear('created_at', $date->year)
-                    ->whereMonth('created_at', $date->month)
+                $startOfMonth = $date->copy()->startOfMonth();
+                $endOfMonth = $date->copy()->endOfMonth();
+                $count = Student::whereBetween('created_at', [$startOfMonth, $endOfMonth])
                     ->count();
                 $months->put($date->format('M Y'), $count);
             }
@@ -426,9 +427,10 @@ class ReportService
             $months = collect();
             for ($i = 11; $i >= 0; $i--) {
                 $date = now()->subMonths($i);
+                $startOfMonth = $date->copy()->startOfMonth();
+                $endOfMonth = $date->copy()->endOfMonth();
                 $amount = Payment::completed()
-                    ->whereYear('payment_date', $date->year)
-                    ->whereMonth('payment_date', $date->month)
+                    ->whereBetween('payment_date', [$startOfMonth, $endOfMonth])
                     ->sum('amount');
                 $months->put($date->format('M Y'), $amount);
             }
@@ -1677,13 +1679,17 @@ class ReportService
     public function getDashboardStats(): array
     {
         return Cache::remember('dashboard_stats', 300, function () {
+            $currentMonth = now();
             return [
                 'total_students' => Student::count(),
                 'total_batches' => Batch::count(),
                 'active_batches' => Batch::active()->count(),
                 'today_attendance' => Attendance::where('date', now()->toDateString())->count(),
                 'this_month_payments' => Payment::completed()
-                    ->whereMonth('payment_date', now()->month)
+                    ->whereBetween('payment_date', [
+                        $currentMonth->copy()->startOfMonth(),
+                        $currentMonth->copy()->endOfMonth()
+                    ])
                     ->sum('amount'),
                 'total_dues' => Student::sum('due_amount'),
             ];

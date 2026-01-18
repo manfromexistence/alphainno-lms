@@ -40,11 +40,11 @@ class AccountService
         }
 
         if (!empty($filters['from_date'])) {
-            $query->whereDate('expense_date', '>=', $filters['from_date']);
+            $query->where('expense_date', '>=', $filters['from_date']);
         }
 
         if (!empty($filters['to_date'])) {
-            $query->whereDate('expense_date', '<=', $filters['to_date']);
+            $query->where('expense_date', '<=', $filters['to_date']);
         }
 
         if (!empty($filters['search'])) {
@@ -85,11 +85,11 @@ class AccountService
         }
 
         if (!empty($filters['from_date'])) {
-            $query->whereDate('income_date', '>=', $filters['from_date']);
+            $query->where('income_date', '>=', $filters['from_date']);
         }
 
         if (!empty($filters['to_date'])) {
-            $query->whereDate('income_date', '<=', $filters['to_date']);
+            $query->where('income_date', '<=', $filters['to_date']);
         }
 
         if (!empty($filters['student_id'])) {
@@ -103,11 +103,12 @@ class AccountService
 
     public function getDailySummary(Carbon $date): array
     {
-        $income = Income::whereDate('income_date', $date)->sum('amount');
-        $expense = Expense::whereDate('expense_date', $date)->sum('amount');
+        $dateString = $date->toDateString();
+        $income = Income::where('income_date', $dateString)->sum('amount');
+        $expense = Expense::where('expense_date', $dateString)->sum('amount');
 
         return [
-            'date' => $date->format('Y-m-d'),
+            'date' => $dateString,
             'total_income' => $income,
             'total_expense' => $expense,
             'net' => $income - $expense,
@@ -116,13 +117,11 @@ class AccountService
 
     public function getMonthlySummary(int $year, int $month): array
     {
-        $income = Income::whereYear('income_date', $year)
-            ->whereMonth('income_date', $month)
-            ->get();
+        $startDate = Carbon::create($year, $month, 1)->startOfMonth();
+        $endDate = Carbon::create($year, $month, 1)->endOfMonth();
 
-        $expense = Expense::whereYear('expense_date', $year)
-            ->whereMonth('expense_date', $month)
-            ->get();
+        $income = Income::whereBetween('income_date', [$startDate, $endDate])->get();
+        $expense = Expense::whereBetween('expense_date', [$startDate, $endDate])->get();
 
         $incomeByCategory = $income->groupBy('category')->map(fn($items) => $items->sum('amount'));
         $expenseByCategory = $expense->groupBy('category')->map(fn($items) => $items->sum('amount'));
@@ -168,22 +167,22 @@ class AccountService
 
     public function getOverviewData(): array
     {
-        $today = Carbon::today();
+        $today = Carbon::today()->toDateString();
         $thisMonth = Carbon::now();
         $lastMonth = Carbon::now()->subMonth();
 
-        $todayIncome = Income::whereDate('income_date', $today)->sum('amount');
-        $todayExpense = Expense::whereDate('expense_date', $today)->sum('amount');
+        $todayIncome = Income::where('income_date', $today)->sum('amount');
+        $todayExpense = Expense::where('expense_date', $today)->sum('amount');
 
-        $thisMonthIncome = Income::whereYear('income_date', $thisMonth->year)
-            ->whereMonth('income_date', $thisMonth->month)->sum('amount');
-        $thisMonthExpense = Expense::whereYear('expense_date', $thisMonth->year)
-            ->whereMonth('expense_date', $thisMonth->month)->sum('amount');
+        $thisMonthStart = $thisMonth->copy()->startOfMonth();
+        $thisMonthEnd = $thisMonth->copy()->endOfMonth();
+        $thisMonthIncome = Income::whereBetween('income_date', [$thisMonthStart, $thisMonthEnd])->sum('amount');
+        $thisMonthExpense = Expense::whereBetween('expense_date', [$thisMonthStart, $thisMonthEnd])->sum('amount');
 
-        $lastMonthIncome = Income::whereYear('income_date', $lastMonth->year)
-            ->whereMonth('income_date', $lastMonth->month)->sum('amount');
-        $lastMonthExpense = Expense::whereYear('expense_date', $lastMonth->year)
-            ->whereMonth('expense_date', $lastMonth->month)->sum('amount');
+        $lastMonthStart = $lastMonth->copy()->startOfMonth();
+        $lastMonthEnd = $lastMonth->copy()->endOfMonth();
+        $lastMonthIncome = Income::whereBetween('income_date', [$lastMonthStart, $lastMonthEnd])->sum('amount');
+        $lastMonthExpense = Expense::whereBetween('expense_date', [$lastMonthStart, $lastMonthEnd])->sum('amount');
 
         return [
             'today' => ['income' => $todayIncome, 'expense' => $todayExpense, 'net' => $todayIncome - $todayExpense],
@@ -200,10 +199,11 @@ class AccountService
         $data = [];
         for ($i = $months - 1; $i >= 0; $i--) {
             $date = Carbon::now()->subMonths($i);
-            $income = Income::whereYear('income_date', $date->year)
-                ->whereMonth('income_date', $date->month)->sum('amount');
-            $expense = Expense::whereYear('expense_date', $date->year)
-                ->whereMonth('expense_date', $date->month)->sum('amount');
+            $startOfMonth = $date->copy()->startOfMonth();
+            $endOfMonth = $date->copy()->endOfMonth();
+            
+            $income = Income::whereBetween('income_date', [$startOfMonth, $endOfMonth])->sum('amount');
+            $expense = Expense::whereBetween('expense_date', [$startOfMonth, $endOfMonth])->sum('amount');
             
             $data[] = [
                 'month' => $date->format('M Y'),

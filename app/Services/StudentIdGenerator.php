@@ -76,8 +76,10 @@ class StudentIdGenerator
         $currentYear = date('Y');
 
         // Get the highest sequence number for this year
-        $lastStudent = Student::whereYear('created_at', $currentYear)
-            ->orderByRaw('CAST(SUBSTRING(registration_no, -4) AS UNSIGNED) DESC')
+        $startOfYear = Carbon::create($currentYear, 1, 1)->startOfYear();
+        $endOfYear = Carbon::create($currentYear, 12, 31)->endOfYear();
+        $lastStudent = Student::whereBetween('created_at', [$startOfYear, $endOfYear])
+            ->orderBy('id', 'desc')
             ->lockForUpdate()
             ->first();
 

@@ -30,8 +30,9 @@ class SalaryController extends Controller
 
         if ($request->has('month') && $request->month) {
             $date = Carbon::parse($request->month);
-            $query->whereYear('payment_date', $date->year)
-                  ->whereMonth('payment_date', $date->month);
+            $startOfMonth = $date->copy()->startOfMonth();
+            $endOfMonth = $date->copy()->endOfMonth();
+            $query->whereBetween('payment_date', [$startOfMonth, $endOfMonth]);
         }
 
         $salaries = $query->paginate(15);
@@ -58,9 +59,10 @@ class SalaryController extends Controller
 
         // Check for duplicate payment (same teacher, same month)
         $paymentMonth = Carbon::parse($validated['payment_date']);
+        $startOfMonth = $paymentMonth->copy()->startOfMonth();
+        $endOfMonth = $paymentMonth->copy()->endOfMonth();
         $duplicate = TeacherSalary::where('teacher_id', $validated['teacher_id'])
-            ->whereYear('payment_date', $paymentMonth->year)
-            ->whereMonth('payment_date', $paymentMonth->month)
+            ->whereBetween('payment_date', [$startOfMonth, $endOfMonth])
             ->exists();
 
         if ($duplicate) {
@@ -122,14 +124,17 @@ class SalaryController extends Controller
         
         $monthlySummary = [];
         for ($month = 1; $month <= 12; $month++) {
-            $total = TeacherSalary::whereYear('payment_date', $year)
-                ->whereMonth('payment_date', $month)
+            $startDate = Carbon::create($year, $month, 1)->startOfMonth();
+            $endDate = Carbon::create($year, $month, 1)->endOfMonth();
+            $total = TeacherSalary::whereBetween('payment_date', [$startDate, $endDate])
                 ->sum('amount');
             $monthlySummary[$month] = $total;
         }
 
-        $teacherSummary = Teacher::withSum(['salaries' => function ($query) use ($year) {
-            $query->whereYear('payment_date', $year);
+        $startOfYear = Carbon::create($year, 1, 1)->startOfYear();
+        $endOfYear = Carbon::create($year, 12, 31)->endOfYear();
+        $teacherSummary = Teacher::withSum(['salaries' => function ($query) use ($startOfYear, $endOfYear) {
+            $query->whereBetween('payment_date', [$startOfYear, $endOfYear]);
         }], 'amount')->get();
 
         return view('dashboard.salaries.report', compact('monthlySummary', 'teacherSummary', 'year'));

@@ -58,8 +58,9 @@ class StudentPortalService
         $query = Attendance::where('student_id', $student->id);
 
         if ($month) {
-            $query->whereMonth('date', $month->month)
-                  ->whereYear('date', $month->year);
+            $startOfMonth = $month->copy()->startOfMonth();
+            $endOfMonth = $month->copy()->endOfMonth();
+            $query->whereBetween('date', [$startOfMonth, $endOfMonth]);
         }
 
         $totalClasses = $query->count();

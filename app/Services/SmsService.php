@@ -667,7 +667,9 @@ class SmsService
             }
             
             if (!empty($criteria['year'])) {
-                $query->whereYear('created_at', $criteria['year']);
+                $startOfYear = Carbon::create($criteria['year'], 1, 1)->startOfYear();
+                $endOfYear = Carbon::create($criteria['year'], 12, 31)->endOfYear();
+                $query->whereBetween('created_at', [$startOfYear, $endOfYear]);
             }
             
             return $query->get()->map(function ($student) {

@@ -84,8 +84,9 @@ class PaymentService
             $year = date('Y');
             $month = date('m');
 
-            $lastPayment = Payment::whereYear('created_at', $year)
-                ->whereMonth('created_at', $month)
+            $startOfMonth = Carbon::create($year, $month, 1)->startOfMonth();
+            $endOfMonth = Carbon::create($year, $month, 1)->endOfMonth();
+            $lastPayment = Payment::whereBetween('created_at', [$startOfMonth, $endOfMonth])
                 ->orderBy('id', 'desc')
                 ->first();
 
@@ -160,8 +161,9 @@ class PaymentService
             $year = date('Y');
             $month = date('m');
 
-            $lastInvoice = Invoice::whereYear('created_at', $year)
-                ->whereMonth('created_at', $month)
+            $startOfMonth = Carbon::create($year, $month, 1)->startOfMonth();
+            $endOfMonth = Carbon::create($year, $month, 1)->endOfMonth();
+            $lastInvoice = Invoice::whereBetween('created_at', [$startOfMonth, $endOfMonth])
                 ->orderBy('id', 'desc')
                 ->first();
 
