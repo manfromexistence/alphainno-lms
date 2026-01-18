@@ -68,10 +68,14 @@ class ReportController extends Controller
     {
         $filters = $this->extractAttendanceFilters($request);
         
-        // Only generate report if filters are provided
-        $report = !empty(array_filter($filters)) 
-            ? $this->reportService->generateAttendanceReport($filters) 
-            : null;
+        // Generate report with default filters if none provided
+        if (empty(array_filter($filters))) {
+            // Default to last 30 days
+            $filters['start_date'] = now()->subDays(30)->format('Y-m-d');
+            $filters['end_date'] = now()->format('Y-m-d');
+        }
+        
+        $report = $this->reportService->generateAttendanceReport($filters);
         
         $batches = Batch::active()->get();
         
@@ -221,10 +225,16 @@ class ReportController extends Controller
     {
         $filters = $this->extractPerformanceFilters($request);
         
-        // Only generate report if filters are provided
-        $report = !empty(array_filter($filters)) 
-            ? $this->reportService->generatePerformanceReport($filters) 
-            : null;
+        // Generate report with default filters if none provided
+        if (empty(array_filter($filters))) {
+            // Default to first batch
+            $firstBatch = Batch::active()->first();
+            if ($firstBatch) {
+                $filters['batch_id'] = $firstBatch->id;
+            }
+        }
+        
+        $report = $this->reportService->generatePerformanceReport($filters);
         
         $batches = Batch::active()->get();
         $courses = Course::active()->get();

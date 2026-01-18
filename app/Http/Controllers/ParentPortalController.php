@@ -13,13 +13,19 @@ use Illuminate\Support\Facades\Auth;
 class ParentPortalController extends Controller
 {
     /**
-     * Get the authenticated parent.
+     * Get the authenticated parent or allow admin/super-admin to view all.
      */
     private function getParent(): ?ParentModel
     {
         $user = Auth::user();
         if (!$user) {
             return null;
+        }
+        
+        // Allow admin and super-admin to view first parent (or you can show all)
+        if ($user->hasRole('admin') || $user->hasRole('super-admin')) {
+            // Return first parent for demo purposes, or you could show a selector
+            return ParentModel::with('students')->first();
         }
         
         // Find parent by email

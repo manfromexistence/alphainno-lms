@@ -41,4 +41,4 @@ Bulk Import
 
 Please update the students frontend pages class student cards section to have border or shadow correctly
 
-And now many admin panel pages like the Inventody sidebar pages and other may not use our custom data-table properly or dont't use at all so please check for all admin panel pages where we use 
+And now many admin panel pages like the Inventody sidebar pages and other may not use our custom data-table properly or dont't use at all so please check for all admin panel pages where we use we used native table and change it to use our resourecse/views/components/ui components data-table instead of normal table in all admin panel pages!!!
