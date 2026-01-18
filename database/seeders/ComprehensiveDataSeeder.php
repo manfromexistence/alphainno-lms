@@ -30,6 +30,12 @@ class ComprehensiveDataSeeder extends Seeder
         $this->seedParentAccounts();
         $this->seedAnnouncements();
         
+        // New seeders for admin panel pages
+        $this->seedAccountsData();
+        $this->seedInventoryData();
+        $this->seedCommunicationData();
+        $this->seedActivityLogs();
+        
         $this->command->info('✅ Comprehensive seeding completed successfully!');
     }
 
@@ -564,6 +570,21 @@ class ComprehensiveDataSeeder extends Seeder
             ]
         );
         
+        // Create User account for main parent
+        $mainParentUser = User::updateOrCreate(
+            ['email' => 'parent@gmail.com'],
+            [
+                'name' => 'Demo Parent',
+                'password' => Hash::make('password'),
+            ]
+        );
+        
+        // Assign parent role
+        $parentRole = \App\Models\Role::where('slug', 'parent')->first();
+        if ($parentRole && !$mainParentUser->hasRole('parent')) {
+            $mainParentUser->roles()->attach($parentRole->id);
+        }
+        
         $createdParents[] = $mainParent;
         $parentCount++;
         
@@ -599,9 +620,12 @@ class ComprehensiveDataSeeder extends Seeder
                     $parent = $createdParents[array_rand($createdParents)];
                 } else {
                     // Create new parent
+                    $parentEmail = 'parent' . ($parentCount + 1) . '@example.com';
+                    $parentName = $this->generateParentName();
+                    
                     $parent = ParentModel::create([
-                        'name' => $this->generateParentName(),
-                        'email' => 'parent' . ($parentCount + 1) . '@example.com',
+                        'name' => $parentName,
+                        'email' => $parentEmail,
                         'phone' => '017' . str_pad(rand(10000000, 99999999), 8, '0', STR_PAD_LEFT),
                         'password' => Hash::make('password'),
                         'notification_preferences' => [
@@ -614,6 +638,21 @@ class ComprehensiveDataSeeder extends Seeder
                         'email_verified_at' => now(),
                         'phone_verified_at' => now(),
                     ]);
+                    
+                    // Create User account for this parent
+                    $parentUser = User::updateOrCreate(
+                        ['email' => $parentEmail],
+                        [
+                            'name' => $parentName,
+                            'password' => Hash::make('password'),
+                        ]
+                    );
+                    
+                    // Assign parent role
+                    $parentRole = \App\Models\Role::where('slug', 'parent')->first();
+                    if ($parentRole && !$parentUser->hasRole('parent')) {
+                        $parentUser->roles()->attach($parentRole->id);
+                    }
                     
                     $createdParents[] = $parent;
                     $parentCount++;

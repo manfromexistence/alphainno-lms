@@ -92,7 +92,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Activity 1 -->
-                <div class="bg-linear-to-br from-blue-50 to-purple-50 rounded-lg p-6 shadow-md">
+                <div class="border bg-linear-to-br from-blue-50 to-purple-50 rounded-lg p-6 shadow-md">
                     <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 text-white bg-primary">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

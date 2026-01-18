@@ -13,3 +13,30 @@ npm run build && "/c/Program Files/7-Zip/7z.exe" a -tzip ../lms-updated-again.zi
 ```bash
 php artisan key:generate && php artisan migrate:fresh --seed && rm -rf public/storage && php artisan storage:link
 ```
+
+Please add some data for these admin panel pages and put them in the main seeder correctly!!!
+Accounts
+Overview
+Income Management
+Expense Tracking
+Financial Reports
+
+Inventory
+Items List
+Inventory Report
+
+Reports
+
+Communication
+Send SMS
+SMS Templates
+SMS Logs
+Announcements
+
+System Admin
+Database Backup
+Activity Logs
+Bulk Import
+
+
+Please update the students frontend pages class student cards section to have border or shadow correctly

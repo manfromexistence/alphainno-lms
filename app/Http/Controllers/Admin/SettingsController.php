@@ -35,6 +35,11 @@ class SettingsController extends Controller
             // Institution Settings
             'institution_name' => 'nullable|string|max:255',
             'institution_logo' => 'nullable|string|max:500',
+            'institution_logo_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'institution_logo_url' => 'nullable|url|max:500',
+            'institution_favicon' => 'nullable|string|max:500',
+            'institution_favicon_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,ico|max:1024',
+            'institution_favicon_url' => 'nullable|url|max:500',
             'institution_address' => 'nullable|string|max:1000',
             'institution_phone' => 'nullable|string|max:20',
             'institution_email' => 'nullable|email|max:255',
@@ -67,7 +72,28 @@ class SettingsController extends Controller
         ]);
 
         try {
+            // Handle logo file upload
+            if ($request->hasFile('institution_logo_file')) {
+                $logoPath = $request->file('institution_logo_file')->store('logos', 'public');
+                $this->settingsService->set('institution_logo', $logoPath);
+            } elseif ($request->filled('institution_logo_url')) {
+                $this->settingsService->set('institution_logo', $request->input('institution_logo_url'));
+            }
+
+            // Handle favicon file upload
+            if ($request->hasFile('institution_favicon_file')) {
+                $faviconPath = $request->file('institution_favicon_file')->store('favicons', 'public');
+                $this->settingsService->set('institution_favicon', $faviconPath);
+            } elseif ($request->filled('institution_favicon_url')) {
+                $this->settingsService->set('institution_favicon', $request->input('institution_favicon_url'));
+            }
+
             foreach ($validated as $key => $value) {
+                // Skip file and URL fields as they're handled above
+                if (in_array($key, ['institution_logo_file', 'institution_logo_url', 'institution_favicon_file', 'institution_favicon_url'])) {
+                    continue;
+                }
+                
                 if ($value !== null) {
                     $this->settingsService->set($key, $value);
                 }

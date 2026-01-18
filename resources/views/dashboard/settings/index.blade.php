@@ -30,7 +30,7 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
-    <form action="{{ route('dashboard.settings.update') }}" method="POST" class="space-y-8">
+    <form action="{{ route('dashboard.settings.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
         @csrf
         @method('PUT')
 
@@ -78,6 +78,26 @@
                         <x-ui.textarea name="institution_address" id="institution_address" rows="2">
                             {{ $settings['institution']['institution_address']['value'] ?? '' }}
                         </x-ui.textarea>
+                    </div>
+
+                    <!-- Logo Upload -->
+                    <div class="md:col-span-2">
+                        <x-ui.image-input 
+                            name="institution_logo" 
+                            label="Institution Logo"
+                            :value="$settings['institution']['institution_logo']['value'] ?? ''"
+                            helperText="Recommended size: 200x200px. Supports JPG, PNG, SVG, WebP"
+                        />
+                    </div>
+
+                    <!-- Favicon Upload -->
+                    <div class="md:col-span-2">
+                        <x-ui.image-input 
+                            name="institution_favicon" 
+                            label="Favicon"
+                            :value="$settings['institution']['institution_favicon']['value'] ?? ''"
+                            helperText="Recommended size: 32x32px or 64x64px. Supports ICO, PNG, SVG"
+                        />
                     </div>
                 </div>
             </x-ui.card-content>
