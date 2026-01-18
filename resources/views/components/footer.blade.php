@@ -1,9 +1,9 @@
 <footer class="text-gray-800" style="background-color: #e9e9e9;">
-    <div class="max-w-7xl mx-auto px-4 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="max-w-7xl mx-auto px-4 py-8 md:py-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             <div>
                 <div class="flex items-center gap-3 mb-4">
-                    <img src="{{ asset('logo.png') }}" alt="Alpha LMS" class="h-10 w-auto object-contain">
+                    <img src="{{ asset('logo.png') }}" alt="Alpha LMS" class="h-8 md:h-10 w-auto object-contain">
                 </div>
                 <p class="text-primary text-sm leading-relaxed mb-4">
                     এক্সওয়াইজেডস স্কুল এন্ড কলেজ - মানসম্মত শিক্ষা এবং নৈতিক মূল্যবোধ সৃষ্টিতে আমরা প্রতিশ্রুতিবদ্ধ।
@@ -27,36 +27,36 @@
             </div>
 
             <div>
-                <h3 class="text-lg font-bold mb-4 text-primary">দ্রুত লিংক</h3>
-                <ul class="space-y-3">
+                <h3 class="text-base md:text-lg font-bold mb-4 text-primary">দ্রুত লিংক</h3>
+                <ul class="space-y-2 md:space-y-3">
                     <li><a href="{{ url('/') }}"
-                            class="text-primary hover:opacity-80 transition-colors">প্রচ্ছদ</a></li>
+                            class="text-primary hover:opacity-80 transition-colors text-sm">প্রচ্ছদ</a></li>
                     <li><a href="{{ route('about') }}"
-                            class="text-primary hover:opacity-80 transition-colors">পরিচিতি</a></li>
+                            class="text-primary hover:opacity-80 transition-colors text-sm">পরিচিতি</a></li>
                     <li><a href="{{ route('courses') }}"
-                            class="text-primary hover:opacity-80 transition-colors">কোর্স</a></li>
+                            class="text-primary hover:opacity-80 transition-colors text-sm">কোর্স</a></li>
                     <li><a href="{{ route('teachers') }}"
-                            class="text-primary hover:opacity-80 transition-colors">শিক্ষক</a></li>
+                            class="text-primary hover:opacity-80 transition-colors text-sm">শিক্ষক</a></li>
                     <li><a href="{{ route('students') }}"
-                            class="text-primary hover:opacity-80 transition-colors">শিক্ষার্থী</a></li>
+                            class="text-primary hover:opacity-80 transition-colors text-sm">শিক্ষার্থী</a></li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="text-lg font-bold mb-4 text-primary">গুরুত্বপূর্ণ লিংক</h3>
-                <ul class="space-y-3">
+                <h3 class="text-base md:text-lg font-bold mb-4 text-primary">গুরুত্বপূর্ণ লিংক</h3>
+                <ul class="space-y-2 md:space-y-3">
                     <li><a href="{{ route('results') }}"
-                            class="text-primary hover:opacity-80 transition-colors">পরীক্ষার ফলাফল</a></li>
+                            class="text-primary hover:opacity-80 transition-colors text-sm">পরীক্ষার ফলাফল</a></li>
                     <li><a href="{{ route('contact') }}"
-                            class="text-primary hover:opacity-80 transition-colors">যোগাযোগ</a></li>
+                            class="text-primary hover:opacity-80 transition-colors text-sm">যোগাযোগ</a></li>
                     <li><a href="{{ route('login') }}"
-                            class="text-primary hover:opacity-80 transition-colors">লগইন</a></li>
+                            class="text-primary hover:opacity-80 transition-colors text-sm">লগইন</a></li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="text-lg font-bold mb-4 text-primary">যোগাযোগ</h3>
-                <ul class="space-y-3 text-sm text-primary">
+                <h3 class="text-base md:text-lg font-bold mb-4 text-primary">যোগাযোগ</h3>
+                <ul class="space-y-2 md:space-y-3 text-sm text-primary">
                     <li>ঠিকানা: জামালপুর সদর, জামালপুর</li>
                     <li>ফোন: +880 1XXX-XXXXXX</li>
                     <li>ইমেইল: info@xyzschool.edu.bd</li>
@@ -66,8 +66,8 @@
     </div>
 
     <div class="border-t border-primary">
-        <div class="max-w-7xl mx-auto px-4 py-6 text-center">
-            <p class="text-primary text-sm">© ২০২৬ এক্সওয়াইজেডস স্কুল এন্ড কলেজ। সর্বস্বত্ব সংরক্ষিত।</p>
+        <div class="max-w-7xl mx-auto px-4 py-4 md:py-6 text-center">
+            <p class="text-primary text-xs md:text-sm">© ২০২৬ এক্সওয়াইজেডস স্কুল এন্ড কলেজ। সর্বস্বত্ব সংরক্ষিত।</p>
         </div>
     </div>
 </footer>

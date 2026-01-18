@@ -52,11 +52,17 @@
         /* HERO / branding utilities (consistent, accessible color combinations) */
         .hero {
             position: relative;
-            padding: 4.5rem 0;
+            padding: 2rem 0;
             display: flex;
             align-items: center;
             background-size: cover;
             background-position: center;
+        }
+
+        @media (min-width: 768px) {
+            .hero {
+                padding: 4.5rem 0;
+            }
         }
 
         .hero-inner {
@@ -88,7 +94,24 @@
             mix-blend-mode: multiply;
         }
 
-        .hero .hero-title { font-weight: 800; letter-spacing: -0.02em; }
+        .hero .hero-title { 
+            font-weight: 800; 
+            letter-spacing: -0.02em;
+            font-size: 1.875rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero .hero-title {
+                font-size: 3rem;
+            }
+        }
+
         .hero .hero-subtitle { opacity: .95; }
         .hero .hero-cta { box-shadow: 0 8px 24px rgba(var(--rgb-primary), .18); }
 

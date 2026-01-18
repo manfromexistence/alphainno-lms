@@ -225,15 +225,25 @@
 </head>
 
 <body class="bg-white">
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden" onclick="toggleMobileSidebar()"></div>
+
     <!-- Sidebar -->
-    <div class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-50">
+    <div id="adminSidebar" class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
         <div class="sidebar-container">
             <!-- Logo -->
             <div class="sidebar-header flex items-center justify-between px-4 py-4 border-b border-gray-200">
                 <img src="{{ asset('logo.png') }}" alt="Alpha LMS" class="h-10 w-auto object-contain">
                 
-                <!-- Collapse/Expand All Buttons -->
-                <div class="flex items-center space-x-1">
+                <!-- Close button for mobile -->
+                <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                
+                <!-- Collapse/Expand All Buttons (Desktop) -->
+                <div class="hidden lg:flex items-center space-x-1">
                     <button type="button" onclick="collapseAllSubmenus()" 
                             class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors" 
                             title="Collapse All">
@@ -275,6 +285,21 @@
             // Active link styling classes
             const ACTIVE_CLASSES = ['bg-emerald-50', 'text-bd-green', 'font-medium'];
             const INACTIVE_CLASSES = ['text-gray-600', 'hover:bg-gray-100'];
+
+            function toggleMobileSidebar() {
+                const sidebar = document.getElementById('adminSidebar');
+                const overlay = document.getElementById('mobileMenuOverlay');
+                
+                if (sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            }
 
             function toggleSubmenu(submenuId) {
                 const submenu = document.getElementById(submenuId);
@@ -426,6 +451,10 @@
                     links.forEach(link => {
                         link.addEventListener('click', function() {
                             saveSidebarScroll();
+                            // Close mobile sidebar on link click
+                            if (window.innerWidth < 1024) {
+                                toggleMobileSidebar();
+                            }
                         });
                     });
 
@@ -539,17 +568,24 @@
     </div>
 
     <!-- Main Content -->
-    <div class="pl-64 min-h-screen flex flex-col top-0 left-0 min-w-full">
+    <div class="lg:pl-64 min-h-screen flex flex-col top-0 left-0 min-w-full">
         <!-- Site Header -->
         <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
-            <div class="flex items-center justify-between px-8 py-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900">@yield('page-title', 'Dashboard')</h1>
-                    <p class="text-sm text-gray-500 mt-1">@yield('page-description', '')</p>
+            <div class="flex items-center justify-between px-4 lg:px-8 py-4">
+                <!-- Mobile Menu Button -->
+                <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-md hover:bg-gray-100 transition-colors">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+
+                <div class="flex-1 lg:flex-none">
+                    <h1 class="text-lg lg:text-2xl font-bold text-gray-900">@yield('page-title', 'Dashboard')</h1>
+                    <p class="text-xs lg:text-sm text-gray-500 mt-1 hidden sm:block">@yield('page-description', '')</p>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <div class="text-right">
-                        <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
+                <div class="flex items-center space-x-2 lg:space-x-4">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-xs lg:text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-gray-500">
                             {{ Auth::user()->roles->first()->name ?? 'User' }}
                         </p>
@@ -558,7 +594,7 @@
                     <!-- Profile Dropdown -->
                     <div class="relative">
                         <button id="profileDropdownBtn" onclick="toggleProfileDropdown()"
-                            class="w-10 h-10 bg-bd-green rounded-full flex items-center justify-center text-white font-bold cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bd-green">
+                            class="w-8 h-8 lg:w-10 lg:h-10 bg-bd-green rounded-full flex items-center justify-center text-white font-bold cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bd-green text-sm lg:text-base">
                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                         </button>
 
@@ -583,7 +619,7 @@
         </header>
 
         <!-- Page Content -->
-        <div class="p-4 min-h-screen overflow-y-auto overflow-x-hidden">
+        <div class="p-4 lg:p-6 min-h-screen overflow-y-auto overflow-x-hidden">
             <!-- Global Toast Notifications -->
             @if (session('success'))
                 <x-ui.toast type="success" :message="session('success')" />

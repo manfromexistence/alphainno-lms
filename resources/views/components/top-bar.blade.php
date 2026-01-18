@@ -4,8 +4,8 @@
 @endphp
 
 <div class="text-white py-2 px-4 text-xs md:text-sm font-medium bg-primary">
-    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center gap-4">
-        <div class="max-w-xl overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-4">
+        <div class="max-w-xl overflow-hidden w-full md:w-auto">
             <div class="ticker">
                 <span>মাধ্যমিক শিক্ষা বোর্ড জামালপুরের অধীনস্থ প্রতিষ্ঠান এবং একটি বেসরকারি শিক্ষা প্রতিষ্ঠান।</span>
                 @if(Request::is('/'))
@@ -17,10 +17,10 @@
                 @endif
             </div>
         </div>
-        <div class="shrink-0 flex items-center gap-4">
-            <span>EIIN No: <strong>123354</strong></span>
-            <span>School code: <strong>123456</strong></span>
-            <span>Reg. No: <strong>12334455617</strong></span>
+        <div class="shrink-0 flex flex-wrap items-center justify-center gap-2 md:gap-4 text-xs">
+            <span>EIIN: <strong>123354</strong></span>
+            <span class="hidden sm:inline">School code: <strong>123456</strong></span>
+            <span class="hidden lg:inline">Reg. No: <strong>12334455617</strong></span>
         </div>
     </div>
 </div>
