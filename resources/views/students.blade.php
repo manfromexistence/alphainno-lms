@@ -9,7 +9,7 @@
     @endphp
 
     <!-- Page Header -->
-    <section class="hero hero--gradient hero--dark">
+    <section class="hero hero--solid hero--dark">
         <div class="hero-inner max-w-7xl mx-auto px-4">
             <h1 class="text-3xl md:text-4xl hero-title text-white text-center mb-2">{{ $page ? $page->getContent('page_title', 'শিক্ষার্থী তথ্য') : 'শিক্ষার্থী তথ্য' }}</h1>
             <p class="text-white text-center opacity-90">{{ $page ? $page->getContent('page_subtitle', 'আমাদের শিক্ষার্থীদের সম্পর্কিত তথ্য ও পরিসংখ্যান') : 'আমাদের শিক্ষার্থীদের সম্পর্কিত তথ্য ও পরিসংখ্যান' }}</p>
@@ -68,7 +68,7 @@
                     @php
                         $color = $colorMap[$classData->class] ?? $defaultColors[$index % count($defaultColors)];
                     @endphp
-                    <div class="bg-gradient-to-br from-{{ $color }}-50 to-{{ $color }}-100 rounded-lg p-6 border-l-4 border-{{ $color }}-500">
+                    <div class="bg-linear-to-br from-{{ $color }}-50 to-{{ $color }}-100 rounded-lg p-6 border-l-4 border-{{ $color }}-500">
                         <div class="flex justify-between items-center">
                             <div>
                                 <h3 class="text-xl font-bold text-gray-800">{{ $classData->class }}</h3>
@@ -92,7 +92,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Activity 1 -->
-                <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-6 shadow-md">
+                <div class="bg-linear-to-br from-blue-50 to-purple-50 rounded-lg p-6 shadow-md">
                     <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 text-white bg-primary">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -104,7 +104,7 @@
                 </div>
 
                 <!-- Activity 2 -->
-                <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-6 shadow-md">
+                <div class="bg-linear-to-br from-green-50 to-blue-50 rounded-lg p-6 shadow-md">
                     <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 text-white bg-primary">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -116,7 +116,7 @@
                 </div>
 
                 <!-- Activity 3 -->
-                <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg p-6 shadow-md">
+                <div class="bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg p-6 shadow-md">
                     <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 text-white bg-primary">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

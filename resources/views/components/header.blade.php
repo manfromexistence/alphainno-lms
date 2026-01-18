@@ -17,7 +17,7 @@
             <nav class="hidden md:flex items-center gap-0.5">
                 <a href="{{ url('/') }}"
                     class="px-4 py-2 rounded-md text-md font-medium hover:opacity-80 transition"
-                    style="{{ Request::is('/') ? 'background-color: ' . $primaryColor . '; color: ' . $primaryForeground : 'color: #374151' }}">
+                    style="{{ Request::is('/') ? 'background-color: ' . $primaryColor . '; color: ' . $primaryForeground : 'color: ' . $primaryColor }}">
                     হোম
                 </a>
                 <a href="{{ route('courses') }}"

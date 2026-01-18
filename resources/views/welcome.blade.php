@@ -27,7 +27,6 @@
 
 @section('content')
     <!-- Hero Slider -->
-    <!-- Hero Slider -->
     <section class="bg-white py-6">
         <div class="hero-inner relative h-[500px] lg:h-[700px] w-full max-w-[95%] 2xl:max-w-[90rem] mx-auto rounded-[2.5rem] overflow-hidden shadow-2xl isolate transform translate-z-0 draggable-slider cursor-grab">
             <!-- Slide 1 -->
@@ -152,7 +151,7 @@
                             $color = $colors[$index % count($colors)];
                         @endphp
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/3 select-none">
-                            <div onclick="openCourseModal(this)" data-course='@json($course)' class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
+                            <div onclick="openCourseModal(this)" data-course="@json($course)" class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-linear-to-br {{ $gradient }}">
                                     @if($course->image)
                                         @if(str_starts_with($course->image, 'http'))
@@ -244,16 +243,16 @@
                     @foreach($featuredStudents as $student)
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/4 select-none">
                             <div onclick="openStudentModal(this)" 
-                                 data-student='@json([
-                                     "name" => $student->user->name ?? "Student",
-                                     "image" => $student->profile_image,
-                                     "class" => $student->class,
-                                     "batch" => $student->batch->name ?? null,
-                                     "roll" => $student->roll_no,
-                                     "section" => $student->section,
-                                     "shift" => $student->shift,
-                                     "group" => $student->group
-                                 ])'
+                                 data-student="@json([
+                                     'name' => $student->user->name ?? 'Student',
+                                     'image' => $student->profile_image,
+                                     'class' => $student->class,
+                                     'batch' => $student->batch->name ?? null,
+                                     'roll' => $student->roll_no,
+                                     'section' => $student->section,
+                                     'shift' => $student->shift,
+                                     'group' => $student->group
+                                 ])"
                                  class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-linear-to-br from-blue-400 to-purple-500">
                                     @if($student->profile_image)
@@ -353,16 +352,16 @@
                         @endphp
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/4 select-none">
                             <div onclick="openStudentModal(this)"
-                                 data-student='@json([
-                                     "name" => $student->user->name ?? "Student",
-                                     "image" => $student->profile_image,
-                                     "class" => $student->class,
-                                     "batch" => $student->batch->name ?? null,
-                                     "roll" => $student->roll_no,
-                                     "section" => $student->section,
-                                     "shift" => $student->shift,
-                                     "group" => $student->group
-                                 ])'
+                                 data-student="@json([
+                                     'name' => $student->user->name ?? 'Student',
+                                     'image' => $student->profile_image,
+                                     'class' => $student->class,
+                                     'batch' => $student->batch->name ?? null,
+                                     'roll' => $student->roll_no,
+                                     'section' => $student->section,
+                                     'shift' => $student->shift,
+                                     'group' => $student->group
+                                 ])"
                                  class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-linear-to-br {{ $studentGradient }}">
                                     @if($student->profile_image)
@@ -449,7 +448,7 @@
                                 <p class="text-gray-600 leading-relaxed mb-4 text-sm">{{ $page ? $page->getContent('about_section_text2', 'প্রতিষ্ঠানটি ১৯৮৮ সালে প্রতিষ্ঠিত হয়। আমাদের লক্ষ্য মানসম্মত শিক্ষা প্রদান করা...') : 'প্রতিষ্ঠানটি ১৯৮৮ সালে প্রতিষ্ঠিত হয়। আমাদের লক্ষ্য মানসম্মত শিক্ষা প্রদান করা...' }}</p>
                             </div>
                             <a href="{{ route('about') }}"
-                                class="block w-full text-center bg-primary text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] transition mt-4">
+                                class="block w-full text-center bg-primary text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary transition mt-4">
                                 {{ $page ? $page->getContent('about_section_button', 'বিস্তারিত পড়ুন') : 'বিস্তারিত পড়ুন' }}
                             </a>
                         </div>
@@ -486,7 +485,7 @@
                     </div>
                     <div class="mt-4 text-center">
                         <a href="#"
-                            class="inline-flex items-center gap-1 text-[{{ $primaryColor ?? '#006A4E' }}] text-sm font-medium hover:underline"><span>{{ $page ? $page->getContent('notice_view_all', 'সকল নোটিশ') : 'সকল নোটিশ' }}</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="inline-flex items-center gap-1 text-primary text-sm font-medium hover:underline"><span>{{ $page ? $page->getContent('notice_view_all', 'সকল নোটিশ') : 'সকল নোটিশ' }}</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg></a>
                     </div>

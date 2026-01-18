@@ -5,7 +5,7 @@
 
 <div class="text-white py-2 px-4 text-xs md:text-sm font-medium bg-primary">
     <div class="max-w-7xl mx-auto px-4 flex justify-between items-center gap-4">
-        <div class="flex-1 overflow-hidden">
+        <div class="max-w-xl overflow-hidden">
             <div class="ticker">
                 <span>মাধ্যমিক শিক্ষা বোর্ড জামালপুরের অধীনস্থ প্রতিষ্ঠান এবং একটি বেসরকারি শিক্ষা প্রতিষ্ঠান।</span>
                 @if(Request::is('/'))
