@@ -32,20 +32,22 @@
                             <span class="{{ $exam->type === 'mcq' ? 'text-blue-600' : 'text-purple-600' }} font-semibold text-sm">{{ strtoupper($exam->type) }}</span>
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-gray-900">{{ $exam->name }}</p>
-                            <p class="text-sm text-gray-500">{{ $exam->scheduled_at->format('M d, Y h:i A') }}</p>
+                            <p class="text-sm font-medium text-gray-900">{{ $exam->title }}</p>
+                            <p class="text-sm text-gray-500">
+                                @if($exam->start_time)
+                                    {{ $exam->start_time->format('M d, Y h:i A') }}
+                                @else
+                                    Available Now
+                                @endif
+                            </p>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm text-gray-600">{{ $exam->duration }} mins • {{ $exam->total_marks }} marks</p>
-                        @if($exam->scheduled_at->isPast())
+                        <p class="text-sm text-gray-600">{{ $exam->duration_minutes }} mins • {{ $exam->total_marks }} marks</p>
                         <a href="{{ $exam->type === 'mcq' ? route('student.exams.start', $exam) : route('student.exams.cq', $exam) }}" 
                            class="mt-2 inline-flex items-center px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700">
                             Take Exam
                         </a>
-                        @else
-                        <span class="text-sm text-gray-500">Starts {{ $exam->scheduled_at->diffForHumans() }}</span>
-                        @endif
                     </div>
                 </div>
                 @endforeach
@@ -72,7 +74,7 @@
                             <span class="{{ $result->percentage >= 40 ? 'text-green-600' : 'text-red-600' }} font-bold text-lg">{{ $result->grade }}</span>
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-gray-900">{{ $result->exam?->name ?? 'Exam' }}</p>
+                            <p class="text-sm font-medium text-gray-900">{{ $result->exam?->title ?? 'Exam' }}</p>
                             <p class="text-sm text-gray-500">{{ $result->created_at->format('M d, Y') }}</p>
                         </div>
                     </div>

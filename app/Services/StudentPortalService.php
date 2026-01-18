@@ -80,15 +80,26 @@ class StudentPortalService
      */
     public function getUpcomingExams(Student $student): Collection
     {
-        if (!$student->batch_id) {
-            return collect();
+        // Get all active exams that the student has access to
+        // Either exams with no batch restriction OR exams for the student's batch
+        $query = Exam::where('status', 'active')
+            ->where(function($q) use ($student) {
+                $q->whereNull('batch_id')
+                  ->orWhere('batch_id', $student->batch_id);
+            });
+
+        // Get exam IDs that the student has already completed
+        $completedExamIds = ExamResult::where('student_id', $student->id)
+            ->pluck('exam_id')
+            ->toArray();
+
+        // Exclude completed exams
+        if (!empty($completedExamIds)) {
+            $query->whereNotIn('id', $completedExamIds);
         }
 
-        return Exam::where('batch_id', $student->batch_id)
-            ->where('scheduled_at', '>', Carbon::now())
-            ->where('status', 'scheduled')
-            ->orderBy('scheduled_at')
-            ->limit(5)
+        return $query->orderBy('created_at', 'desc')
+            ->limit(10)
             ->get();
     }
 

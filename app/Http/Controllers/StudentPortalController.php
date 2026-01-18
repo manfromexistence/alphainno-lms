@@ -843,6 +843,33 @@ class StudentPortalController extends Controller
             abort(403, 'You do not have access to this exam. Please contact your administrator.');
         }
 
+        // Load CQ questions
+        $questions = $exam->questions()
+            ->where('type', 'cq')
+            ->orderBy('order')
+            ->get();
+
+        // Create or retrieve ExamAttempt for student
+        $timeValidator = app(\App\Services\ExamTimeValidator::class);
+        
+        $attempt = ExamAttempt::firstOrCreate(
+            [
+                'student_id' => $student->id,
+                'exam_id' => $exam->id,
+                'status' => 'in_progress',
+            ],
+            [
+                'started_at' => now(),
+                'answers' => [],
+                'cheating_events' => [],
+                'screenshots' => [],
+                'ip_address' => request()->ip(),
+            ]
+        );
+
+        // Calculate remaining time
+        $remainingTime = $timeValidator->getRemainingTime($attempt);
+
         $submission = CqSubmission::where('student_id', $student->id)
             ->where('exam_id', $exam->id)
             ->first();
@@ -850,6 +877,9 @@ class StudentPortalController extends Controller
         return view('student.cq-exam', [
             'student' => $student,
             'exam' => $exam,
+            'questions' => $questions,
+            'attempt' => $attempt,
+            'timeRemaining' => $remainingTime,
             'submission' => $submission,
         ]);
     }
