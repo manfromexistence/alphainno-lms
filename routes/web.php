@@ -107,38 +107,40 @@ Route::middleware('auth')->group(function () {
         Route::get('classes/{class}', [\App\Http\Controllers\Admin\ClassController::class, 'show'])->name('classes.show');
 
         // Online Exam Management
-        Route::resource('exams', \App\Http\Controllers\Admin\OnlineExamController::class);
-        Route::get('mcq-exams', [\App\Http\Controllers\Admin\OnlineExamController::class, 'mcq'])->name('exams.mcq');
-        Route::get('cq-exams', [\App\Http\Controllers\Admin\OnlineExamController::class, 'cq'])->name('exams.cq');
-        Route::get('live-exams', [\App\Http\Controllers\Admin\OnlineExamController::class, 'live'])->name('exams.live');
-        Route::get('exam-results', [\App\Http\Controllers\Admin\OnlineExamController::class, 'results'])->name('exams.results');
-        Route::get('exam-leaderboard', [\App\Http\Controllers\Admin\OnlineExamController::class, 'leaderboard'])->name('exams.leaderboard');
-        
-        // Question Management for Exams
-        Route::prefix('exams/{exam}/questions')->name('exams.questions.')->group(function() {
-            Route::post('/', [\App\Http\Controllers\Admin\OnlineExamController::class, 'storeQuestion'])->name('store');
-            Route::get('/{question}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'getQuestion'])->name('show');
-            Route::put('/{question}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'updateQuestion'])->name('update');
-            Route::delete('/{question}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'destroyQuestion'])->name('destroy');
+        Route::middleware('student.exam.access')->group(function() {
+            Route::resource('exams', \App\Http\Controllers\Admin\OnlineExamController::class);
+            Route::get('mcq-exams', [\App\Http\Controllers\Admin\OnlineExamController::class, 'mcq'])->name('exams.mcq');
+            Route::get('cq-exams', [\App\Http\Controllers\Admin\OnlineExamController::class, 'cq'])->name('exams.cq');
+            Route::get('live-exams', [\App\Http\Controllers\Admin\OnlineExamController::class, 'live'])->name('exams.live');
+            Route::get('exam-results', [\App\Http\Controllers\Admin\OnlineExamController::class, 'results'])->name('exams.results');
+            Route::get('exam-leaderboard', [\App\Http\Controllers\Admin\OnlineExamController::class, 'leaderboard'])->name('exams.leaderboard');
+            
+            // Question Management for Exams
+            Route::prefix('exams/{exam}/questions')->name('exams.questions.')->group(function() {
+                Route::post('/', [\App\Http\Controllers\Admin\OnlineExamController::class, 'storeQuestion'])->name('store');
+                Route::get('/{question}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'getQuestion'])->name('show');
+                Route::put('/{question}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'updateQuestion'])->name('update');
+                Route::delete('/{question}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'destroyQuestion'])->name('destroy');
+            });
+
+            // Question Import/Export
+            Route::get('exams/{exam}/import-questions', [\App\Http\Controllers\Admin\OnlineExamController::class, 'importQuestions'])->name('exams.import-questions');
+            Route::post('exams/{exam}/import-questions', [\App\Http\Controllers\Admin\OnlineExamController::class, 'processImport'])->name('exams.process-import');
+            Route::get('exams/{exam}/export-questions', [\App\Http\Controllers\Admin\OnlineExamController::class, 'exportQuestions'])->name('exams.export-questions');
+            Route::get('exams/download-template', [\App\Http\Controllers\Admin\OnlineExamController::class, 'downloadTemplate'])->name('exams.download-template');
+
+            // Results Management
+            Route::get('exams/{exam}/results/{result}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'viewResult'])->name('exams.view-result');
+            Route::get('exams/{exam}/results/{result}/edit', [\App\Http\Controllers\Admin\OnlineExamController::class, 'editResult'])->name('exams.edit-result');
+            Route::put('exams/{exam}/results/{result}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'updateResult'])->name('exams.update-result');
+            Route::delete('exams/{exam}/results/{result}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'deleteResult'])->name('exams.delete-result');
+            Route::get('exams/{exam}/export-results', [\App\Http\Controllers\Admin\OnlineExamController::class, 'exportResults'])->name('exams.export-results');
+
+            // Offline Exam Review
+            Route::get('exams/{exam}/review', [\App\Http\Controllers\Admin\OnlineExamController::class, 'reviewSubmissions'])->name('exams.review-submissions');
+            Route::get('exams/{exam}/review/{submission}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'reviewSubmission'])->name('exams.review-submission');
+            Route::post('exams/{exam}/review/{submission}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'saveReview'])->name('exams.save-review');
         });
-
-        // Question Import/Export
-        Route::get('exams/{exam}/import-questions', [\App\Http\Controllers\Admin\OnlineExamController::class, 'importQuestions'])->name('exams.import-questions');
-        Route::post('exams/{exam}/import-questions', [\App\Http\Controllers\Admin\OnlineExamController::class, 'processImport'])->name('exams.process-import');
-        Route::get('exams/{exam}/export-questions', [\App\Http\Controllers\Admin\OnlineExamController::class, 'exportQuestions'])->name('exams.export-questions');
-        Route::get('exams/download-template', [\App\Http\Controllers\Admin\OnlineExamController::class, 'downloadTemplate'])->name('exams.download-template');
-
-        // Results Management
-        Route::get('exams/{exam}/results/{result}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'viewResult'])->name('exams.view-result');
-        Route::get('exams/{exam}/results/{result}/edit', [\App\Http\Controllers\Admin\OnlineExamController::class, 'editResult'])->name('exams.edit-result');
-        Route::put('exams/{exam}/results/{result}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'updateResult'])->name('exams.update-result');
-        Route::delete('exams/{exam}/results/{result}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'deleteResult'])->name('exams.delete-result');
-        Route::get('exams/{exam}/export-results', [\App\Http\Controllers\Admin\OnlineExamController::class, 'exportResults'])->name('exams.export-results');
-
-        // Offline Exam Review
-        Route::get('exams/{exam}/review', [\App\Http\Controllers\Admin\OnlineExamController::class, 'reviewSubmissions'])->name('exams.review-submissions');
-        Route::get('exams/{exam}/review/{submission}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'reviewSubmission'])->name('exams.review-submission');
-        Route::post('exams/{exam}/review/{submission}', [\App\Http\Controllers\Admin\OnlineExamController::class, 'saveReview'])->name('exams.save-review');
 
         // Accounts Management
         Route::prefix('accounts')->name('accounts.')->group(function () {

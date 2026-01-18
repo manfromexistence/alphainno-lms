@@ -9,7 +9,7 @@
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <a href="{{ url('/') }}">
-                    <img src="{{ asset('Alphainno LMS.png') }}" alt="Alpha LMS"
+                    <img src="{{ asset('logo.png') }}" alt="Alpha LMS"
                         class="h-12 w-auto object-contain cursor-pointer hover:opacity-80 transition">
                 </a>
             </div>

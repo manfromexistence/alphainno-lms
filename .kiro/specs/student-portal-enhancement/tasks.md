@@ -15,12 +15,12 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
   - _Requirements: 12.4, 6.4, 3.4_
 
 - [ ] 2. Implement student exam access control
-  - [-] 2.1 Create StudentExamAccessMiddleware to restrict student access to admin exam functions
+  - [x] 2.1 Create StudentExamAccessMiddleware to restrict student access to admin exam functions
     - Check user role and redirect students attempting to access edit/view URLs
     - Apply middleware to exam routes
     - _Requirements: 1.2_
   
-  - [~] 2.2 Update student exam list view to show only "Take Exam" actions
+  - [-] 2.2 Update student exam list view to show only "Take Exam" actions
     - Modify exam list Blade template to hide edit/view/delete buttons for students
     - Show only "Take Exam" button for available exams
     - _Requirements: 1.1, 1.3_
