@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('batch_id')->constrained()->onDelete('cascade');
             $table->date('date');
-            $table->enum('status', ['present', 'absent', 'late'])->default('present');
+            $table->enum('status', ['present', 'absent', 'late', 'excused'])->default('present');
             $table->timestamps();
         });
     }

@@ -6,34 +6,75 @@
     <title>Admin Login - Alpha LMS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    @php
+        $settingsService = app(\App\Services\SettingsService::class);
+        $primaryColor = $settingsService->get('theme_primary_color', '#3b82f6');
+        $primaryForeground = $settingsService->get('theme_primary_foreground', '#ffffff');
+        $secondaryColor = $settingsService->get('theme_secondary_color', '#8b5cf6');
+        $secondaryForeground = $settingsService->get('theme_secondary_foreground', '#ffffff');
+        
+        // Convert hex to RGB for gradient effects
+        [$pr, $pg, $pb] = sscanf($primaryColor, '#%02x%02x%02x');
+        [$sr, $sg, $sb] = sscanf($secondaryColor, '#%02x%02x%02x');
+    @endphp
     <style>
+        :root {
+            --color-primary: {{ $primaryColor }};
+            --color-primary-foreground: {{ $primaryForeground }};
+            --color-secondary: {{ $secondaryColor }};
+            --color-secondary-foreground: {{ $secondaryForeground }};
+            --color-primary-rgb: {{ $pr }}, {{ $pg }}, {{ $pb }};
+            --color-secondary-rgb: {{ $sr }}, {{ $sg }}, {{ $sb }};
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, 
+                rgba(var(--color-primary-rgb), 0.05) 0%, 
+                rgba(255, 255, 255, 1) 50%, 
+                rgba(var(--color-secondary-rgb), 0.05) 100%);
         }
-        .bg-bd-green {
+        
+        .bg-primary {
             background-color: var(--color-primary);
         }
-        .text-bd-green {
-            color: #006A4E;
+        
+        .text-primary {
+            color: var(--color-primary);
         }
-        .border-bd-green {
-            border-color: #006A4E;
+        
+        .text-primary-foreground {
+            color: var(--color-primary-foreground);
         }
-        .hover\:bg-bd-green-dark:hover {
-            background-color: var(--color-primary);
+        
+        .border-primary {
+            border-color: var(--color-primary);
+        }
+        
+        .hover\:bg-primary-dark:hover {
+            filter: brightness(0.9);
+        }
+        
+        .focus\:ring-primary:focus {
+            --tw-ring-color: var(--color-primary);
+        }
+        
+        .logo-container {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(var(--color-primary-rgb), 0.3);
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-emerald-50 via-white to-amber-50 min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md">
         <!-- Logo -->
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-bd-green rounded-2xl mb-4">
-                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"> 
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                </svg>
+            <div class="inline-flex items-center justify-center mb-4">
+                <img src="{{ asset('logo.png') }}" alt="Alpha LMS Logo" class="h-16 w-auto">
             </div>
-            <h1 class="text-3xl font-bold text-gray-900">Alpha LMS</h1>
+            <!-- <h1 class="text-3xl font-bold text-gray-900">Alpha LMS</h1> -->
             <p class="text-gray-600 mt-2">Admin Dashboard Login</p>
         </div>
 
@@ -63,7 +104,7 @@
                             id="email" 
                             name="email" 
                             value="{{ old('email') }}"
-                            class="w-full px-4 py-3 pr-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                            class="w-full px-4 py-3 pr-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
                             required
                             autofocus
                         >
@@ -83,7 +124,7 @@
                             type="password" 
                             id="password" 
                             name="password" 
-                            class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                            class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
                             required
                         >
                         <button 
@@ -112,9 +153,8 @@
 
                 <!-- Submit Button -->
                 <button
-                class="w-full bg-bd-green hover:bg-bd-green-dark text-black font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
-                style="background-color: {{ $primaryColor ?? '#3b82f6' }}
                     type="submit" 
+                    class="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl hover:bg-primary-dark transform hover:scale-[1.02]"
                 >
                     Sign In
                 </button>
@@ -122,7 +162,7 @@
 
             <!-- Back to Home -->
             <div class="mt-6 text-center">
-                <a href="/" class="text-sm text-bd-green hover:underline">← Back to Homepage</a>
+                <a href="/" class="text-sm text-primary hover:underline font-medium">← Back to Homepage</a>
             </div>
         </div>
 

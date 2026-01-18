@@ -166,6 +166,22 @@ class CourseSeeder extends Seeder
             ]
         ];
 
+        // Unsplash images for education/learning themes
+        $educationImages = [
+            'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=250&fit=crop', // Books and apple
+            'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&h=250&fit=crop', // Student studying
+            'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&h=250&fit=crop', // Classroom
+            'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=250&fit=crop', // University campus
+            'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=400&h=250&fit=crop', // Books stack
+            'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400&h=250&fit=crop', // Student with laptop
+            'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=250&fit=crop', // Graduation
+            'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop', // Notebook and pen
+            'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=400&h=250&fit=crop', // Books open
+            'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=250&fit=crop', // Team learning
+            'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=250&fit=crop', // Group study
+            'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=400&h=250&fit=crop', // Library
+        ];
+
         // Create standard courses for all classes 1-12 to ensure coverage
         foreach (range(1, 12) as $class) {
             // Check if we already added a course for this class above (just for variety)
@@ -184,7 +200,7 @@ class CourseSeeder extends Seeder
                     'duration_unit' => 'months',
                     'status' => 'active',
                     'class' => (string)$class,
-                    'image' => 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=250&fit=crop', // Generic school image
+                    'image' => $educationImages[($class - 1) % count($educationImages)],
                     'start_date' => now(),
                     'end_date' => now()->addYear(),
                     'max_students' => 50,
