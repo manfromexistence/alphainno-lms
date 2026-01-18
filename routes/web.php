@@ -322,6 +322,20 @@ Route::middleware('auth')->group(function () {
         // Payments
         Route::get('/payments', [\App\Http\Controllers\StudentPortalController::class, 'payments'])->name('payments');
         Route::get('/payments/{payment}/receipt', [\App\Http\Controllers\StudentPortalController::class, 'downloadReceipt'])->name('payments.receipt');
+        
+        // Course Enrollment Payment Routes (Task 15)
+        Route::get('/courses', [\App\Http\Controllers\StudentPortalController::class, 'courses'])->name('courses');
+        Route::get('/payment/form/{course}', [\App\Http\Controllers\PaymentController::class, 'showForm'])->name('payment.form');
+        Route::post('/payment/submit', [\App\Http\Controllers\PaymentController::class, 'submit'])->name('payment.submit');
+        Route::get('/payment/dashboard', [\App\Http\Controllers\PaymentController::class, 'dashboard'])->name('payment.dashboard');
     });
+});
+
+// Admin Payment Review Routes (Task 15)
+Route::middleware(['auth', 'role:admin,super-admin'])->prefix('admin')->name('payment.')->group(function () {
+    Route::get('/payment-review', [\App\Http\Controllers\PaymentController::class, 'reviewList'])->name('review.list');
+    Route::get('/payment-review/{payment}', [\App\Http\Controllers\PaymentController::class, 'reviewDetail'])->name('review.detail');
+    Route::post('/payment-review/{payment}/approve', [\App\Http\Controllers\PaymentController::class, 'approve'])->name('approve');
+    Route::post('/payment-review/{payment}/reject', [\App\Http\Controllers\PaymentController::class, 'reject'])->name('reject');
 });
 

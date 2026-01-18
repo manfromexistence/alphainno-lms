@@ -28,7 +28,7 @@
 @section('content')
     <!-- Hero Slider -->
     <section class="hero hero--image hero--dark !p-0 flex items-center justify-center !bg-white">
-        <div class="hero-inner relative h-screen overflow-hidden !w-full !max-w-none !m-0 !p-0 px-0!">
+        <div class="hero-inner relative h-[85vh] overflow-hidden !w-full !lg:max-w-7xl !mx-auto !p-0 px-0! !bg-white">
             <!-- Slide 1 -->
             <div class="slide active absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide1_image', 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop') : 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop' }}" alt="Students"

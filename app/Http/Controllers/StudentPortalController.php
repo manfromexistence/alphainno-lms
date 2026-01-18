@@ -865,4 +865,65 @@ class StudentPortalController extends Controller
 
         return response()->json($trends);
     }
+
+    /**
+     * Browse all available courses.
+     * 
+     * Requirements: 10.1
+     * 
+     * Task details:
+     * - Fetch all active courses
+     * - Get authenticated student's enrolled course IDs
+     * - Get course IDs with pending payments
+     * - Pass data to view
+     */
+    public function browse()
+    {
+        $student = $this->getStudent();
+        
+        if (!$student) {
+            return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
+        }
+
+        // Fetch all active courses
+        $courses = \App\Models\Course::active()
+            ->with(['batches'])
+            ->orderBy('name')
+            ->get();
+
+        // Get authenticated student's enrolled course IDs
+        // Student is enrolled through batch, and batch belongs to a course
+        $enrolledCourseIds = [];
+        if ($student->batch_id) {
+            $batch = \App\Models\Batch::find($student->batch_id);
+            if ($batch && $batch->course_id) {
+                $enrolledCourseIds[] = $batch->course_id;
+            }
+        }
+
+        // Also check if student is enrolled in multiple courses through different batches
+        // by checking if there are any approved payments that led to enrollments
+        $approvedPayments = Payment::where('student_id', $student->id)
+            ->where('status', Payment::STATUS_APPROVED)
+            ->whereNotNull('course_id')
+            ->pluck('course_id')
+            ->toArray();
+        
+        $enrolledCourseIds = array_unique(array_merge($enrolledCourseIds, $approvedPayments));
+
+        // Get course IDs with pending payments
+        $pendingPaymentCourseIds = Payment::where('student_id', $student->id)
+            ->where('status', Payment::STATUS_PENDING)
+            ->whereNotNull('course_id')
+            ->pluck('course_id')
+            ->toArray();
+
+        // Pass data to view
+        return view('student.courses', [
+            'student' => $student,
+            'courses' => $courses,
+            'enrolledCourseIds' => $enrolledCourseIds,
+            'pendingPaymentCourseIds' => $pendingPaymentCourseIds,
+        ]);
+    }
 }
