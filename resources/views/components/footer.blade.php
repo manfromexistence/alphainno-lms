@@ -3,7 +3,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div>
                 <div class="flex items-center gap-3 mb-4">
-                    <img src="{{ asset('Alphainno LMS.png') }}" alt="Alpha LMS" class="h-10 w-auto object-contain">
+                    <img src="{{ asset('logo.png') }}" alt="Alpha LMS" class="h-10 w-auto object-contain">
                 </div>
                 <p class="text-primary text-sm leading-relaxed mb-4">
                     এক্সওয়াইজেডস স্কুল এন্ড কলেজ - মানসম্মত শিক্ষা এবং নৈতিক মূল্যবোধ সৃষ্টিতে আমরা প্রতিশ্রুতিবদ্ধ।

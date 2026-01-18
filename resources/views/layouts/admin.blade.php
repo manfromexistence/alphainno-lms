@@ -149,7 +149,7 @@
         <div class="sidebar-container">
             <!-- Logo -->
             <div class="sidebar-header flex items-center justify-between px-4 py-4 border-b border-gray-200">
-                <img src="{{ asset('Alphainno LMS.png') }}" alt="Alpha LMS" class="h-10 w-auto object-contain">
+                <img src="{{ asset('logo.png') }}" alt="Alpha LMS" class="h-10 w-auto object-contain">
                 
                 <!-- Collapse/Expand All Buttons -->
                 <div class="flex items-center space-x-1">
