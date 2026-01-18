@@ -68,7 +68,7 @@
                     @php
                         $color = $colorMap[$classData->class] ?? $defaultColors[$index % count($defaultColors)];
                     @endphp
-                    <div class="bg-linear-to-br from-{{ $color }}-50 to-{{ $color }}-100 rounded-lg p-6 border-l-4 border-{{ $color }}-500">
+                    <div class="bg-white rounded-lg p-6 border-l-4 border-{{ $color }}-500 shadow-md hover:shadow-lg transition-shadow">
                         <div class="flex justify-between items-center">
                             <div>
                                 <h3 class="text-xl font-bold text-gray-800">{{ $classData->class }}</h3>

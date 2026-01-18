@@ -81,6 +81,7 @@ class StudentManagementSeeder extends Seeder
                     $student = Student::create([
                         'user_id' => $user->id,
                         'batch_id' => $batch->id,
+                        'name_bn' => $name, // Set the Bengali name field
                         'class' => (string)$class,
                         'roll' => str_pad(rand(1, 50), 3, '0', STR_PAD_LEFT),
                         'section' => collect(['A', 'B', 'C', 'D'])->random(),
@@ -177,6 +178,7 @@ class StudentManagementSeeder extends Seeder
                 Student::create([
                     'user_id' => $user->id,
                     'batch_id' => $batch->id,
+                    'name_bn' => $data['name'], // Set the Bengali name field
                     'class' => $data['class'],
                     'roll' => str_pad(rand(1, 50), 3, '0', STR_PAD_LEFT),
                     'section' => collect(['A', 'B', 'C', 'D'])->random(),
