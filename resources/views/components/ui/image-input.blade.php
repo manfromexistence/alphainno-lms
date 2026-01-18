@@ -15,9 +15,17 @@
     
     // Determine if the value is a storage path (not an external URL)
     $isStoragePath = $urlValue && !str_starts_with($urlValue, 'http://') && !str_starts_with($urlValue, 'https://');
-    $previewUrl = $urlValue ? ($isStoragePath ? asset('storage/' . $urlValue) : $urlValue) : '';
     
-    // For display: show the full URL (including storage paths converted to full URLs)
+    // For preview: convert storage paths to full URLs
+    if ($isStoragePath) {
+        // Remove 'public/' prefix if present (storage paths are stored as 'logos/file.png' not 'public/logos/file.png')
+        $cleanPath = str_starts_with($urlValue, 'public/') ? substr($urlValue, 7) : $urlValue;
+        $previewUrl = asset('storage/' . $cleanPath);
+    } else {
+        $previewUrl = $urlValue;
+    }
+    
+    // For display in URL input: show the full URL
     $displayUrl = $previewUrl;
     
     // For submission: only submit external URLs, not storage paths

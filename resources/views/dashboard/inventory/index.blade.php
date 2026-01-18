@@ -88,7 +88,8 @@
                         <option value="out_of_stock" {{ request('status') == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
                     </x-ui.select>
                 </div>
-                <div class="flex items-end">
+                <div class="space-y-2">
+                    <x-ui.label class="invisible">Filter</x-ui.label>
                     <x-ui.button type="submit" variant="secondary" class="w-full">Filter Inventory</x-ui.button>
                 </div>
             </form>
@@ -175,7 +176,7 @@
                                 </x-ui.dialog-content>
                             </x-ui.dialog>
 
-                            <form action="{{ route('dashboard.inventory.destroy', $item) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete this item?');">
+                            <form action="{{ route('dashboard.inventory.destroy', $item) }}" method="POST" class="inline-block" onsubmit="return confirmDelete(this, 'Are you sure you want to delete {{ $item->name }}? This action cannot be undone.');">
                                 @csrf
                                 @method('DELETE')
                                 <x-ui.button variant="ghost" size="icon" type="submit" class="text-destructive hover:text-destructive hover:bg-destructive/10">

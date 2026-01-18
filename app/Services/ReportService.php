@@ -58,13 +58,32 @@ class ReportService
 
                 $attendances = $query->orderBy('date', 'desc')->get();
 
+                // Transform to array format for the view
+                $transformedData = $attendances->map(function($attendance) {
+                    return [
+                        'id' => $attendance->id,
+                        'student_id' => $attendance->student_id,
+                        'student_name' => $attendance->student ? $attendance->student->name : 'N/A',
+                        'registration_no' => $attendance->student ? $attendance->student->registration_no : '',
+                        'batch_id' => $attendance->batch_id,
+                        'batch_name' => $attendance->batch ? $attendance->batch->name : 'N/A',
+                        'date' => $attendance->date,
+                        'status' => $attendance->status,
+                        'check_in_time' => $attendance->check_in_time ?? '-',
+                        'remarks' => $attendance->remarks ?? '-',
+                    ];
+                });
+
                 // Calculate summary
                 $summary = [
                     'total_records' => $attendances->count(),
-                    'present' => $attendances->where('status', 'present')->count(),
-                    'absent' => $attendances->where('status', 'absent')->count(),
-                    'late' => $attendances->where('status', 'late')->count(),
-                    'excused' => $attendances->where('status', 'excused')->count(),
+                    'total_present' => $attendances->where('status', 'present')->count(),
+                    'total_absent' => $attendances->where('status', 'absent')->count(),
+                    'total_late' => $attendances->where('status', 'late')->count(),
+                    'total_excused' => $attendances->where('status', 'excused')->count(),
+                    'attendance_rate' => $attendances->count() > 0 
+                        ? round(($attendances->where('status', 'present')->count() / $attendances->count()) * 100, 2)
+                        : 0,
                 ];
 
                 // Group by date for chart data
@@ -76,7 +95,7 @@ class ReportService
                     ]);
 
                 return [
-                    'data' => $attendances,
+                    'data' => $transformedData,
                     'summary' => $summary,
                     'chart_data' => $byDate,
                 ];
@@ -90,10 +109,11 @@ class ReportService
                 'data' => collect(),
                 'summary' => [
                     'total_records' => 0,
-                    'present' => 0,
-                    'absent' => 0,
-                    'late' => 0,
-                    'excused' => 0,
+                    'total_present' => 0,
+                    'total_absent' => 0,
+                    'total_late' => 0,
+                    'total_excused' => 0,
+                    'attendance_rate' => 0,
                 ],
                 'chart_data' => collect(),
                 'error' => 'Unable to generate attendance report. Please try again.',
@@ -106,10 +126,11 @@ class ReportService
                 'data' => collect(),
                 'summary' => [
                     'total_records' => 0,
-                    'present' => 0,
-                    'absent' => 0,
-                    'late' => 0,
-                    'excused' => 0,
+                    'total_present' => 0,
+                    'total_absent' => 0,
+                    'total_late' => 0,
+                    'total_excused' => 0,
+                    'attendance_rate' => 0,
                 ],
                 'chart_data' => collect(),
                 'error' => 'Unable to generate attendance report. Please try again.',
