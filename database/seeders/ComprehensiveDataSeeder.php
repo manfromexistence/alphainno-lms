@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\{
     Course, CourseVideo, CourseMaterial, Batch, Student, Teacher, ClassSchedule,
     Attendance, Exam, Question, ExamResult, ExamAttempt,
-    Invoice, Payment, ParentModel, Announcement, User
+    Invoice, Payment, ParentModel, Announcement, User, Setting
 };
 use Illuminate\Support\Facades\Hash;
 
@@ -20,6 +20,7 @@ class ComprehensiveDataSeeder extends Seeder
         $this->command->info('🚀 Starting comprehensive data seeding...');
         
         // Seed in order of dependencies
+        $this->seedFooterSettings();
         $this->seedCourseVideos();
         $this->seedCourseMaterials();
         $this->seedClassSchedules();
@@ -30,6 +31,34 @@ class ComprehensiveDataSeeder extends Seeder
         $this->seedAnnouncements();
         
         $this->command->info('✅ Comprehensive seeding completed successfully!');
+    }
+
+    /**
+     * Seed footer settings
+     */
+    private function seedFooterSettings(): void
+    {
+        $this->command->info('⚙️ Seeding footer settings...');
+        
+        Setting::updateOrCreate(
+            ['key' => 'footer_text'],
+            [
+                'value' => 'Developed by Alphainno',
+                'group' => 'general',
+                'type' => 'string',
+            ]
+        );
+        
+        Setting::updateOrCreate(
+            ['key' => 'footer_copyright'],
+            [
+                'value' => '© ' . date('Y') . ' All rights reserved. Developed by Alphainno',
+                'group' => 'general',
+                'type' => 'string',
+            ]
+        );
+        
+        $this->command->info('✓ Footer settings created');
     }
 
     /**
@@ -159,8 +188,6 @@ class ComprehensiveDataSeeder extends Seeder
     {
         $this->command->info('📢 Seeding announcements...');
         
-        $batches = Batch::all();
-        $courses = Course::all();
         $adminUser = User::whereHas('roles', function($q) {
             $q->where('slug', 'admin');
         })->first();
@@ -174,129 +201,65 @@ class ComprehensiveDataSeeder extends Seeder
             return;
         }
         
-        $announcementCount = 0;
-        
-        // Create 'all' target announcements
-        $allAnnouncements = [
+        // Create exactly 5 active announcements for homepage display
+        $announcements = [
             [
-                'title' => 'Welcome to the New Academic Year!',
-                'content' => 'We are excited to welcome all students to the new academic year. Please check your schedules and ensure you have all required materials.',
+                'title' => 'Welcome to the New Academic Year 2026!',
+                'content' => 'We are excited to welcome all students to the new academic year. Please check your schedules and ensure you have all required materials. Our dedicated faculty is ready to support your learning journey.',
                 'priority' => 'high',
                 'starts_at' => now()->subDays(30),
-                'expires_at' => now()->addDays(30),
-            ],
-            [
-                'title' => 'Important: Exam Schedule Released',
-                'content' => 'The examination schedule for this term has been released. Please check your student portal for detailed information.',
-                'priority' => 'urgent',
-                'starts_at' => now()->subDays(10),
-                'expires_at' => now()->addDays(20),
-            ],
-            [
-                'title' => 'Library Hours Extended',
-                'content' => 'Good news! Library hours have been extended until 9 PM on weekdays to support your studies.',
-                'priority' => 'normal',
-                'starts_at' => now()->subDays(5),
                 'expires_at' => now()->addDays(60),
             ],
             [
-                'title' => 'Payment Reminder',
-                'content' => 'This is a friendly reminder to clear any pending fees by the end of this month to avoid late charges.',
-                'priority' => 'high',
-                'starts_at' => now()->subDays(3),
-                'expires_at' => now()->addDays(15),
+                'title' => 'Important: Exam Schedule Released',
+                'content' => 'The examination schedule for this term has been released. Please check your student portal for detailed information about exam dates, timings, and venues. Prepare well and good luck!',
+                'priority' => 'urgent',
+                'starts_at' => now()->subDays(10),
+                'expires_at' => now()->addDays(30),
             ],
             [
-                'title' => 'Holiday Notice',
-                'content' => 'The institution will remain closed on Friday for the national holiday. Regular classes will resume on Saturday.',
+                'title' => 'Library Hours Extended for Students',
+                'content' => 'Good news! Library hours have been extended until 9 PM on weekdays to support your studies. Take advantage of the quiet study spaces and extensive resources available.',
                 'priority' => 'normal',
-                'starts_at' => now()->subDays(2),
-                'expires_at' => now()->addDays(5),
+                'starts_at' => now()->subDays(5),
+                'expires_at' => now()->addDays(90),
+            ],
+            [
+                'title' => 'Payment Reminder - Fee Deadline Approaching',
+                'content' => 'This is a friendly reminder to clear any pending fees by the end of this month to avoid late charges. You can pay online through your student portal or visit the accounts office.',
+                'priority' => 'high',
+                'starts_at' => now()->subDays(3),
+                'expires_at' => now()->addDays(20),
+            ],
+            [
+                'title' => 'New Course Materials and Videos Available',
+                'content' => 'New study materials, video lectures, and practice resources have been uploaded to all courses. Check your course materials section regularly for updates and additional learning resources.',
+                'priority' => 'normal',
+                'starts_at' => now()->subDays(1),
+                'expires_at' => now()->addDays(45),
             ],
         ];
         
-        foreach ($allAnnouncements as $data) {
-            Announcement::create([
-                'title' => $data['title'],
-                'content' => $data['content'],
-                'target_type' => 'all',
-                'target_id' => null,
-                'priority' => $data['priority'],
-                'starts_at' => $data['starts_at'],
-                'expires_at' => $data['expires_at'],
-                'is_active' => true,
-                'created_by' => $adminUser->id,
-            ]);
+        $announcementCount = 0;
+        
+        foreach ($announcements as $data) {
+            Announcement::updateOrCreate(
+                ['title' => $data['title']],
+                [
+                    'content' => $data['content'],
+                    'target_type' => 'all',
+                    'target_id' => null,
+                    'priority' => $data['priority'],
+                    'starts_at' => $data['starts_at'],
+                    'expires_at' => $data['expires_at'],
+                    'is_active' => true,
+                    'created_by' => $adminUser->id,
+                ]
+            );
             $announcementCount++;
         }
         
-        // Create batch-specific announcements
-        if ($batches->isNotEmpty()) {
-            foreach ($batches->take(5) as $batch) {
-                $batchAnnouncements = [
-                    [
-                        'title' => "Class Schedule Update - {$batch->name}",
-                        'content' => "There has been a minor change in the class schedule for {$batch->name}. Please check the updated schedule in your portal.",
-                        'priority' => 'high',
-                    ],
-                    [
-                        'title' => "Extra Class Scheduled - {$batch->name}",
-                        'content' => "An extra revision class has been scheduled for {$batch->name} this Saturday at 10 AM. Attendance is highly recommended.",
-                        'priority' => 'normal',
-                    ],
-                ];
-                
-                foreach ($batchAnnouncements as $data) {
-                    Announcement::create([
-                        'title' => $data['title'],
-                        'content' => $data['content'],
-                        'target_type' => 'batch',
-                        'target_id' => $batch->id,
-                        'priority' => $data['priority'],
-                        'starts_at' => now()->subDays(rand(1, 7)),
-                        'expires_at' => now()->addDays(rand(10, 30)),
-                        'is_active' => true,
-                        'created_by' => $adminUser->id,
-                    ]);
-                    $announcementCount++;
-                }
-            }
-        }
-        
-        // Create course-specific announcements
-        if ($courses->isNotEmpty()) {
-            foreach ($courses->take(5) as $course) {
-                $courseAnnouncements = [
-                    [
-                        'title' => "New Study Materials - {$course->name}",
-                        'content' => "New study materials and video lectures have been uploaded for {$course->name}. Check the course materials section.",
-                        'priority' => 'normal',
-                    ],
-                    [
-                        'title' => "Assignment Deadline - {$course->name}",
-                        'content' => "Reminder: The assignment for {$course->name} is due next week. Please submit on time to avoid penalties.",
-                        'priority' => 'high',
-                    ],
-                ];
-                
-                foreach ($courseAnnouncements as $data) {
-                    Announcement::create([
-                        'title' => $data['title'],
-                        'content' => $data['content'],
-                        'target_type' => 'course',
-                        'target_id' => $course->id,
-                        'priority' => $data['priority'],
-                        'starts_at' => now()->subDays(rand(1, 5)),
-                        'expires_at' => now()->addDays(rand(7, 21)),
-                        'is_active' => true,
-                        'created_by' => $adminUser->id,
-                    ]);
-                    $announcementCount++;
-                }
-            }
-        }
-        
-        $this->command->info("✓ Created {$announcementCount} announcements");
+        $this->command->info("✓ Created {$announcementCount} announcements for homepage display");
     }
 
     /**

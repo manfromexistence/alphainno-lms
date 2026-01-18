@@ -68,6 +68,7 @@
     <div class="border-t border-primary">
         <div class="max-w-7xl mx-auto px-4 py-4 md:py-6 text-center">
             <p class="text-primary text-xs md:text-sm">© ২০২৬ এক্সওয়াইজেডস স্কুল এন্ড কলেজ। সর্বস্বত্ব সংরক্ষিত।</p>
+            <p class="text-primary text-xs md:text-sm mt-1">{{ \App\Models\Setting::getValue('footer_text', 'Developed by Alphainno') }}</p>
         </div>
     </div>
 </footer>
