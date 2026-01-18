@@ -72,14 +72,14 @@ This implementation plan focuses on rapidly connecting existing Laravel componen
     - _Requirements: 6.2, 6.3, 6.4_
 
 - [ ] 4. Build CQ exam interface
-  - [-] 4.1 Create ExamController::takeCQ() method
+  - [x] 4.1 Create ExamController::takeCQ() method
     - Validate exam time window
     - Create or retrieve ExamAttempt
     - Load CQ questions
     - Pass data to view
     - _Requirements: 5.1, 5.2_
   
-  - [~] 4.2 Create cq-exam.blade.php view with text editor and upload
+  - [-] 4.2 Create cq-exam.blade.php view with text editor and upload
     - Display CQ questions with text editor for each (use TinyMCE or similar)
     - Add screenshot upload field for each question
     - Include timer and submit button

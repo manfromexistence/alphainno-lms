@@ -448,6 +448,81 @@ class StudentPortalController extends Controller
     }
 
     /**
+     * Take a CQ exam.
+     * 
+     * Requirements: 5.1, 5.2
+     * 
+     * Task details:
+     * - Validate exam time window
+     * - Create or retrieve ExamAttempt
+     * - Load CQ questions
+     * - Pass data to view
+     */
+    public function takeCQ(Exam $exam)
+    {
+        $student = $this->getStudent();
+        
+        if (!$student) {
+            return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
+        }
+
+        // Verify student has access to this exam (same batch)
+        if ($exam->batch_id !== $student->batch_id) {
+            abort(403, 'Unauthorized access to this exam.');
+        }
+
+        // Validate exam time window using ExamTimeValidator
+        $timeValidator = app(\App\Services\ExamTimeValidator::class);
+        
+        if (!$timeValidator->canStartExam($exam)) {
+            $timeStatus = $timeValidator->getTimeStatus($exam);
+            $message = $timeValidator->getTimeStatusMessage($exam);
+            
+            return redirect()->route('student.exams')
+                ->with('error', $message);
+        }
+
+        // Create or retrieve ExamAttempt for student
+        $attempt = ExamAttempt::firstOrCreate(
+            [
+                'student_id' => $student->id,
+                'exam_id' => $exam->id,
+                'status' => 'in_progress',
+            ],
+            [
+                'started_at' => now(),
+                'answers' => [],
+                'cheating_events' => [],
+                'screenshots' => [],
+                'ip_address' => request()->ip(),
+            ]
+        );
+
+        // If attempt was just created, set started_at
+        if (!$attempt->wasRecentlyCreated && !$attempt->started_at) {
+            $attempt->update(['started_at' => now()]);
+        }
+
+        // Load CQ questions
+        $questions = $exam->questions()
+            ->where('type', 'cq')
+            ->orderBy('order')
+            ->get();
+
+        // Calculate remaining time
+        $remainingTime = $timeValidator->getRemainingTime($attempt);
+
+        // Pass data to view
+        return view('student.cq-exam', [
+            'student' => $student,
+            'exam' => $exam,
+            'attempt' => $attempt,
+            'questions' => $questions,
+            'timeRemaining' => $remainingTime,
+        ]);
+    }
+
+    /**
      * Show CQ exam question paper.
      */
     public function showCqExam(Exam $exam)

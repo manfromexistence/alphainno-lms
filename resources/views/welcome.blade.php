@@ -28,15 +28,15 @@
 @section('content')
     <!-- Hero Slider -->
     <section class="hero hero--image hero--dark !p-0 flex items-center justify-center !bg-white">
-        <div class="hero-inner relative h-screen overflow-hidden !lg:w-8xl !w-full !m-0 !p-0">
+        <div class="hero-inner relative h-screen overflow-hidden !w-full !max-w-none !m-0 !p-0 px-0!">
             <!-- Slide 1 -->
             <div class="slide active absolute inset-0 w-full h-full">
                 <img src="{{ $page ? $page->getContent('slide1_image', 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop') : 'https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop' }}" alt="Students"
                     class="w-full h-full object-cover brightness-75">
-                <div class="absolute inset-0 hero__overlay flex items-center justify-center">
-                    <div class="text-center px-4">
-                        <h2 class="hero-title text-4xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide1_title', 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড') : 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড' }}</h2>
-                        <h3 class="hero-subtitle text-2xl md:text-3xl font-semibold text-white/90 drop-shadow-md">{{ $page ? $page->getContent('slide1_subtitle', 'কলেজে এর পক্ষ থেকে!') : 'কলেজে এর পক্ষ থেকে!' }}</h3>
+                <div class="absolute inset-0 hero__overlay flex items-center justify-center bg-black/30">
+                    <div class="text-center px-4 max-w-5xl mx-auto">
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-xl leading-tight">{{ $page ? $page->getContent('slide1_title', 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড') : 'স্বাগতম এক্সওয়াইজেডস স্কুল এন্ড' }}</h2>
+                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-lg">{{ $page ? $page->getContent('slide1_subtitle', 'কলেজে এর পক্ষ থেকে!') : 'কলেজে এর পক্ষ থেকে!' }}</h3>
                     </div>
                 </div>
             </div>
@@ -47,8 +47,8 @@
                     class="w-full h-full object-cover brightness-75">
                 <div class="absolute inset-0 hero__overlay flex items-center justify-center">
                     <div class="text-center px-4">
-                        <h2 class="hero-title text-4xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide2_title', 'শিক্ষার আলোয় আলোকিত') : 'শিক্ষার আলোয় আলোকিত' }}</h2>
-                        <h3 class="hero-subtitle text-2xl md:text-3xl font-semibold text-white/90 drop-shadow-md">{{ $page ? $page->getContent('slide2_subtitle', 'ভবিষ্যৎ প্রজন্ম') : 'ভবিষ্যৎ প্রজন্ম' }}</h3>
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide2_title', 'শিক্ষার আলোয় আলোকিত') : 'শিক্ষার আলোয় আলোকিত' }}</h2>
+                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-md">{{ $page ? $page->getContent('slide2_subtitle', 'ভবিষ্যৎ প্রজন্ম') : 'ভবিষ্যৎ প্রজন্ম' }}</h3>
                     </div>
                 </div>
             </div>
@@ -59,8 +59,8 @@
                     class="w-full h-full object-cover brightness-75">
                 <div class="absolute inset-0 hero__overlay flex items-center justify-center">
                     <div class="text-center px-4">
-                        <h2 class="hero-title text-4xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide3_title', 'মানসম্মত শিক্ষা') : 'মানসম্মত শিক্ষা' }}</h2>
-                        <h3 class="hero-subtitle text-2xl md:text-3xl font-semibold text-white/90 drop-shadow-md">{{ $page ? $page->getContent('slide3_subtitle', 'আধুনিক শিক্ষা ব্যবস্থা') : 'আধুনিক শিক্ষা ব্যবস্থা' }}</h3>
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 !text-white drop-shadow-lg leading-tight">{{ $page ? $page->getContent('slide3_title', 'মানসম্মত শিক্ষা') : 'মানসম্মত শিক্ষা' }}</h2>
+                        <h3 class="text-2xl md:text-3xl font-semibold !text-white drop-shadow-md">{{ $page ? $page->getContent('slide3_subtitle', 'আধুনিক শিক্ষা ব্যবস্থা') : 'আধুনিক শিক্ষা ব্যবস্থা' }}</h3>
                     </div>
                 </div>
             </div>
