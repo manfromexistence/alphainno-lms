@@ -151,7 +151,7 @@
                             $color = $colors[$index % count($colors)];
                         @endphp
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/3 select-none">
-                            <div onclick="openCourseModal(this)" data-course="@json($course)" class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
+                            <div onclick="openCourseModal(this)" data-course="{{ htmlspecialchars(json_encode($course), ENT_QUOTES, 'UTF-8') }}" class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-linear-to-br {{ $gradient }}">
                                     @if($course->image)
                                         @if(str_starts_with($course->image, 'http'))
@@ -243,7 +243,14 @@
                     @foreach($featuredStudents as $student)
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/4 select-none">
                             <div onclick="openStudentModal(this)" 
-
+                                 data-student="{{ htmlspecialchars(json_encode([
+                                     'name' => $student->user->name ?? 'Student',
+                                     'image' => $student->profile_image,
+                                     'class' => $student->class,
+                                     'batch' => $student->batch->name ?? null,
+                                     'registration_no' => $student->registration_no,
+                                     'phone' => $student->phone
+                                 ]), ENT_QUOTES, 'UTF-8') }}"
                                  class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-linear-to-br from-blue-400 to-purple-500">
                                     @if($student->profile_image)
@@ -343,7 +350,14 @@
                         @endphp
                         <x-ui.carousel-item class="basis-full md:basis-1/2 lg:basis-1/4 select-none">
                             <div onclick="openStudentModal(this)"
-
+                                 data-student="{{ htmlspecialchars(json_encode([
+                                     'name' => $student->user->name ?? 'Student',
+                                     'image' => $student->profile_image,
+                                     'class' => $student->class,
+                                     'batch' => $student->batch->name ?? null,
+                                     'registration_no' => $student->registration_no,
+                                     'phone' => $student->phone
+                                 ]), ENT_QUOTES, 'UTF-8') }}"
                                  class="cursor-pointer bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1 mx-2 h-full">
                                 <div class="relative h-48 bg-linear-to-br {{ $studentGradient }}">
                                     @if($student->profile_image)
@@ -554,20 +568,12 @@
                                         <p class="font-semibold text-gray-800" id="student-modal-batch">-</p>
                                     </div>
                                     <div>
-                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Roll</p>
-                                        <p class="font-semibold text-gray-800" id="student-modal-roll">-</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Section</p>
-                                        <p class="font-semibold text-gray-800" id="student-modal-section">-</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Group</p>
-                                        <p class="font-semibold text-gray-800" id="student-modal-group">-</p>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Registration No</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-registration">-</p>
                                     </div>
                                     <div class="col-span-2">
-                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Shift</p>
-                                        <p class="font-semibold text-gray-800" id="student-modal-shift">-</p>
+                                        <p class="text-xs text-gray-500 uppercase tracking-wide">Phone</p>
+                                        <p class="font-semibold text-gray-800" id="student-modal-phone">-</p>
                                     </div>
                                 </div>
                             </div>
@@ -669,47 +675,64 @@
         sliderContainer.addEventListener('touchmove', moveDragging);
 
         function openCourseModal(element) {
-            const course = JSON.parse(element.getAttribute('data-course'));
-            document.getElementById('modal-title').innerText = course.name;
-            document.getElementById('modal-description').innerText = course.description || 'No description available.';
-            
-            let imageUrl = '';
-            if (course.image) {
-                imageUrl = course.image.startsWith('http') ? course.image : `/storage/${course.image}`;
-            } else {
-                // Placeholder if no image
-                imageUrl = 'https://via.placeholder.com/640x360?text=No+Image';
-            }
-            document.getElementById('modal-image').src = imageUrl;
+            try {
+                const courseData = element.getAttribute('data-course');
+                if (!courseData) {
+                    console.error('No course data found');
+                    return;
+                }
+                
+                // Decode HTML entities
+                const decodedData = courseData.replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+                const course = JSON.parse(decodedData);
+                if (!course) {
+                    console.error('Failed to parse course data');
+                    return;
+                }
+                
+                document.getElementById('modal-title').innerText = course.name || 'Course';
+                document.getElementById('modal-description').innerText = course.description || 'No description available.';
+                
+                let imageUrl = '';
+                if (course.image) {
+                    imageUrl = course.image.startsWith('http') ? course.image : `/storage/${course.image}`;
+                } else {
+                    // Placeholder if no image
+                    imageUrl = 'https://via.placeholder.com/640x360?text=No+Image';
+                }
+                document.getElementById('modal-image').src = imageUrl;
 
-            if (course.videos_count) {
-                 document.getElementById('modal-videos-text').innerText = `${course.videos_count} টি ভিডিও`;
-                 document.getElementById('modal-videos').style.display = 'flex';
-            } else {
-                 document.getElementById('modal-videos').style.display = 'none';
-            }
-            
-            if (course.category) {
-                document.getElementById('modal-category').innerText = course.category;
-                document.getElementById('modal-category').style.display = 'inline-block';
-            } else {
-                document.getElementById('modal-category').style.display = 'none';
-            }
+                if (course.videos_count) {
+                     document.getElementById('modal-videos-text').innerText = `${course.videos_count} টি ভিডিও`;
+                     document.getElementById('modal-videos').style.display = 'flex';
+                } else {
+                     document.getElementById('modal-videos').style.display = 'none';
+                }
+                
+                if (course.category) {
+                    document.getElementById('modal-category').innerText = course.category;
+                    document.getElementById('modal-category').style.display = 'inline-block';
+                } else {
+                    document.getElementById('modal-category').style.display = 'none';
+                }
 
-            // Set Buy Link with authentication check
-            const buyBtn = document.getElementById('modal-buy-btn');
-            if (buyBtn) {
-                @auth
-                    // User is authenticated, redirect to enrollment
-                    buyBtn.href = `/student/courses/${course.id}/enroll`;
-                @else
-                    // User is not authenticated, redirect to login
-                    buyBtn.href = `/login`;
-                @endauth
-            }
+                // Set Buy Link with authentication check
+                const buyBtn = document.getElementById('modal-buy-btn');
+                if (buyBtn && course.id) {
+                    @auth
+                        // User is authenticated, redirect to enrollment
+                        buyBtn.href = `/student/courses/${course.id}/enroll`;
+                    @else
+                        // User is not authenticated, redirect to login
+                        buyBtn.href = `/login`;
+                    @endauth
+                }
 
-            document.getElementById('courseModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                document.getElementById('courseModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            } catch (error) {
+                console.error('Error opening course modal:', error);
+            }
         }
 
         function closeCourseModal() {
@@ -718,26 +741,43 @@
         }
 
         function openStudentModal(element) {
-            const student = JSON.parse(element.getAttribute('data-student'));
-            
-            document.getElementById('student-modal-name').innerText = student.name;
-            document.getElementById('student-modal-class').innerText = 'Class ' + (student.class || 'N/A');
-            document.getElementById('student-modal-batch').innerText = student.batch || '-';
-            document.getElementById('student-modal-roll').innerText = student.roll || '-';
-            document.getElementById('student-modal-section').innerText = student.section || '-';
-            document.getElementById('student-modal-group').innerText = student.group || '-';
-            document.getElementById('student-modal-shift').innerText = student.shift || '-';
-            
-            let imageUrl = '';
-            if (student.image) {
-                imageUrl = student.image.startsWith('http') ? student.image : `/storage/${student.image}`;
-            } else {
-                imageUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=random`;
-            }
-            document.getElementById('student-modal-image').src = imageUrl;
+            try {
+                const studentData = element.getAttribute('data-student');
+                if (!studentData) {
+                    console.error('No student data found');
+                    return;
+                }
+                
+                // Decode HTML entities
+                const decodedData = studentData.replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+                const student = JSON.parse(decodedData);
+                if (!student) {
+                    console.error('Failed to parse student data');
+                    return;
+                }
+                
+                // Debug: log the student data
+                console.log('Student data:', student);
+                
+                document.getElementById('student-modal-name').innerText = student.name || 'Student';
+                document.getElementById('student-modal-class').innerText = student.class ? `Class ${student.class}` : 'N/A';
+                document.getElementById('student-modal-batch').innerText = student.batch || '-';
+                document.getElementById('student-modal-registration').innerText = student.registration_no || '-';
+                document.getElementById('student-modal-phone').innerText = student.phone || '-';
+                
+                let imageUrl = '';
+                if (student.image) {
+                    imageUrl = student.image.startsWith('http') ? student.image : `/storage/${student.image}`;
+                } else {
+                    imageUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name || 'Student')}&background=random`;
+                }
+                document.getElementById('student-modal-image').src = imageUrl;
 
-            document.getElementById('studentModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+                document.getElementById('studentModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } catch (error) {
+                console.error('Error opening student modal:', error);
+            }
         }
 
         function closeStudentModal() {

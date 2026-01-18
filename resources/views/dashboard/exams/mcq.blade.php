@@ -14,12 +14,15 @@
                     {{ $exams->total() }} Exams
                 </span>
             </div>
-            <a href="{{ route('dashboard.exams.create') }}" class="inline-flex items-center px-4 py-2 bg-bd-green text-white rounded-lg hover:bg-bd-green-dark transition-colors font-medium text-sm shadow-sm">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Create MCQ Exam
-            </a>
+            @if(!auth()->user()->isStudent())
+                {{-- Only show Create button for admins and teachers --}}
+                <a href="{{ route('dashboard.exams.create') }}" class="inline-flex items-center px-4 py-2 bg-bd-green text-white rounded-lg hover:bg-bd-green-dark transition-colors font-medium text-sm shadow-sm">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Create MCQ Exam
+                </a>
+            @endif
         </div>
 
         <!-- Exams List -->
@@ -66,15 +69,23 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('dashboard.exams.show', $exam) }}" class="text-blue-600 hover:text-blue-900">View</a>
-                                    <a href="{{ route('dashboard.exams.edit', $exam) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    <form action="{{ route('dashboard.exams.destroy', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                                    </form>
-                                </div>
+                                @if(auth()->user()->isStudent())
+                                    {{-- Students only see "Take Exam" action --}}
+                                    <a href="{{ route('student.exams.start', $exam) }}" class="inline-flex items-center px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700">
+                                        Take Exam
+                                    </a>
+                                @else
+                                    {{-- Admins and Teachers see View, Edit, Delete actions --}}
+                                    <div class="flex space-x-2">
+                                        <a href="{{ route('dashboard.exams.show', $exam) }}" class="text-blue-600 hover:text-blue-900">View</a>
+                                        <a href="{{ route('dashboard.exams.edit', $exam) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                        <form action="{{ route('dashboard.exams.destroy', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                        </form>
+                                    </div>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

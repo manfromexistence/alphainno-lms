@@ -49,6 +49,21 @@ class StudentExamAccessMiddleware
         $route = $request->route();
         $routeName = $route ? $route->getName() : '';
         
+        // List of routes that students CAN access (viewing exam lists)
+        $allowedRoutes = [
+            'dashboard.exams.index',     // All exams list
+            'dashboard.exams.mcq',       // MCQ exams list
+            'dashboard.exams.cq',        // CQ exams list
+            'dashboard.exams.live',      // Live exams list
+            'dashboard.exams.results',   // Exam results list
+            'dashboard.exams.leaderboard', // Exam leaderboard
+        ];
+        
+        // If the route is in the allowed list, let students access it
+        if (in_array($routeName, $allowedRoutes)) {
+            return $next($request);
+        }
+        
         // List of admin exam routes that students should NOT access
         $restrictedRoutes = [
             'dashboard.exams.create',
@@ -80,15 +95,21 @@ class StudentExamAccessMiddleware
             return $this->redirectToStudentExams($request);
         }
 
-        // Check if the URL path contains admin exam patterns
+        // Check if the URL path contains admin exam patterns that should be blocked
         $path = $request->path();
         
-        // Block access to dashboard exam routes
-        if (preg_match('#^dashboard/exams#', $path)) {
+        // Block access to specific dashboard exam management routes
+        // But allow viewing exam lists
+        if (preg_match('#^dashboard/exams/[0-9]+/(edit|questions|import|export|review)#', $path)) {
+            return $this->redirectToStudentExams($request);
+        }
+        
+        // Block access to exam creation
+        if (preg_match('#^dashboard/exams/create#', $path)) {
             return $this->redirectToStudentExams($request);
         }
 
-        // Allow access to student exam routes
+        // Allow access to student exam routes and exam list views
         return $next($request);
     }
 

@@ -236,8 +236,30 @@ class StudentPortalController extends Controller
     {
         $student = $this->getStudent();
         
-        if (!$student || $exam->batch_id !== $student->batch_id) {
-            abort(403, 'Unauthorized access to this exam.');
+        if (!$student) {
+            abort(403, 'Student profile not found.');
+        }
+        
+        // Check if student has access to this exam
+        // Allow access if:
+        // 1. Exam has no batch restriction (batch_id is null), OR
+        // 2. Student's batch matches the exam's batch, OR
+        // 3. Student is enrolled in a batch that has access to this exam
+        $hasAccess = false;
+        
+        if (!$exam->batch_id) {
+            // Exam is available to all students
+            $hasAccess = true;
+        } elseif ($student->batch_id && $exam->batch_id === $student->batch_id) {
+            // Student's batch matches exam's batch
+            $hasAccess = true;
+        } elseif ($student->batches && $student->batches->contains('id', $exam->batch_id)) {
+            // Student is enrolled in the exam's batch (many-to-many relationship)
+            $hasAccess = true;
+        }
+        
+        if (!$hasAccess) {
+            abort(403, 'You do not have access to this exam. Please contact your administrator.');
         }
 
         $attempt = $this->examService->startAttempt($student, $exam);
@@ -259,9 +281,27 @@ class StudentPortalController extends Controller
             return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
         }
 
-        // Verify student has access to this exam (same batch)
-        if ($exam->batch_id !== $student->batch_id) {
-            abort(403, 'Unauthorized access to this exam.');
+        // Check if student has access to this exam
+        // Allow access if:
+        // 1. Exam has no batch restriction (batch_id is null), OR
+        // 2. Student's batch matches the exam's batch, OR
+        // 3. Student is enrolled in a batch that has access to this exam
+        $hasAccess = false;
+        
+        if (!$exam->batch_id) {
+            // Exam is available to all students
+            $hasAccess = true;
+        } elseif ($student->batch_id && $exam->batch_id === $student->batch_id) {
+            // Student's batch matches exam's batch
+            $hasAccess = true;
+        } elseif ($student->batches && $student->batches->contains('id', $exam->batch_id)) {
+            // Student is enrolled in the exam's batch (many-to-many relationship)
+            $hasAccess = true;
+        }
+        
+        if (!$hasAccess) {
+            return redirect()->route('student.exams')
+                ->with('error', 'You do not have access to this exam. Please contact your administrator.');
         }
 
         // Validate exam time window using ExamTimeValidator
@@ -576,9 +616,27 @@ class StudentPortalController extends Controller
             return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
         }
 
-        // Verify student has access to this exam (same batch)
-        if ($exam->batch_id !== $student->batch_id) {
-            abort(403, 'Unauthorized access to this exam.');
+        // Check if student has access to this exam
+        // Allow access if:
+        // 1. Exam has no batch restriction (batch_id is null), OR
+        // 2. Student's batch matches the exam's batch, OR
+        // 3. Student is enrolled in a batch that has access to this exam
+        $hasAccess = false;
+        
+        if (!$exam->batch_id) {
+            // Exam is available to all students
+            $hasAccess = true;
+        } elseif ($student->batch_id && $exam->batch_id === $student->batch_id) {
+            // Student's batch matches exam's batch
+            $hasAccess = true;
+        } elseif ($student->batches && $student->batches->contains('id', $exam->batch_id)) {
+            // Student is enrolled in the exam's batch (many-to-many relationship)
+            $hasAccess = true;
+        }
+        
+        if (!$hasAccess) {
+            return redirect()->route('student.exams')
+                ->with('error', 'You do not have access to this exam. Please contact your administrator.');
         }
 
         // Validate exam time window using ExamTimeValidator
@@ -759,8 +817,30 @@ class StudentPortalController extends Controller
     {
         $student = $this->getStudent();
         
-        if (!$student || $exam->batch_id !== $student->batch_id) {
-            abort(403, 'Unauthorized access to this exam.');
+        if (!$student) {
+            abort(403, 'Student profile not found.');
+        }
+        
+        // Check if student has access to this exam
+        // Allow access if:
+        // 1. Exam has no batch restriction (batch_id is null), OR
+        // 2. Student's batch matches the exam's batch, OR
+        // 3. Student is enrolled in a batch that has access to this exam
+        $hasAccess = false;
+        
+        if (!$exam->batch_id) {
+            // Exam is available to all students
+            $hasAccess = true;
+        } elseif ($student->batch_id && $exam->batch_id === $student->batch_id) {
+            // Student's batch matches exam's batch
+            $hasAccess = true;
+        } elseif ($student->batches && $student->batches->contains('id', $exam->batch_id)) {
+            // Student is enrolled in the exam's batch (many-to-many relationship)
+            $hasAccess = true;
+        }
+        
+        if (!$hasAccess) {
+            abort(403, 'You do not have access to this exam. Please contact your administrator.');
         }
 
         $submission = CqSubmission::where('student_id', $student->id)
@@ -781,8 +861,30 @@ class StudentPortalController extends Controller
     {
         $student = $this->getStudent();
         
-        if (!$student || $exam->batch_id !== $student->batch_id) {
-            abort(403, 'Unauthorized access to this exam.');
+        if (!$student) {
+            abort(403, 'Student profile not found.');
+        }
+        
+        // Check if student has access to this exam
+        // Allow access if:
+        // 1. Exam has no batch restriction (batch_id is null), OR
+        // 2. Student's batch matches the exam's batch, OR
+        // 3. Student is enrolled in a batch that has access to this exam
+        $hasAccess = false;
+        
+        if (!$exam->batch_id) {
+            // Exam is available to all students
+            $hasAccess = true;
+        } elseif ($student->batch_id && $exam->batch_id === $student->batch_id) {
+            // Student's batch matches exam's batch
+            $hasAccess = true;
+        } elseif ($student->batches && $student->batches->contains('id', $exam->batch_id)) {
+            // Student is enrolled in the exam's batch (many-to-many relationship)
+            $hasAccess = true;
+        }
+        
+        if (!$hasAccess) {
+            abort(403, 'You do not have access to this exam. Please contact your administrator.');
         }
 
         $request->validate([
