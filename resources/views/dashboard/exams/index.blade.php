@@ -88,7 +88,7 @@
                                     <div class="flex space-x-2">
                                         <a href="{{ route('dashboard.exams.show', $exam) }}" class="text-blue-600 hover:text-blue-900">View</a>
                                         <a href="{{ route('dashboard.exams.edit', $exam) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                        <form action="{{ route('dashboard.exams.destroy', $exam) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                                        <form action="{{ route('dashboard.exams.destroy', $exam) }}" method="POST" class="inline" onsubmit="return confirmDelete(this, 'Are you sure you want to delete this exam? This action cannot be undone.');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>

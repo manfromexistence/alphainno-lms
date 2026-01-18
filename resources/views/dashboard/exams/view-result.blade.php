@@ -162,7 +162,7 @@
                     Edit Result
                 </a>
                 <form action="{{ route('dashboard.exams.delete-result', [$exam, $result]) }}" method="POST" 
-                      onsubmit="return confirm('Are you sure you want to delete this result? This action cannot be undone.')" class="inline">
+                      onsubmit="return confirmDelete(this, 'Are you sure you want to delete this result? This action cannot be undone.')" class="inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">

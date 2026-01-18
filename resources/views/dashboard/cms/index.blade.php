@@ -83,7 +83,7 @@
                                 <x-ui.button variant="ghost" size="icon" class="h-8 w-8" as="a" href="{{ route('dashboard.cms.edit', $page) }}">
                                     <i class="fas fa-edit text-xs"></i>
                                 </x-ui.button>
-                                <form action="{{ route('dashboard.cms.destroy', $page) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this page?');">
+                                <form action="{{ route('dashboard.cms.destroy', $page) }}" method="POST" class="inline" onsubmit="return confirmDelete(this, 'Are you sure you want to delete this page?');">
                                     @csrf
                                     @method('DELETE')
                                     <x-ui.button variant="ghost" size="icon" type="submit" class="h-8 w-8 text-destructive hover:bg-destructive/10">

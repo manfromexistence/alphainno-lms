@@ -66,7 +66,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </button>
                         <a href="{{ route('dashboard.courses.videos.edit', [$course, $video]) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
-                        <form action="{{ route('dashboard.courses.videos.destroy', [$course, $video]) }}" method="POST" class="inline" onsubmit="return confirm('Delete this video?');">
+                        <form action="{{ route('dashboard.courses.videos.destroy', [$course, $video]) }}" method="POST" class="inline" onsubmit="return confirmDelete(this, 'Are you sure you want to delete this video?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>

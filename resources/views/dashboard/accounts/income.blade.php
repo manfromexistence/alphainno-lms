@@ -99,7 +99,7 @@
                     <x-ui.table-cell>{{ $income->reference ?? '-' }}</x-ui.table-cell>
                     <x-ui.table-cell class="text-xs text-muted-foreground">{{ $income->creator->name ?? 'System' }}</x-ui.table-cell>
                     <x-ui.table-cell class="text-right">
-                        <form action="{{ route('dashboard.accounts.income.destroy', $income) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this income record?');">
+                        <form action="{{ route('dashboard.accounts.income.destroy', $income) }}" method="POST" class="inline-block" onsubmit="return confirmDelete(this, 'Are you sure you want to delete this income record?');">
                             @csrf
                             @method('DELETE')
                             <x-ui.button variant="ghost" size="icon" type="submit" class="text-destructive hover:text-destructive hover:bg-destructive/10">

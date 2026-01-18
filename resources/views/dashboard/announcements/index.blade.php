@@ -46,7 +46,7 @@
                             <x-ui.button variant="outline" size="sm" as="a" href="{{ route('dashboard.announcements.edit', $announcement) }}">
                                 Edit
                             </x-ui.button>
-                            <form action="{{ route('dashboard.announcements.destroy', $announcement) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete this announcement?')">
+                            <form action="{{ route('dashboard.announcements.destroy', $announcement) }}" method="POST" class="inline-block" onsubmit="return confirmDelete(this, 'Are you sure you want to delete this announcement?')">
                                 @csrf
                                 @method('DELETE')
                                 <x-ui.button variant="destructive" size="sm" type="submit">

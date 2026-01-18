@@ -8,8 +8,13 @@
     <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-3">
+                @php
+                    $settingsService = app(\App\Services\SettingsService::class);
+                    $logoUrl = $settingsService->getLogo();
+                    $institutionName = $settingsService->get('institution_name', 'Alpha LMS');
+                @endphp
                 <a href="{{ url('/') }}">
-                    <img src="{{ asset('logo.png') }}" alt="Alpha LMS"
+                    <img src="{{ $logoUrl }}" alt="{{ $institutionName }}"
                         class="h-10 md:h-12 w-auto object-contain cursor-pointer hover:opacity-80 transition">
                 </a>
             </div>

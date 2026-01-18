@@ -98,7 +98,7 @@
                                         <i class="fas fa-download"></i>
                                     </x-ui.button>
                                 @endif
-                                <form action="{{ route('dashboard.courses.materials.destroy', [$course, $material]) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete this material?');">
+                                <form action="{{ route('dashboard.courses.materials.destroy', [$course, $material]) }}" method="POST" class="inline-block" onsubmit="return confirmDelete(this, 'Are you sure you want to delete this material? This action cannot be undone.');">
                                     @csrf
                                     @method('DELETE')
                                     <x-ui.button variant="outline" size="sm" type="submit" class="text-destructive hover:bg-destructive/10 border-destructive/20">

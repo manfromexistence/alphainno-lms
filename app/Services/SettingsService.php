@@ -89,6 +89,11 @@ class SettingsService
             'group' => 'institution',
             'type' => 'string',
         ],
+        'institution_favicon' => [
+            'value' => '',
+            'group' => 'institution',
+            'type' => 'string',
+        ],
         'institution_address' => [
             'value' => '',
             'group' => 'institution',
@@ -374,5 +379,45 @@ class SettingsService
             'text', 'string' => (string) $value,
             default => $value,
         };
+    }
+
+    /**
+     * Get the institution logo URL with fallback to default.
+     */
+    public function getLogo(): string
+    {
+        $logo = $this->get('institution_logo', '');
+        
+        if (empty($logo)) {
+            return asset('logo.png');
+        }
+        
+        // If it's a full URL, return as is
+        if (str_starts_with($logo, 'http://') || str_starts_with($logo, 'https://')) {
+            return $logo;
+        }
+        
+        // If it's a storage path, convert to asset URL
+        return asset('storage/' . $logo);
+    }
+
+    /**
+     * Get the institution favicon URL with fallback to default.
+     */
+    public function getFavicon(): string
+    {
+        $favicon = $this->get('institution_favicon', '');
+        
+        if (empty($favicon)) {
+            return asset('favicon.ico');
+        }
+        
+        // If it's a full URL, return as is
+        if (str_starts_with($favicon, 'http://') || str_starts_with($favicon, 'https://')) {
+            return $favicon;
+        }
+        
+        // If it's a storage path, convert to asset URL
+        return asset('storage/' . $favicon);
     }
 }

@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard') - Alpha LMS</title>
 
+    @php
+        $settingsService = app(\App\Services\SettingsService::class);
+        $faviconUrl = $settingsService->getFavicon();
+    @endphp
+    <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <!-- Font Awesome -->
@@ -233,7 +239,12 @@
         <div class="sidebar-container">
             <!-- Logo -->
             <div class="sidebar-header flex items-center justify-between px-4 py-4 border-b border-gray-200">
-                <img src="{{ asset('logo.png') }}" alt="Alpha LMS" class="h-10 w-auto object-contain">
+                @php
+                    $settingsService = app(\App\Services\SettingsService::class);
+                    $logoUrl = $settingsService->getLogo();
+                    $institutionName = $settingsService->get('institution_name', 'Alpha LMS');
+                @endphp
+                <img src="{{ $logoUrl }}" alt="{{ $institutionName }}" class="h-10 w-auto object-contain">
                 
                 <!-- Close button for mobile -->
                 <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors">

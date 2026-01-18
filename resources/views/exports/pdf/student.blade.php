@@ -411,11 +411,16 @@
         <!-- Header with Institution Branding -->
         <div class="header">
             <div class="header-content">
+                @php
+                    $settingsService = app(\App\Services\SettingsService::class);
+                    $logoUrl = $settingsService->getLogo();
+                    $institutionName = $settingsService->get('institution_name', 'Alpha LMS');
+                @endphp
                 <div class="logo-section">
-                    <div class="logo-placeholder">A</div>
+                    <img src="{{ $logoUrl }}" alt="{{ $institutionName }}" style="max-width: 60px; max-height: 60px; object-fit: contain;">
                 </div>
                 <div class="institution-info">
-                    <div class="institution-name">Alpha LMS</div>
+                    <div class="institution-name">{{ $institutionName }}</div>
                     <div class="institution-tagline">Learning Management System</div>
                 </div>
                 <div class="report-meta">

@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Alpha LMS</title>
+    @php
+        $settingsService = app(\App\Services\SettingsService::class);
+        $faviconUrl = $settingsService->getFavicon();
+    @endphp
+    <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     @php
-        $settingsService = app(\App\Services\SettingsService::class);
         $primaryColor = $settingsService->get('theme_primary_color', '#3b82f6');
         $primaryForeground = $settingsService->get('theme_primary_foreground', '#ffffff');
         $secondaryColor = $settingsService->get('theme_secondary_color', '#8b5cf6');
@@ -71,10 +75,15 @@
     <div class="w-full max-w-md">
         <!-- Logo -->
         <div class="text-center mb-8">
+            @php
+                $settingsService = app(\App\Services\SettingsService::class);
+                $logoUrl = $settingsService->getLogo();
+                $institutionName = $settingsService->get('institution_name', 'Alpha LMS');
+            @endphp
             <div class="inline-flex items-center justify-center mb-4">
-                <img src="{{ asset('logo.png') }}" alt="Alpha LMS Logo" class="h-16 w-auto">
+                <img src="{{ $logoUrl }}" alt="{{ $institutionName }} Logo" class="h-16 w-auto">
             </div>
-            <!-- <h1 class="text-3xl font-bold text-gray-900">Alpha LMS</h1> -->
+            <!-- <h1 class="text-3xl font-bold text-gray-900">{{ $institutionName }}</h1> -->
             <p class="text-gray-600 mt-2">Admin Dashboard Login</p>
         </div>
 

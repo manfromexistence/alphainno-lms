@@ -168,7 +168,7 @@
                                     </form>
                                     
                                     <!-- Delete Button - Requirement 12.4 -->
-                                    <form action="{{ route('dashboard.communication.templates.delete', $template) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this template?')">
+                                    <form action="{{ route('dashboard.communication.templates.delete', $template) }}" method="POST" class="inline" onsubmit="return confirmDelete(this, 'Are you sure you want to delete this template?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-gray-500 hover:text-red-600 transition-colors" title="Delete">

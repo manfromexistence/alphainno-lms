@@ -2,8 +2,13 @@
     <div class="max-w-7xl mx-auto px-4 py-8 md:py-12">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             <div>
+                @php
+                    $settingsService = app(\App\Services\SettingsService::class);
+                    $logoUrl = $settingsService->getLogo();
+                    $institutionName = $settingsService->get('institution_name', 'Alpha LMS');
+                @endphp
                 <div class="flex items-center gap-3 mb-4">
-                    <img src="{{ asset('logo.png') }}" alt="Alpha LMS" class="h-8 md:h-10 w-auto object-contain">
+                    <img src="{{ $logoUrl }}" alt="{{ $institutionName }}" class="h-8 md:h-10 w-auto object-contain">
                 </div>
                 <p class="text-primary text-sm leading-relaxed mb-4">
                     এক্সওয়াইজেডস স্কুল এন্ড কলেজ - মানসম্মত শিক্ষা এবং নৈতিক মূল্যবোধ সৃষ্টিতে আমরা প্রতিশ্রুতিবদ্ধ।

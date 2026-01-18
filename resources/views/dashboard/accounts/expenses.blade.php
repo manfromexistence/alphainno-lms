@@ -141,7 +141,7 @@
                                 </x-ui.dialog-content>
                             </x-ui.dialog>
 
-                            <form action="{{ route('dashboard.accounts.expenses.destroy', $expense) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure?');">
+                            <form action="{{ route('dashboard.accounts.expenses.destroy', $expense) }}" method="POST" class="inline-block" onsubmit="return confirmDelete(this, 'Are you sure you want to delete this expense record?');">
                                 @csrf
                                 @method('DELETE')
                                 <x-ui.button variant="ghost" size="icon" type="submit" class="text-destructive hover:text-destructive hover:bg-destructive/10">

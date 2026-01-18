@@ -57,7 +57,7 @@
                                         <x-ui.button variant="ghost" size="icon" class="h-8 w-8" as="a" href="{{ route('dashboard.schedules.edit', $schedule) }}">
                                             <i class="fas fa-edit text-xs"></i>
                                         </x-ui.button>
-                                        <form action="{{ route('dashboard.schedules.destroy', $schedule) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete?')">
+                                        <form action="{{ route('dashboard.schedules.destroy', $schedule) }}" method="POST" class="inline-block" onsubmit="return confirmDelete(this, 'Are you sure you want to delete this schedule?')">
                                             @csrf
                                             @method('DELETE')
                                             <x-ui.button variant="ghost" size="icon" type="submit" class="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10">

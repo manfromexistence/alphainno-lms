@@ -64,7 +64,7 @@
                             </svg>
                         </x-ui.button>
                         <form action="{{ route('dashboard.users.destroy', $user) }}" method="POST" class="inline"
-                            onsubmit="return confirm('Are you sure you want to delete this user?');">
+                            onsubmit="return confirmDelete(this, 'Are you sure you want to delete this user? This action cannot be undone.');">
                             @csrf
                             @method('DELETE')
                             <x-ui.button variant="ghost" size="icon" type="submit" class="h-8 w-8 text-destructive hover:bg-destructive/10">

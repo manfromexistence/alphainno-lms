@@ -45,14 +45,14 @@
                                 <i class="fas fa-download mr-1"></i> Download
                             </x-ui.button>
                             
-                            <form action="{{ route('dashboard.backups.restore', $backup['filename']) }}" method="POST" class="inline-block" onsubmit="return confirm('WARNING: This will overwrite your current database! Are you sure?')">
+                            <form action="{{ route('dashboard.backups.restore', $backup['filename']) }}" method="POST" class="inline-block" onsubmit="return showConfirmDialog({ title: 'Restore Database Backup', message: 'WARNING: This will overwrite your current database! Are you absolutely sure you want to restore this backup?', confirmText: 'Yes, Restore', type: 'danger', onConfirm: () => this.submit() }); return false;">
                                 @csrf
                                 <x-ui.button variant="warning" size="sm" type="submit">
                                     <i class="fas fa-undo mr-1"></i> Restore
                                 </x-ui.button>
                             </form>
 
-                            <form action="{{ route('dashboard.backups.destroy', $backup['filename']) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete this backup file?')">
+                            <form action="{{ route('dashboard.backups.destroy', $backup['filename']) }}" method="POST" class="inline-block" onsubmit="return confirmDelete(this, 'Are you sure you want to delete this backup file?')">
                                 @csrf
                                 @method('DELETE')
                                 <x-ui.button variant="destructive" size="sm" type="submit">
