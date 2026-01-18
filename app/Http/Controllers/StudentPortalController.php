@@ -316,22 +316,38 @@ class StudentPortalController extends Controller
         }
 
         // Create or retrieve ExamAttempt for student
-        $attempt = ExamAttempt::firstOrCreate(
-            [
+        // First, check if any attempt exists (regardless of status)
+        $attempt = ExamAttempt::where('student_id', $student->id)
+            ->where('exam_id', $exam->id)
+            ->first();
+        
+        // If no attempt exists, create one
+        if (!$attempt) {
+            $attempt = ExamAttempt::create([
                 'student_id' => $student->id,
                 'exam_id' => $exam->id,
                 'status' => 'in_progress',
-            ],
-            [
                 'started_at' => now(),
                 'answers' => [],
                 'cheating_events' => [],
                 'ip_address' => request()->ip(),
-            ]
-        );
-
-        // If attempt was just created, set started_at
-        if (!$attempt->wasRecentlyCreated && !$attempt->started_at) {
+            ]);
+        }
+        
+        // If attempt is already submitted, redirect to results
+        if ($attempt->status === 'submitted') {
+            $result = ExamResult::where('student_id', $student->id)
+                ->where('exam_id', $exam->id)
+                ->first();
+            
+            if ($result) {
+                return redirect()->route('student.exam-result', $result->id)
+                    ->with('info', 'You have already submitted this exam.');
+            }
+        }
+        
+        // If attempt exists but has no started_at, set it
+        if (!$attempt->started_at) {
             $attempt->update(['started_at' => now()]);
         }
 
@@ -670,23 +686,39 @@ class StudentPortalController extends Controller
         }
 
         // Create or retrieve ExamAttempt for student
-        $attempt = ExamAttempt::firstOrCreate(
-            [
+        // First, check if any attempt exists (regardless of status)
+        $attempt = ExamAttempt::where('student_id', $student->id)
+            ->where('exam_id', $exam->id)
+            ->first();
+        
+        // If no attempt exists, create one
+        if (!$attempt) {
+            $attempt = ExamAttempt::create([
                 'student_id' => $student->id,
                 'exam_id' => $exam->id,
                 'status' => 'in_progress',
-            ],
-            [
                 'started_at' => now(),
                 'answers' => [],
                 'cheating_events' => [],
                 'screenshots' => [],
                 'ip_address' => request()->ip(),
-            ]
-        );
-
-        // If attempt was just created, set started_at
-        if (!$attempt->wasRecentlyCreated && !$attempt->started_at) {
+            ]);
+        }
+        
+        // If attempt is already submitted, redirect to results
+        if ($attempt->status === 'submitted') {
+            $result = ExamResult::where('student_id', $student->id)
+                ->where('exam_id', $exam->id)
+                ->first();
+            
+            if ($result) {
+                return redirect()->route('student.exam-result', $result->id)
+                    ->with('info', 'You have already submitted this exam.');
+            }
+        }
+        
+        // If attempt exists but wasn't just created and has no started_at, set it
+        if (!$attempt->started_at) {
             $attempt->update(['started_at' => now()]);
         }
 
@@ -871,20 +903,36 @@ class StudentPortalController extends Controller
         // Create or retrieve ExamAttempt for student
         $timeValidator = app(\App\Services\ExamTimeValidator::class);
         
-        $attempt = ExamAttempt::firstOrCreate(
-            [
+        // First, check if any attempt exists (regardless of status)
+        $attempt = ExamAttempt::where('student_id', $student->id)
+            ->where('exam_id', $exam->id)
+            ->first();
+        
+        // If no attempt exists, create one
+        if (!$attempt) {
+            $attempt = ExamAttempt::create([
                 'student_id' => $student->id,
                 'exam_id' => $exam->id,
                 'status' => 'in_progress',
-            ],
-            [
                 'started_at' => now(),
                 'answers' => [],
                 'cheating_events' => [],
                 'screenshots' => [],
                 'ip_address' => request()->ip(),
-            ]
-        );
+            ]);
+        }
+        
+        // If attempt is already submitted, redirect to results
+        if ($attempt->status === 'submitted') {
+            $result = ExamResult::where('student_id', $student->id)
+                ->where('exam_id', $exam->id)
+                ->first();
+            
+            if ($result) {
+                return redirect()->route('student.exam-result', $result->id)
+                    ->with('info', 'You have already submitted this exam.');
+            }
+        }
 
         // Calculate remaining time
         $remainingTime = $timeValidator->getRemainingTime($attempt);
