@@ -119,17 +119,16 @@
                         <!-- Question Text -->
                         <div class="mb-6">
                             <h2 class="text-xl font-semibold text-gray-900 leading-relaxed">
-                                {{ $question->question ?? 'Question text not available' }}
+                                {{ $question->question_text ?? 'Question text not available' }}
                             </h2>
                         </div>
                         
                         <!-- Options -->
-                        @if($question->type === 'mcq')
+                        @if($question->type === 'mcq' && $question->options)
                         <div class="space-y-3">
                             @foreach(['A', 'B', 'C', 'D'] as $optKey)
                                 @php 
-                                    $optionField = 'option_' . strtolower($optKey);
-                                    $optionValue = $question->{$optionField} ?? null;
+                                    $optionValue = $question->options[$optKey] ?? null;
                                 @endphp
                                 
                                 @if($optionValue)
