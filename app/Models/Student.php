@@ -68,7 +68,9 @@ class Student extends Model
         'total_amount',
         'paid_amount',
         'due_amount',
+        'balance',
         'payment_method',
+        'status',
         'phone',
         'profile_image',
         'featured'
@@ -86,6 +88,7 @@ class Student extends Model
             'total_amount' => 'decimal:2',
             'paid_amount' => 'decimal:2',
             'due_amount' => 'decimal:2',
+            'balance' => 'decimal:2',
             'featured' => 'boolean',
         ];
     }
@@ -96,6 +99,15 @@ class Student extends Model
     public function getNameAttribute(): string
     {
         return $this->name_bn ?? 'Unknown Student';
+    }
+
+    /**
+     * Get the balance attribute (alias for due_amount for compatibility).
+     */
+    public function getBalanceAttribute($value): float
+    {
+        // If balance is not set, return due_amount
+        return $value ?? $this->attributes['due_amount'] ?? 0;
     }
 
     /**
@@ -216,6 +228,17 @@ class Student extends Model
 
         $present = $this->attendances()->whereIn('status', ['present', 'late'])->count();
         return round(($present / $total) * 100, 2);
+    }
+
+    /**
+     * Scope a query to only include active students.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
     }
 
     /**

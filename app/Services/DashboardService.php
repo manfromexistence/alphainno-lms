@@ -74,7 +74,7 @@ class DashboardService
                     'pending_results' => true,
                     'attendance_entry' => true,
                 ],
-                'visible_courses' => Course::where('is_active', true)->pluck('id')->toArray(),
+                'visible_courses' => Course::where('status', 'active')->pluck('id')->toArray(),
             ];
         });
     }
@@ -193,7 +193,7 @@ class DashboardService
             'attendance_rate' => $totalAttendance > 0 ? round(($attendanceRate / $totalAttendance) * 100, 1) : 0,
             'balance' => $student->balance ?? 0,
             'upcoming_exams' => 0, // Would need exam integration
-            'recent_results_count' => $student->examResults()->count(),
+            'recent_results_count' => $student->results()->count(),
         ];
     }
 
