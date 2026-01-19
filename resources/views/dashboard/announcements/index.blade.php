@@ -134,7 +134,7 @@
             </div>
 
             <div class="flex items-center space-x-2">
-                <input type="checkbox" name="is_active" id="edit_is_active" class="h-4 w-4 rounded border-gray-300 text-bd-green focus:ring-bd-green">
+                <input type="checkbox" name="is_active" id="edit_is_active" value="1" class="h-4 w-4 rounded border-gray-300 text-bd-green focus:ring-bd-green">
                 <label for="edit_is_active" class="text-sm font-medium text-gray-700">Active</label>
             </div>
 
@@ -158,39 +158,65 @@
 
     function openEditModal(announcementId) {
         const announcement = announcements.find(a => a.id === announcementId);
-        if (!announcement) return;
+        if (!announcement) {
+            console.error('Announcement not found:', announcementId);
+            return;
+        }
+
+        console.log('Opening edit modal for:', announcement);
 
         // Set form action
-        document.getElementById('editAnnouncementForm').action = `/dashboard/announcements/${announcementId}`;
+        const form = document.getElementById('editAnnouncementForm');
+        if (form) {
+            form.action = `/dashboard/announcements/${announcementId}`;
+            console.log('Form action set to:', form.action);
+        }
 
         // Populate form fields
-        document.getElementById('edit_title').value = announcement.title;
-        document.getElementById('edit_content').value = announcement.content;
-        document.getElementById('edit_target_type').value = announcement.target_type;
-        document.getElementById('edit_priority').value = announcement.priority;
-        document.getElementById('edit_starts_at').value = announcement.starts_at ? announcement.starts_at.split('T')[0] : '';
-        document.getElementById('edit_expires_at').value = announcement.expires_at ? announcement.expires_at.split('T')[0] : '';
-        document.getElementById('edit_is_active').checked = announcement.is_active;
+        const titleInput = document.getElementById('edit_title');
+        const contentInput = document.getElementById('edit_content');
+        const targetTypeSelect = document.getElementById('edit_target_type');
+        const prioritySelect = document.getElementById('edit_priority');
+        const startsAtInput = document.getElementById('edit_starts_at');
+        const expiresAtInput = document.getElementById('edit_expires_at');
+        const isActiveCheckbox = document.getElementById('edit_is_active');
+
+        if (titleInput) titleInput.value = announcement.title || '';
+        if (contentInput) contentInput.value = announcement.content || '';
+        if (targetTypeSelect) targetTypeSelect.value = announcement.target_type || 'all';
+        if (prioritySelect) prioritySelect.value = announcement.priority || 'normal';
+        if (startsAtInput) startsAtInput.value = announcement.starts_at ? announcement.starts_at.split('T')[0] : '';
+        if (expiresAtInput) expiresAtInput.value = announcement.expires_at ? announcement.expires_at.split('T')[0] : '';
+        if (isActiveCheckbox) isActiveCheckbox.checked = announcement.is_active ? true : false;
 
         // Update target list and show modal
         updateEditTargetList(announcement.target_type, announcement.target_id);
-        document.getElementById('editAnnouncementModal').classList.remove('hidden');
+        
+        const modal = document.getElementById('editAnnouncementModal');
+        if (modal) {
+            modal.classList.remove('hidden');
+        }
     }
 
     function closeEditModal() {
-        document.getElementById('editAnnouncementModal').classList.add('hidden');
+        const modal = document.getElementById('editAnnouncementModal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
     }
 
     function updateEditTargetList(type, selectedId = null) {
         const targetIdContainer = document.getElementById('edit_target_id_container');
         const targetIdSelect = document.getElementById('edit_target_id');
         
+        if (!targetIdSelect) return;
+        
         targetIdSelect.innerHTML = '<option value="">-- Select --</option>';
         
         if (type === 'all') {
-            targetIdContainer.style.display = 'none';
+            if (targetIdContainer) targetIdContainer.style.display = 'none';
         } else {
-            targetIdContainer.style.display = 'block';
+            if (targetIdContainer) targetIdContainer.style.display = 'block';
             const data = type === 'batch' ? batches : courses;
             data.forEach(item => {
                 const option = document.createElement('option');
@@ -202,21 +228,40 @@
         }
     }
 
-    // Listen for target type changes
-    document.getElementById('edit_target_type').addEventListener('change', function() {
-        updateEditTargetList(this.value);
-    });
-
-    // Close modal on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeEditModal();
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Listen for target type changes
+        const editTargetType = document.getElementById('edit_target_type');
+        if (editTargetType) {
+            editTargetType.addEventListener('change', function() {
+                updateEditTargetList(this.value);
+            });
         }
-    });
 
-    // Close modal on background click
-    document.getElementById('editAnnouncementModal').addEventListener('click', function(e) {
-        if (e.target === this) closeEditModal();
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEditModal();
+            }
+        });
+
+        // Close modal on background click
+        const editModal = document.getElementById('editAnnouncementModal');
+        if (editModal) {
+            editModal.addEventListener('click', function(e) {
+                if (e.target === this) closeEditModal();
+            });
+        }
+
+        // Add form submit handler for debugging
+        const editForm = document.getElementById('editAnnouncementForm');
+        if (editForm) {
+            editForm.addEventListener('submit', function(e) {
+                console.log('Form submitting to:', this.action);
+                console.log('Form data:', new FormData(this));
+                // Let the form submit normally
+            });
+        }
     });
 </script>
 @endpush

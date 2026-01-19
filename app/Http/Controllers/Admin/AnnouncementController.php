@@ -39,12 +39,17 @@ class AnnouncementController extends Controller
             'target_id' => 'nullable|integer',
             'priority' => 'required|in:normal,high,urgent',
             'starts_at' => 'nullable|date',
-            'expires_at' => 'nullable|date|after:starts_at',
-            'is_active' => 'boolean',
+            'expires_at' => 'nullable|date|after_or_equal:starts_at',
+            'is_active' => 'nullable|boolean',
         ]);
 
         $validated['created_by'] = Auth::id();
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = $request->has('is_active') ? true : false;
+        
+        // If target_type is 'all', ensure target_id is null
+        if ($validated['target_type'] === 'all') {
+            $validated['target_id'] = null;
+        }
 
         Announcement::create($validated);
 
@@ -66,6 +71,11 @@ class AnnouncementController extends Controller
 
     public function update(Request $request, Announcement $announcement)
     {
+        \Log::info('Update announcement called', [
+            'announcement_id' => $announcement->id,
+            'request_data' => $request->all()
+        ]);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -73,13 +83,22 @@ class AnnouncementController extends Controller
             'target_id' => 'nullable|integer',
             'priority' => 'required|in:normal,high,urgent',
             'starts_at' => 'nullable|date',
-            'expires_at' => 'nullable|date|after:starts_at',
-            'is_active' => 'boolean',
+            'expires_at' => 'nullable|date|after_or_equal:starts_at',
+            'is_active' => 'nullable|boolean',
         ]);
 
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = $request->has('is_active') ? true : false;
+        
+        // If target_type is 'all', ensure target_id is null
+        if ($validated['target_type'] === 'all') {
+            $validated['target_id'] = null;
+        }
+
+        \Log::info('Validated data', ['validated' => $validated]);
 
         $announcement->update($validated);
+
+        \Log::info('Announcement updated successfully');
 
         return redirect()->route('dashboard.announcements.index')
             ->with('success', 'Announcement updated successfully.');

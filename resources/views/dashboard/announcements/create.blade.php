@@ -7,52 +7,88 @@
             <x-ui.card-title>Create Announcement</x-ui.card-title>
         </x-ui.card-header>
         <x-ui.card-content>
+            {{-- Global Validation Error Display --}}
+            @if ($errors->any())
+                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6" role="alert">
+                    <div class="flex items-center mb-2">
+                        <svg class="w-5 h-5 mr-2 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                        <strong class="font-semibold">Please fix the following errors:</strong>
+                    </div>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('dashboard.announcements.store') }}" method="POST" class="space-y-6">
                 @csrf
                 
                 <div class="space-y-2">
                     <x-ui.label for="title">Title</x-ui.label>
-                    <x-ui.input type="text" name="title" id="title" required />
+                    <x-ui.input type="text" name="title" id="title" value="{{ old('title') }}" required />
+                    @error('title')
+                        <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="space-y-2">
                     <x-ui.label for="content">Content</x-ui.label>
-                    <x-ui.textarea name="content" id="content" rows="6" required />
+                    <x-ui.textarea name="content" id="content" rows="6" required>{{ old('content') }}</x-ui.textarea>
+                    @error('content')
+                        <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
-                        <x-ui.select name="target_type" id="target_type" label="Target Audience" required>
+                        <x-ui.select name="target_type" id="target_type" label="Target Audience" :selected="old('target_type', 'all')" required>
                             <option value="all">Everyone</option>
                             <option value="batch">Specific Batch</option>
                             <option value="course">Specific Course</option>
                         </x-ui.select>
+                        @error('target_type')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="space-y-2" id="target_id_container" style="display: none;">
                         <x-ui.select name="target_id" id="target_id" label="Select Target">
                             <option value="">-- Select --</option>
                         </x-ui.select>
+                        @error('target_id')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="space-y-2">
-                        <x-ui.select name="priority" label="Priority" required>
+                        <x-ui.select name="priority" label="Priority" :selected="old('priority', 'normal')" required>
                             <option value="normal">Normal</option>
                             <option value="high">High</option>
                             <option value="urgent">Urgent</option>
                         </x-ui.select>
+                        @error('priority')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="space-y-2">
-                        <x-ui.date-picker name="starts_at" id="starts_at" label="Start Date (Optional)" />
+                        <x-ui.date-picker name="starts_at" id="starts_at" label="Start Date (Optional)" value="{{ old('starts_at') }}" />
+                        @error('starts_at')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="space-y-2">
-                        <x-ui.date-picker name="expires_at" id="expires_at" label="Expiry Date (Optional)" />
+                        <x-ui.date-picker name="expires_at" id="expires_at" label="Expiry Date (Optional)" value="{{ old('expires_at') }}" />
+                        @error('expires_at')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="flex items-center space-x-2">
-                    <input type="checkbox" name="is_active" id="is_active" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" checked>
+                    <input type="checkbox" name="is_active" id="is_active" value="1" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" {{ old('is_active', true) ? 'checked' : '' }}>
                     <label for="is_active" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Active immediately</label>
                 </div>
 
@@ -71,24 +107,12 @@
         const batches = @json($batches);
         const courses = @json($courses);
         const targetTypeSelect = document.getElementById('target_type');
-        const targetIdContainer = document.getElementById('target_id_container'); // Container div
-        
-        // We need to target the native select inside the x-ui.select component
-        // x-ui.select preserves the ID on the native select
-        const targetIdSelect = document.getElementById('target_id'); 
+        const targetIdContainer = document.getElementById('target_id_container');
+        const targetIdSelect = document.getElementById('target_id');
+        const oldTargetType = "{{ old('target_type', 'all') }}";
+        const oldTargetId = "{{ old('target_id') }}";
 
-        targetTypeSelect.addEventListener('change', function() {
-            const type = this.value;
-            
-            // Clear options (keep first placeholder)
-            // Since we are manipulating the DOM of a custom component, we need to be careful.
-            // But if x-ui.select behaves as expected, we update the native options and then trigger a re-render if the component supports it, 
-            // OR we might need to manually update the custom UI.
-            
-            // Re-reading Select.blade.php: 
-            // It has `renderOptions(name)` exposed on window.
-            // So we can update native options and call `renderOptions('target_id')`.
-            
+        function updateTargetList(type, selectedId = null) {
             targetIdSelect.innerHTML = '<option value="">-- Select --</option>';
             
             if (type === 'all') {
@@ -100,6 +124,7 @@
                     const option = document.createElement('option');
                     option.value = item.id;
                     option.text = item.name + (type === 'batch' && item.course ? ` (${item.course.name})` : '');
+                    if (item.id == selectedId) option.selected = true;
                     targetIdSelect.appendChild(option);
                 });
             }
@@ -108,7 +133,16 @@
             if (window.renderOptions) {
                 window.renderOptions('target_id');
             }
+        }
+
+        targetTypeSelect.addEventListener('change', function() {
+            updateTargetList(this.value);
         });
+        
+        // Initial load - restore old values if validation failed
+        if (oldTargetType) {
+            updateTargetList(oldTargetType, oldTargetId);
+        }
     });
 </script>
 @endpush
