@@ -5,7 +5,7 @@ This is the official repository for the Alphainno Learning Management System (LM
 ## Zip with windows 7-Zip
 
 ```bash
-npm run build && "/c/Program Files/7-Zip/7z.exe" a -tzip ../lms-updated-again.zip . '-xr!node_modules' '-xr!.git' -mx=1
+npm run build && "/c/Program Files/7-Zip/7z.exe" a -tzip ../lms . '-xr!node_modules' '-xr!.git' -mx=1
 ```
 
 ### Cpanel Deploy
