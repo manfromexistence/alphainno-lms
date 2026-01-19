@@ -17,7 +17,10 @@ class AnnouncementController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('dashboard.announcements.index', compact('announcements'));
+        $batches = Batch::with('course')->get();
+        $courses = Course::all();
+
+        return view('dashboard.announcements.index', compact('announcements', 'batches', 'courses'));
     }
 
     public function create()
