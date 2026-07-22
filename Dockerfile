@@ -23,10 +23,12 @@ RUN apt-get update && apt-get install -y \
 COPY --from=build /app /var/www/html
 COPY --from=build /usr/bin/composer /usr/bin/composer
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && touch /var/www/html/database/database.sqlite
 
 COPY docker-apache-config.conf /etc/apache2/sites-available/000-default.conf
 
+WORKDIR /var/www/html
 EXPOSE 80
 
-CMD php artisan migrate --force && apache2-foreground
+CMD php artisan config:clear && php artisan migrate --force && apache2-foreground
