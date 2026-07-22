@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => PermissionMiddleware::class,
             'student.exam.access' => StudentExamAccessMiddleware::class,
         ]);
+
+        // Trust Render's proxy so HTTPS URLs are generated correctly
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
