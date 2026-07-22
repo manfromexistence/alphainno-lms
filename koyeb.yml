@@ -1,0 +1,19 @@
+app:
+  name: alphainno-lms
+
+services:
+  - name: web
+    type: web
+    port: 80
+    dockerfile: Dockerfile
+    env:
+      - APP_NAME=Alphainno LMS
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_URL=https://alphainno-lms.koyeb.app
+      - DB_CONNECTION=mysql
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
