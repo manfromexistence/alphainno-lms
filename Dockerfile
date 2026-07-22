@@ -31,4 +31,4 @@ COPY docker-apache-config.conf /etc/apache2/sites-available/000-default.conf
 WORKDIR /var/www/html
 EXPOSE 80
 
-CMD php artisan migrate --force && apache2-foreground
+CMD php artisan migrate --force --seed && apache2-foreground
