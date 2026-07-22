@@ -1,7 +1,7 @@
 FROM php:8.3-apache AS build
 
 RUN apt-get update && apt-get install -y \
-    git curl libpng-dev libonig-dev libxml2-dev libzip-dev unzip nodejs npm \
+    git curl libicu-dev libpng-dev libonig-dev libxml2-dev libzip-dev unzip nodejs npm \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -16,7 +16,7 @@ RUN php artisan optimize
 FROM php:8.3-apache
 
 RUN apt-get update && apt-get install -y \
-    libpng-dev libonig-dev libxml2-dev libzip-dev unzip \
+    libicu-dev libpng-dev libonig-dev libxml2-dev libzip-dev unzip \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl \
     && a2enmod rewrite
 
