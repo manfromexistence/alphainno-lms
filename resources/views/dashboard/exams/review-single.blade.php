@@ -37,7 +37,7 @@
         transform: scale(1.1);
     }
     .color-btn.active {
-        border-color: #3b82f6;
+        border-color: #3d59f9;
         border-width: 3px;
         transform: scale(1.15);
     }
@@ -107,7 +107,7 @@
                 <span class="text-sm text-gray-600 mr-2">Color:</span>
                 <button onclick="setColor('#ef4444')" class="color-btn active" style="background-color: #ef4444;" data-color="#ef4444"></button>
                 <button onclick="setColor('#10b981')" class="color-btn" style="background-color: #10b981;" data-color="#10b981"></button>
-                <button onclick="setColor('#3b82f6')" class="color-btn" style="background-color: #3b82f6;" data-color="#3b82f6"></button>
+                <button onclick="setColor('#3d59f9')" class="color-btn" style="background-color: #3d59f9;" data-color="#3d59f9"></button>
                 <button onclick="setColor('#f59e0b')" class="color-btn" style="background-color: #f59e0b;" data-color="#f59e0b"></button>
                 <button onclick="setColor('#8b5cf6')" class="color-btn" style="background-color: #8b5cf6;" data-color="#8b5cf6"></button>
                 <button onclick="setColor('#000000')" class="color-btn" style="background-color: #000000;" data-color="#000000"></button>
@@ -402,3 +402,4 @@
     });
 </script>
 @endsection
+

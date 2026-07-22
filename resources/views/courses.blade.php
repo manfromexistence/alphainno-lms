@@ -94,7 +94,7 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-xl font-bold text-primary">{{ $price }}</span>
-                                <button type="button" class="bg-primary text-white px-4 py-2 rounded-lg text-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] transition">বিস্তারিত</button>
+                                <button type="button" class="bg-primary text-white px-4 py-2 rounded-lg text-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3d59f9' }}] transition">বিস্তারিত</button>
                             </div>
                         </div>
                     </div>
@@ -247,3 +247,4 @@
         });
     </script>
 @endpush
+

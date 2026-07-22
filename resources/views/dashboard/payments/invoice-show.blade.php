@@ -27,7 +27,7 @@
         }
         
         .invoice-header {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, #3d59f9 0%, #1d4ed8 100%);
             color: white;
             padding: 30px;
             display: flex;
@@ -187,7 +187,7 @@
             border-bottom: none;
             padding-top: 12px;
             margin-top: 8px;
-            border-top: 2px solid #3b82f6;
+            border-top: 2px solid #3d59f9;
         }
         
         .summary-row .label {
@@ -201,7 +201,7 @@
         .summary-row.total .label,
         .summary-row.total .value {
             font-size: 18px;
-            color: #3b82f6;
+            color: #3d59f9;
         }
         
         .payment-instructions {
@@ -266,7 +266,7 @@
         
         .invoice-footer .thank-you {
             font-size: 14px;
-            color: #3b82f6;
+            color: #3d59f9;
             font-weight: 600;
         }
         
@@ -292,7 +292,7 @@
         }
         
         .btn-primary {
-            background: #3b82f6;
+            background: #3d59f9;
             color: white;
             box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
         }
@@ -518,3 +518,4 @@
     </div>
 </body>
 </html>
+

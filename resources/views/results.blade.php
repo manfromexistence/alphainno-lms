@@ -56,7 +56,7 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] transition">
+                        <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3d59f9' }}] transition">
                             {{ $page ? $page->getContent('search_button', 'ফলাফল দেখুন') : 'ফলাফল দেখুন' }}
                         </button>
                     </form>
@@ -245,3 +245,4 @@
         </div>
     </section>
 @endsection
+

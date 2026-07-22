@@ -264,11 +264,11 @@
                         <x-ui.label for="theme_primary_color">Primary Background Color</x-ui.label>
                         <div class="flex gap-3 items-center">
                             <input type="color" name="theme_primary_color" id="theme_primary_color" 
-                                value="{{ $settings['theme']['theme_primary_color']['value'] ?? '#3b82f6' }}"
+                                value="{{ $settings['theme']['theme_primary_color']['value'] ?? '#3d59f9' }}"
                                 class="h-10 w-20 rounded border border-input cursor-pointer" />
                             <x-ui.input type="text" id="theme_primary_color_text" 
-                                value="{{ $settings['theme']['theme_primary_color']['value'] ?? '#3b82f6' }}"
-                                placeholder="#3b82f6" class="flex-1" readonly />
+                                value="{{ $settings['theme']['theme_primary_color']['value'] ?? '#3d59f9' }}"
+                                placeholder="#3d59f9" class="flex-1" readonly />
                         </div>
                         <p class="text-[0.8rem] text-muted-foreground">Main brand background color</p>
                     </div>
@@ -367,3 +367,4 @@
 </script>
 @endpush
 @endsection
+

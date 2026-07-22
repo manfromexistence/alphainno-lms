@@ -5,7 +5,7 @@
 @section('content')
     @php
         // Provide a local fallback so the view never throws if controller doesn't pass $primaryColor
-        $primaryColor = $primaryColor ?? '#3b82f6';
+        $primaryColor = $primaryColor ?? '#3d59f9';
     @endphp
 
     <!-- Page Header -->

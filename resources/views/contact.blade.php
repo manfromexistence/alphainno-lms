@@ -23,23 +23,23 @@
                             <div>
                                 <label class="block text-gray-700 font-semibold mb-2">আপনার নাম</label>
                                 <input type="text" placeholder="নাম লিখুন"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] focus:border-transparent">
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3d59f9' }}] focus:border-transparent">
                             </div>
                             <div>
                                 <label class="block text-gray-700 font-semibold mb-2">ইমেইল ঠিকানা</label>
                                 <input type="email" placeholder="ইমেইল লিখুন"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] focus:border-transparent">
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3d59f9' }}] focus:border-transparent">
                             </div>
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-2">বিষয়</label>
                             <input type="text" placeholder="বিষয় লিখুন"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] focus:border-transparent">
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3d59f9' }}] focus:border-transparent">
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-2">বার্তা</label>
                             <textarea rows="5" placeholder="আপনার বার্তাটি এখানে লিখুন"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3b82f6' }}] focus:border-transparent"></textarea>
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[{{ $primaryColor ?? '#3d59f9' }}] focus:border-transparent"></textarea>
                         </div>
                         <button type="submit"
                             class="w-full bg-primary hover:opacity-90 text-white font-bold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl">

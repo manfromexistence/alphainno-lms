@@ -23,7 +23,7 @@
         width: 24px;
         height: 24px;
         border: 2px solid #e5e7eb;
-        border-top-color: #3b82f6;
+        border-top-color: #3d59f9;
         border-radius: 50%;
     }
     @keyframes spin {
@@ -848,3 +848,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
+

@@ -1,6 +1,6 @@
 @php
     $settingsService = app(\App\Services\SettingsService::class);
-    $primaryColor = $settingsService->get('theme_primary_color', '#3b82f6');
+    $primaryColor = $settingsService->get('theme_primary_color', '#3d59f9');
 @endphp
 
 <div class="text-white py-2 px-4 text-xs md:text-sm font-medium bg-primary">

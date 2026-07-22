@@ -141,7 +141,7 @@ class SettingsService
 
         // Theme Settings
         'theme_primary_color' => [
-            'value' => '#3b82f6',
+            'value' => '#3d59f9',
             'group' => 'theme',
             'type' => 'string',
         ],

@@ -23,7 +23,7 @@
     
     @php
         $settingsService = app(\App\Services\SettingsService::class);
-        $primaryColor = $settingsService->get('theme_primary_color', '#3b82f6');
+        $primaryColor = $settingsService->get('theme_primary_color', '#3d59f9');
         $primaryForeground = $settingsService->get('theme_primary_foreground', '#ffffff');
         $secondaryColor = $settingsService->get('theme_secondary_color', '#8b5cf6');
         $secondaryForeground = $settingsService->get('theme_secondary_foreground', '#ffffff');
@@ -657,3 +657,4 @@
 </body>
 
 </html>
+

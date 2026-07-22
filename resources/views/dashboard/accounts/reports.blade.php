@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 labels: @json(array_keys($report['income_by_category']->toArray())),
                 datasets: [{
                     data: @json(array_values($report['income_by_category']->toArray())),
-                    backgroundColor: ['#3b82f6', '#10b981', '#06b6d4', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'],
+                    backgroundColor: ['#3d59f9', '#10b981', '#06b6d4', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'],
                     borderWidth: 2,
                     borderColor: '#fff'
                 }]
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 labels: @json(array_keys($report['expense_by_category']->toArray())),
                 datasets: [{
                     data: @json(array_values($report['expense_by_category']->toArray())),
-                    backgroundColor: ['#ef4444', '#f59e0b', '#06b6d4', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899'],
+                    backgroundColor: ['#ef4444', '#f59e0b', '#06b6d4', '#10b981', '#3d59f9', '#8b5cf6', '#ec4899'],
                     borderWidth: 2,
                     borderColor: '#fff'
                 }]
