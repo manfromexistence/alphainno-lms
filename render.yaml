@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: essence-lms
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_KEY
+        value: base64:I5rZFeYqDi0ISvuCCPrWlS0UoNYXyDrx3AbwgMW1YRw=
+      - key: APP_URL
+        value: https://essence-lms.onrender.com
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_NAME
+        value: "Alphainno LMS"
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: DB_DATABASE
+        value: /var/www/html/database/database.sqlite
+      - key: SESSION_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: CACHE_STORE
+        value: file
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: warning
+      - key: MAIL_MAILER
+        value: log
